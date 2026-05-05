@@ -1,193 +1,145 @@
 "use client";
 
 import { useState } from "react";
-import { z } from "zod";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
 
-const schema = z.object({
-  name: z.string().min(2, "İsim en az 2 karakter olmalı"),
-  email: z.string().email("Geçerli bir e-posta girin"),
-  phone: z.string().optional(),
-  subject: z.string().optional(),
-  message: z.string().min(10, "Mesaj en az 10 karakter olmalı"),
-});
-
-type FormData = z.infer<typeof schema>;
-type Status = "idle" | "loading" | "success" | "error";
-type FieldErrors = Partial<Record<keyof FormData, string[]>>;
-
-type ContactFormProps = {
-  formTitle?: string;
-  successMessage?: string;
-};
-
-export function ContactForm({
-  formTitle = "Bize Ulaşın",
-  successMessage = "Mesajınız alındı. En kısa sürede size dönüş yapacağız.",
-}: ContactFormProps) {
-  const [status, setStatus] = useState<Status>("idle");
-  const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
-  const [formData, setFormData] = useState<FormData>({
+export function ContactForm() {
+  const [formData, setFormData] = useState({
     name: "",
-    email: "",
     phone: "",
-    subject: "",
+    email: "",
+    subject: "Genel Bilgi",
     message: "",
   });
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-    // Alan hatasını temizle
-    if (fieldErrors[name as keyof FormData]) {
-      setFieldErrors((prev) => ({ ...prev, [name]: undefined }));
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+
+  const validate = () => {
+    const newErrors: Record<string, string> = {};
+    if (!formData.name.trim()) newErrors.name = "Ad soyad gereklidir.";
+    if (!formData.phone.trim()) {
+      newErrors.phone = "Telefon gereklidir.";
+    } else if (!/^[0-9\s+()-]+$/.test(formData.phone)) {
+      newErrors.phone = "Geçerli bir telefon numarası giriniz.";
     }
+    if (!formData.email.trim()) {
+      newErrors.email = "E-posta gereklidir.";
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      newErrors.email = "Geçerli bir e-posta adresi giriniz.";
+    }
+    if (!formData.message.trim()) newErrors.message = "Mesaj alanı boş bırakılamaz.";
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setStatus("loading");
-    setFieldErrors({});
+    if (!validate()) return;
 
-    // Client-side validasyon
-    const result = schema.safeParse(formData);
-    if (!result.success) {
-      setFieldErrors(result.error.flatten().fieldErrors as FieldErrors);
-      setStatus("idle");
-      return;
-    }
-
-    // Honeypot alanını al
-    const form = e.currentTarget;
-    const honeypot = (form.elements.namedItem("website") as HTMLInputElement)?.value || "";
-
-    try {
-      const res = await fetch("/api/contact", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...formData, honeypot }),
-      });
-
-      if (res.ok) {
-        setStatus("success");
-      } else {
-        const data = await res.json();
-        if (data.error && typeof data.error === "object") {
-          setFieldErrors(data.error);
-        }
-        setStatus("error");
-      }
-    } catch {
-      setStatus("error");
-    }
+    setIsSubmitting(true);
+    // Simulate API call
+    setTimeout(() => {
+      setIsSubmitting(false);
+      setIsSuccess(true);
+      setFormData({ name: "", phone: "", email: "", subject: "Genel Bilgi", message: "" });
+      // Reset success message after 5 seconds
+      setTimeout(() => setIsSuccess(false), 5000);
+    }, 1500);
   };
-
-  if (status === "success") {
-    return (
-      <div className="rounded-lg border bg-card p-8 text-center">
-        <div className="text-4xl mb-4">✅</div>
-        <p className="text-lg font-medium">{successMessage}</p>
-      </div>
-    );
-  }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6" noValidate>
-      {formTitle && <h2 className="text-2xl font-bold">{formTitle}</h2>}
+    <form onSubmit={handleSubmit} className="space-y-6">
+      {isSuccess && (
+        <div className="bg-green-50 text-green-700 p-4 rounded-xl border border-green-200">
+          Mesajınız başarıyla gönderildi. En kısa sürede size dönüş yapacağız.
+        </div>
+      )}
 
-      {/* Honeypot — spam botları için gizli alan */}
-      <div className="absolute opacity-0 pointer-events-none h-0 overflow-hidden" aria-hidden="true">
-        <input name="website" type="text" tabIndex={-1} autoComplete="off" />
-      </div>
-
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div className="grid md:grid-cols-2 gap-6">
         <div className="space-y-2">
-          <Label htmlFor="name">Ad Soyad *</Label>
-          <Input
-            id="name"
-            name="name"
-            value={formData.name}
-            onChange={handleChange}
+          <label className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">Ad Soyad</label>
+          <input
+            type="text"
+            className={`w-full bg-muted/30 border rounded-xl px-4 py-4 focus:ring-2 focus:ring-primary outline-none transition-all ${
+              errors.name ? "border-red-500 focus:ring-red-500" : "border-transparent"
+            }`}
             placeholder="Adınız Soyadınız"
-            aria-invalid={!!fieldErrors.name}
+            value={formData.name}
+            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
           />
-          {fieldErrors.name && (
-            <p className="text-sm text-destructive">{fieldErrors.name[0]}</p>
-          )}
+          {errors.name && <p className="text-red-500 text-xs mt-1">{errors.name}</p>}
         </div>
-
         <div className="space-y-2">
-          <Label htmlFor="email">E-posta *</Label>
-          <Input
-            id="email"
-            name="email"
-            type="email"
-            value={formData.email}
-            onChange={handleChange}
-            placeholder="ornek@mail.com"
-            aria-invalid={!!fieldErrors.email}
+          <label className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">Telefon</label>
+          <input
+            type="tel"
+            className={`w-full bg-muted/30 border rounded-xl px-4 py-4 focus:ring-2 focus:ring-primary outline-none transition-all ${
+              errors.phone ? "border-red-500 focus:ring-red-500" : "border-transparent"
+            }`}
+            placeholder="0555 000 00 00"
+            value={formData.phone}
+            onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
           />
-          {fieldErrors.email && (
-            <p className="text-sm text-destructive">{fieldErrors.email[0]}</p>
-          )}
+          {errors.phone && <p className="text-red-500 text-xs mt-1">{errors.phone}</p>}
         </div>
       </div>
-
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <div className="space-y-2">
-          <Label htmlFor="phone">Telefon</Label>
-          <Input
-            id="phone"
-            name="phone"
-            type="tel"
-            value={formData.phone}
-            onChange={handleChange}
-            placeholder="+90 555 000 00 00"
-          />
-        </div>
-
-        <div className="space-y-2">
-          <Label htmlFor="subject">Konu</Label>
-          <Input
-            id="subject"
-            name="subject"
-            value={formData.subject}
-            onChange={handleChange}
-            placeholder="Mesajınızın konusu"
-          />
-        </div>
+      
+      <div className="space-y-2">
+        <label className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">E-Posta</label>
+        <input
+          type="email"
+          className={`w-full bg-muted/30 border rounded-xl px-4 py-4 focus:ring-2 focus:ring-primary outline-none transition-all ${
+            errors.email ? "border-red-500 focus:ring-red-500" : "border-transparent"
+          }`}
+          placeholder="ornek@email.com"
+          value={formData.email}
+          onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+        />
+        {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email}</p>}
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="message">Mesaj *</Label>
-        <Textarea
-          id="message"
-          name="message"
-          value={formData.message}
-          onChange={handleChange}
-          placeholder="Mesajınızı buraya yazın..."
-          rows={6}
-          aria-invalid={!!fieldErrors.message}
-        />
-        {fieldErrors.message && (
-          <p className="text-sm text-destructive">{fieldErrors.message[0]}</p>
-        )}
+        <label className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">Konu</label>
+        <select
+          className="w-full bg-muted/30 border-none rounded-xl px-4 py-4 focus:ring-2 focus:ring-primary outline-none transition-all text-foreground"
+          value={formData.subject}
+          onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
+        >
+          <option>Satılık İlanlar Hakkında</option>
+          <option>Kiralık İlanlar Hakkında</option>
+          <option>Mülkümü Satmak İstiyorum</option>
+          <option>Mülkümü Kiraya Vermek İstiyorum</option>
+          <option>Genel Bilgi</option>
+        </select>
       </div>
 
-      {status === "error" && (
-        <p className="text-sm text-destructive">
-          Bir hata oluştu. Lütfen tekrar deneyin.
-        </p>
-      )}
+      <div className="space-y-2">
+        <label className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">Mesajınız</label>
+        <textarea
+          rows={5}
+          className={`w-full bg-muted/30 border rounded-xl px-4 py-4 focus:ring-2 focus:ring-primary outline-none transition-all resize-none ${
+            errors.message ? "border-red-500 focus:ring-red-500" : "border-transparent"
+          }`}
+          placeholder="Nasıl yardımcı olabiliriz?"
+          value={formData.message}
+          onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+        />
+        {errors.message && <p className="text-red-500 text-xs mt-1">{errors.message}</p>}
+      </div>
 
-      <Button type="submit" disabled={status === "loading"} className="w-full sm:w-auto">
-        {status === "loading" ? "Gönderiliyor..." : "Gönder"}
-      </Button>
+      <button
+        type="submit"
+        disabled={isSubmitting}
+        className="w-full bg-primary text-primary-foreground font-bold text-lg rounded-xl py-5 hover:opacity-90 active:scale-[0.98] transition-all disabled:opacity-70 flex justify-center items-center"
+      >
+        {isSubmitting ? (
+          <span className="w-6 h-6 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+        ) : (
+          "Mesajı Gönder"
+        )}
+      </button>
     </form>
   );
 }

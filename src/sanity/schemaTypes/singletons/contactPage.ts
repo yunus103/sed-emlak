@@ -5,8 +5,15 @@ export const contactPageType = defineType({
   title: "İletişim Sayfası",
   type: "document",
   fields: [
-    defineField({ name: "pageTitle", title: "Sayfa Başlığı", type: "string", validation: (Rule) => Rule.required() }),
+    defineField({ name: "pageTitle", title: "Sayfa Başlığı", type: "string", validation: (Rule) => Rule.required(), initialValue: "İletişim" }),
     defineField({ name: "pageSubtitle", title: "Giriş Metni", type: "text", rows: 3 }),
+    defineField({
+      name: "mainImage",
+      title: "Arka Plan Görseli",
+      type: "image",
+      options: { hotspot: true },
+      fields: [defineField({ name: "alt", title: "Alt Metni", type: "string" })],
+    }),
     defineField({ name: "formTitle", title: "Form Başlığı", type: "string", initialValue: "Bize Ulaşın" }),
     defineField({
       name: "successMessage",

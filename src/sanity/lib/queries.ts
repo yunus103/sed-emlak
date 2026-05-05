@@ -32,13 +32,21 @@ export const homePageQuery = groq`*[_type == "homePage"][0] {
 }`;
 
 export const aboutPageQuery = groq`*[_type == "aboutPage"][0] {
-  pageTitle, pageSubtitle, body,
+  pageTitle, pageSubtitle,
   mainImage { asset->{ _id, url, metadata { lqip, dimensions } }, alt, hotspot, crop },
+  storyTitle, body,
+  advisorName, advisorTitle, advisorBio,
+  advisorImage { asset->{ _id, url, metadata { lqip, dimensions } }, hotspot, crop },
+  missionTitle, missionText,
+  visionTitle, visionText,
+  stats[] { label, value },
   seo
 }`;
 
 export const contactPageQuery = groq`*[_type == "contactPage"][0] {
-  pageTitle, pageSubtitle, formTitle, successMessage, seo
+  pageTitle, pageSubtitle, formTitle, successMessage,
+  mainImage { asset->{ _id, url, metadata { lqip, dimensions } }, alt, hotspot, crop },
+  seo
 }`;
 
 export const blogPageQuery = groq`*[_type == "blogPage"][0] {
