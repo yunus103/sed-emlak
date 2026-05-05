@@ -1,26 +1,13 @@
 import Link from "next/link";
 import {
-  FaInstagram,
-  FaFacebook,
-  FaLinkedin,
-  FaYoutube,
-  FaTiktok,
-  FaPinterest,
-  FaWhatsapp,
+  FaInstagram, FaFacebook, FaLinkedin, FaYoutube,
+  FaTiktok, FaPinterest, FaWhatsapp,
 } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
-import { RiMailLine, RiPhoneLine, RiMapPinLine } from "react-icons/ri";
+import { RiMailLine, RiPhoneLine, RiMapPinLine, RiTimeLine } from "react-icons/ri";
 
-type NavItem = {
-  label: string;
-  href: string;
-  openInNewTab?: boolean;
-};
-
-type SocialLink = {
-  platform: string;
-  url: string;
-};
+type NavItem = { label: string; href: string; openInNewTab?: boolean };
+type SocialLink = { platform: string; url: string };
 
 const socialIconMap: Record<string, React.ElementType> = {
   instagram: FaInstagram,
@@ -33,7 +20,7 @@ const socialIconMap: Record<string, React.ElementType> = {
   whatsapp: FaWhatsapp,
 };
 
-function resolveHref(item: NavItem): string {
+function resolveHref(item: NavItem) {
   return item.href || "#";
 }
 
@@ -41,72 +28,33 @@ export function Footer({ settings, navigation }: { settings: any; navigation: an
   const footerLinks: NavItem[] = navigation?.footerLinks || [];
   const socialLinks: SocialLink[] = (settings?.socialLinks || []).filter((s: SocialLink) => s.url);
   const contact = settings?.contactInfo;
-  const currentYear = new Date().getFullYear();
+  const year = new Date().getFullYear();
+
+  const quickLinks: NavItem[] = footerLinks.length > 0 ? footerLinks : [
+    { label: "Satılık İlanlar", href: "/ilanlar/satilik" },
+    { label: "Kiralık İlanlar", href: "/ilanlar/kiralik" },
+    { label: "Bölgeler", href: "/bolgeler" },
+    { label: "Hizmetlerimiz", href: "/hizmetler" },
+    { label: "Blog", href: "/blog" },
+    { label: "Hakkımızda", href: "/hakkimizda" },
+    { label: "İletişim", href: "/iletisim" },
+  ];
 
   return (
-    <footer className="border-t bg-background">
-      <div className="container mx-auto px-4 py-12">
-        <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
+    <footer className="bg-foreground text-white/75">
+      <div className="container mx-auto px-4 py-14">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
 
-          {/* Marka & İletişim */}
-          <div className="space-y-4">
-            <h3 className="font-bold text-lg">{settings?.siteName}</h3>
-            {settings?.siteTagline && (
-              <p className="text-sm text-muted-foreground">{settings.siteTagline}</p>
-            )}
-            <div className="space-y-2">
-              {contact?.phone && (
-                <a
-                  href={`tel:${contact.phone}`}
-                  className="flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors"
-                >
-                  <RiPhoneLine className="shrink-0" />
-                  {contact.phone}
-                </a>
-              )}
-              {contact?.email && (
-                <a
-                  href={`mailto:${contact.email}`}
-                  className="flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors"
-                >
-                  <RiMailLine className="shrink-0" />
-                  {contact.email}
-                </a>
-              )}
-              {contact?.address && (
-                <p className="flex items-start gap-2 text-sm text-muted-foreground">
-                  <RiMapPinLine className="shrink-0 mt-0.5" />
-                  {contact.address}
-                </p>
-              )}
-            </div>
-          </div>
-
-          {/* Footer Linkleri */}
-          {footerLinks.length > 0 && (
-            <div className="space-y-4">
-              <h3 className="font-bold text-sm uppercase tracking-wider">Hızlı Linkler</h3>
-              <nav className="space-y-2">
-                {footerLinks.map((item, i) => (
-                  <Link
-                    key={i}
-                    href={resolveHref(item)}
-                    target={item.openInNewTab ? "_blank" : undefined}
-                    rel={item.openInNewTab ? "noopener noreferrer" : undefined}
-                    className="block text-sm text-muted-foreground hover:text-primary transition-colors"
-                  >
-                    {item.label}
-                  </Link>
-                ))}
-              </nav>
-            </div>
-          )}
-
-          {/* Sosyal Medya */}
-          {socialLinks.length > 0 && (
-            <div className="space-y-4">
-              <h3 className="font-bold text-sm uppercase tracking-wider">Sosyal Medya</h3>
-              <div className="flex flex-wrap gap-3">
+          {/* Brand column */}
+          <div className="lg:col-span-2 space-y-4">
+            <p className="text-xl font-heading font-bold text-white">
+              {settings?.siteName || "SED Emlak"}
+            </p>
+            <p className="text-sm leading-relaxed max-w-sm">
+              {settings?.siteTagline || "İstanbul'da 20 yılı aşkın tecrübesiyle kiralık ve satılık gayrimenkul danışmanlığı."}
+            </p>
+            {socialLinks.length > 0 && (
+              <div className="flex flex-wrap gap-3 pt-2">
                 {socialLinks.map((social, i) => {
                   const Icon = socialIconMap[social.platform];
                   if (!Icon) return null;
@@ -117,29 +65,80 @@ export function Footer({ settings, navigation }: { settings: any; navigation: an
                       target="_blank"
                       rel="noopener noreferrer"
                       aria-label={social.platform}
-                      className="flex h-9 w-9 items-center justify-center rounded-full border text-muted-foreground hover:text-primary hover:border-primary transition-colors"
+                      className="w-9 h-9 rounded-full border border-white/20 flex items-center justify-center text-white/60 hover:text-white hover:border-white transition-colors"
                     >
-                      <Icon size={16} />
+                      <Icon size={15} />
                     </a>
                   );
                 })}
               </div>
-            </div>
-          )}
+            )}
+          </div>
+
+          {/* Quick links */}
+          <div>
+            <p className="text-xs font-bold uppercase tracking-widest text-white mb-5">Hızlı Bağlantılar</p>
+            <nav className="space-y-2.5">
+              {quickLinks.map((item, i) => (
+                <Link
+                  key={i}
+                  href={resolveHref(item)}
+                  target={item.openInNewTab ? "_blank" : undefined}
+                  rel={item.openInNewTab ? "noopener noreferrer" : undefined}
+                  className="block text-sm hover:text-white transition-colors"
+                >
+                  {item.label}
+                </Link>
+              ))}
+            </nav>
+          </div>
+
+          {/* Contact */}
+          <div>
+            <p className="text-xs font-bold uppercase tracking-widest text-white mb-5">İletişim</p>
+            <ul className="space-y-3.5 text-sm">
+              {contact?.phone && (
+                <li className="flex items-start gap-2.5">
+                  <RiPhoneLine size={15} className="shrink-0 mt-0.5 text-primary" />
+                  <a href={`tel:${contact.phone}`} className="hover:text-white transition-colors">{contact.phone}</a>
+                </li>
+              )}
+              {contact?.email && (
+                <li className="flex items-start gap-2.5">
+                  <RiMailLine size={15} className="shrink-0 mt-0.5 text-primary" />
+                  <a href={`mailto:${contact.email}`} className="hover:text-white transition-colors">{contact.email}</a>
+                </li>
+              )}
+              {contact?.address && (
+                <li className="flex items-start gap-2.5">
+                  <RiMapPinLine size={15} className="shrink-0 mt-0.5 text-primary" />
+                  <span>{contact.address}</span>
+                </li>
+              )}
+              {contact?.workingHours && (
+                <li className="flex items-start gap-2.5">
+                  <RiTimeLine size={15} className="shrink-0 mt-0.5 text-primary" />
+                  <span>{contact.workingHours}</span>
+                </li>
+              )}
+              {!contact && (
+                <>
+                  <li className="flex items-start gap-2.5"><RiPhoneLine size={15} className="shrink-0 mt-0.5 text-primary" /><span>+90 532 000 00 00</span></li>
+                  <li className="flex items-start gap-2.5"><RiMailLine size={15} className="shrink-0 mt-0.5 text-primary" /><span>info@sedemlak.com</span></li>
+                  <li className="flex items-start gap-2.5"><RiMapPinLine size={15} className="shrink-0 mt-0.5 text-primary" /><span>Beşiktaş, İstanbul</span></li>
+                  <li className="flex items-start gap-2.5"><RiTimeLine size={15} className="shrink-0 mt-0.5 text-primary" /><span>Pzt–Cmt: 09:00–19:00</span></li>
+                </>
+              )}
+            </ul>
+          </div>
         </div>
 
-        {/* Alt Bar */}
-        <div className="mt-12 border-t pt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-xs text-muted-foreground">
-            © {currentYear} {settings?.siteName}. Tüm hakları saklıdır.
-          </p>
+        {/* Bottom bar */}
+        <div className="mt-12 pt-6 border-t border-white/10 flex flex-col sm:flex-row justify-between items-center gap-3 text-xs text-white/40">
+          <p>© {year} {settings?.siteName || "SED Emlak"}. Tüm hakları saklıdır.</p>
           <div className="flex gap-4">
-            <Link href="/yasal/gizlilik-politikasi" className="text-xs text-muted-foreground hover:text-primary transition-colors">
-              Gizlilik Politikası
-            </Link>
-            <Link href="/yasal/kullanim-kosullari" className="text-xs text-muted-foreground hover:text-primary transition-colors">
-              Kullanım Koşulları
-            </Link>
+            <Link href="/yasal/gizlilik-politikasi" className="hover:text-white transition-colors">Gizlilik Politikası</Link>
+            <Link href="/yasal/kullanim-kosullari" className="hover:text-white transition-colors">Kullanım Koşulları</Link>
           </div>
         </div>
       </div>

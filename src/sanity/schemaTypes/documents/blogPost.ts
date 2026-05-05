@@ -18,6 +18,13 @@ export const blogPostType = defineType({
       description: "Blog yazısının ait olduğu kategori",
     }),
     defineField({
+      name: "regions",
+      title: "İlgili Bölgeler",
+      type: "array",
+      of: [{ type: "reference", to: [{ type: "region" }] }],
+      description: "Bu blog yazısının ilgili olduğu ilçeleri seçin (Örn: Güngören, Merter).",
+    }),
+    defineField({
       name: "mainImage",
       title: "Kapak Görseli",
       type: "image",

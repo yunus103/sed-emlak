@@ -29,14 +29,17 @@ export const structure: StructureResolver = (S) =>
               .child(S.document().schemaType("blogPage").documentId("blogPage")),
             S.listItem().title("🛠 Hizmetler").id("servicesPage").schemaType("servicesPage")
               .child(S.document().schemaType("servicesPage").documentId("servicesPage")),
-            S.listItem().title("💼 Projeler").id("projectsPage").schemaType("projectsPage")
-              .child(S.document().schemaType("projectsPage").documentId("projectsPage")),
+            S.listItem().title("🔑 İlanlar").id("listingsPage").schemaType("listingsPage")
+              .child(S.document().schemaType("listingsPage").documentId("listingsPage")),
+            S.listItem().title("📍 Bölgeler").id("regionsPage").schemaType("regionsPage")
+              .child(S.document().schemaType("regionsPage").documentId("regionsPage")),
           ])
         ),
       S.divider(),
+      S.documentTypeListItem("listing").title("🔑 İlanlar"),
+      S.documentTypeListItem("region").title("📍 Bölgeler"),
       S.documentTypeListItem("blogCategory").title("📝 Blog Kategorileri"),
       S.documentTypeListItem("blogPost").title("📝 Blog Yazıları"),
       S.documentTypeListItem("service").title("🛠 Hizmetler"),
-      S.documentTypeListItem("project").title("💼 Projeler"),
       S.documentTypeListItem("legalPage").title("⚖️ Yasal Sayfalar"),
     ]);

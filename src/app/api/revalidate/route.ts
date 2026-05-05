@@ -46,7 +46,10 @@ export async function POST(req: Request) {
       contactPage: ["contact"],
       blogPost: ["blog"],
       service: ["services"],
-      project: ["projects"],
+      listing: ["listings"],
+      region: ["regions"],
+      listingsPage: ["listings"],
+      regionsPage: ["regions"],
       legalPage: ["legal"],
       faq: ["faq"],
     };
