@@ -134,7 +134,7 @@ export function ListingsFilter({ regions = [] }: { regions?: any[] }) {
           <label className="text-sm font-medium text-foreground">Mülk Türü</label>
           <Select
             value={currentTur}
-            onValueChange={(val) => handleFilterChange("tur", val === "all" ? "" : val)}
+            onValueChange={(val) => handleFilterChange("tur", val === "all" || !val ? "" : val)}
           >
             <SelectTrigger className="w-full bg-muted/50 border-border/50 rounded-xl px-4 py-2.5 h-auto text-sm focus:ring-primary/20 transition-all cursor-pointer">
               <SelectValue placeholder="Tümü" />
@@ -154,7 +154,7 @@ export function ListingsFilter({ regions = [] }: { regions?: any[] }) {
           <label className="text-sm font-medium text-foreground">İlçe / Bölge</label>
           <Select
             value={currentIlce}
-            onValueChange={(val) => handleFilterChange("ilce", val === "all" ? "" : val)}
+            onValueChange={(val) => handleFilterChange("ilce", val === "all" || !val ? "" : val)}
           >
             <SelectTrigger className="w-full bg-muted/50 border-border/50 rounded-xl px-4 py-2.5 h-auto text-sm focus:ring-primary/20 transition-all cursor-pointer">
               <SelectValue placeholder="Tüm İstanbul" />
@@ -178,7 +178,7 @@ export function ListingsFilter({ regions = [] }: { regions?: any[] }) {
           <label className="text-sm font-medium text-foreground">Oda Sayısı</label>
           <Select
             value={currentOda}
-            onValueChange={(val) => handleFilterChange("oda", val === "all" ? "" : val)}
+            onValueChange={(val) => handleFilterChange("oda", val === "all" || !val ? "" : val)}
           >
             <SelectTrigger className="w-full bg-muted/50 border-border/50 rounded-xl px-4 py-2.5 h-auto text-sm focus:ring-primary/20 transition-all cursor-pointer">
               <SelectValue placeholder="Farketmez" />
@@ -197,7 +197,7 @@ export function ListingsFilter({ regions = [] }: { regions?: any[] }) {
           <label className="text-sm font-medium text-foreground">Eşyalı Durumu</label>
           <Select
             value={currentEsyali}
-            onValueChange={(val) => handleFilterChange("esyali", val === "all" ? "" : val)}
+            onValueChange={(val) => handleFilterChange("esyali", val === "all" || !val ? "" : val)}
           >
             <SelectTrigger className="w-full bg-muted/50 border-border/50 rounded-xl px-4 py-2.5 h-auto text-sm focus:ring-primary/20 transition-all cursor-pointer">
               {/* Render human-readable label instead of raw value */}
