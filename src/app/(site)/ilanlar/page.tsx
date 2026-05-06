@@ -60,7 +60,7 @@ export default async function ListingsPage({
   const titlePrefix = filters.tip === "kiralik" ? "Kiralık İlanlar" : filters.tip === "satilik" ? "Satılık İlanlar" : "Tüm İlanlar";
   const bgImage = "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=1920&auto=format&fit=crop";
 
-  const regions = await getClient(isDraft).fetch(`*[_type == "region"] | order(name asc) { _id, name, slug }`);
+  const regions = await getClient(isDraft).fetch(`*[_type == "region"] | order(title asc) { _id, title, slug }`);
 
   return (
     <main className="flex min-h-screen flex-col w-full bg-background">

@@ -161,11 +161,14 @@ export function ListingsFilter({ regions = [] }: { regions?: any[] }) {
             </SelectTrigger>
             <SelectContent alignItemWithTrigger={false} className="rounded-xl border-border/50 shadow-xl">
               <SelectItem value="all" className="py-2.5 px-3 cursor-pointer">Tüm İstanbul</SelectItem>
-              {regions.map((r: any) => (
-                <SelectItem key={r._id} value={r.slug.current} className="py-2.5 px-3 cursor-pointer">
-                  {r.name}
-                </SelectItem>
-              ))}
+              {regions.map((r: any) => {
+                const label = r.title ? r.title.charAt(0).toLocaleUpperCase('tr-TR') + r.title.slice(1).toLocaleLowerCase('tr-TR') : "";
+                return (
+                  <SelectItem key={r._id} value={r.slug.current} className="py-2.5 px-3 cursor-pointer">
+                    {label}
+                  </SelectItem>
+                );
+              })}
             </SelectContent>
           </Select>
         </div>

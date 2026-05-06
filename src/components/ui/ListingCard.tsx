@@ -49,7 +49,7 @@ export function ListingCard({ listing, priority = false }: ListingCardProps) {
   const href = `/ilanlar/${slugStr || "ilan"}`;
 
   return (
-    <div className={`group flex flex-col rounded-2xl overflow-hidden bg-white shadow-sm border border-border/60 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 relative ${isInactive ? 'opacity-90 grayscale-[0.2]' : ''}`}>
+    <div className={`group flex flex-col rounded-2xl overflow-hidden bg-white shadow-sm border border-border/60 transition-all duration-300 relative ${isInactive ? 'opacity-90 grayscale-[0.2]' : ''}`}>
       {/* Slider Area */}
       <div className="relative w-full aspect-[4/3] overflow-hidden bg-muted">
         {images.length > 0 ? (
@@ -59,6 +59,12 @@ export function ListingCard({ listing, priority = false }: ListingCardProps) {
             pagination={{ clickable: true, dynamicBullets: true }}
             className="w-full h-full listing-swiper"
             loop={images.length > 1}
+            style={{
+              // @ts-ignore
+              "--swiper-navigation-color": "#000",
+              "--swiper-pagination-color": "#000",
+              "--swiper-navigation-size": "20px",
+            }}
           >
             {images.map((img, i) => (
               <SwiperSlide key={i}>
@@ -67,7 +73,7 @@ export function ListingCard({ listing, priority = false }: ListingCardProps) {
                       image={img}
                       fill
                       sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                      className="object-cover transition-transform duration-700 group-hover:scale-105"
+                      className="object-cover"
                       priority={priority && i === 0}
                     />
                 </Link>
@@ -100,7 +106,10 @@ export function ListingCard({ listing, priority = false }: ListingCardProps) {
         <div className="flex items-center gap-1.5 text-sm text-muted-foreground mb-4">
           <RiMapPin2Line size={15} className="shrink-0 text-primary" />
           <span className="truncate">
-            {[listing.neighborhood, listing.region?.name || listing.location].filter(Boolean).join(", ")}
+            {[
+              listing.neighborhood ? listing.neighborhood.charAt(0).toLocaleUpperCase('tr-TR') + listing.neighborhood.slice(1).toLocaleLowerCase('tr-TR') : "",
+              listing.region?.title ? listing.region.title.charAt(0).toLocaleUpperCase('tr-TR') + listing.region.title.slice(1).toLocaleLowerCase('tr-TR') : listing.location
+            ].filter(Boolean).join(", ")}
           </span>
         </div>
 

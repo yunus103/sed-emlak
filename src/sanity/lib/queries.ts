@@ -132,15 +132,15 @@ export const projectBySlugQuery = groq`*[_type == "project" && slug.current == $
 // ─── İlanlar ──────────────────────────────────────────────────────────────────
 
 export const listingsQuery = groq`*[_type == "listing" 
-  && ($tip == "" || status == $tip)
+  && ($tip == "" || ($tip == "satilik" && status in ["satilik", "satildi"]) || ($tip == "kiralik" && status in ["kiralik", "kiralandi"]))
   && ($tur == "" || propertyType == $tur)
   && ($oda == "" || features.rooms == $oda)
   && ($ilce == "" || region->slug.current == $ilce || neighborhood match $ilce)
   && ($fiyat == 100000000 || price <= $fiyat)
   && (!defined($esyali) || features.furnished == $esyali)
-] | order(_createdAt desc) {
+] | order(select(status in ["satildi", "kiralandi"] => 1, 0) asc, _createdAt desc) {
   _id, title, slug, status, propertyType, price, neighborhood,
-  region->{name, slug},
+  region->{title, slug},
   features { grossArea, netArea, rooms, floor, buildingAge, heating, furnished, creditEligible, deedStatus, dues },
   mainImage { asset->{ _id, url, metadata { lqip, dimensions } }, alt, hotspot, crop },
   gallery[] { asset->{ _id, url, metadata { lqip, dimensions } }, alt, hotspot, crop }
@@ -148,7 +148,7 @@ export const listingsQuery = groq`*[_type == "listing"
 
 export const listingDetailQuery = groq`*[_type == "listing" && slug.current == $slug][0] {
   _id, title, slug, status, propertyType, price, neighborhood, locationMap,
-  region->{name, slug},
+  region->{title, slug},
   features { grossArea, netArea, rooms, floor, buildingAge, heating, furnished, creditEligible, deedStatus, dues },
   mainImage { asset->{ _id, url, metadata { lqip, dimensions } }, alt, hotspot, crop },
   gallery[] { asset->{ _id, url, metadata { lqip, dimensions } }, alt, hotspot, crop },
@@ -157,7 +157,7 @@ export const listingDetailQuery = groq`*[_type == "listing" && slug.current == $
 
 export const relatedListingsQuery = groq`*[_type == "listing" && region._ref == $regionId && _id != $currentId] | order(_createdAt desc)[0...3] {
   _id, title, slug, status, propertyType, price, neighborhood,
-  region->{name, slug},
+  region->{title, slug},
   features { grossArea, netArea, rooms, floor, buildingAge, heating, furnished, creditEligible, deedStatus, dues },
   mainImage { asset->{ _id, url, metadata { lqip, dimensions } }, alt, hotspot, crop },
   gallery[] { asset->{ _id, url, metadata { lqip, dimensions } }, alt, hotspot, crop }
