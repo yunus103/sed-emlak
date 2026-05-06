@@ -32,11 +32,9 @@ export default async function ContactPage() {
   const page = data?.page;
   const settings = data?.settings;
 
-  if (!page || !settings) return null;
+  const contact = settings?.contactInfo;
 
-  const contact = settings.contactInfo;
-
-  const bgImage = page.mainImage?.asset
+  const bgImage = page?.mainImage?.asset
     ? urlForImage(page.mainImage as any)?.url()
     : undefined;
 
