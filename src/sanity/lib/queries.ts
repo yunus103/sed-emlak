@@ -129,6 +129,40 @@ export const projectBySlugQuery = groq`*[_type == "project" && slug.current == $
   seo
 }`;
 
+// ─── İlanlar ──────────────────────────────────────────────────────────────────
+
+export const listingsQuery = groq`*[_type == "listing" 
+  && ($tip == "" || status == $tip)
+  && ($tur == "" || propertyType == $tur)
+  && ($oda == "" || features.rooms == $oda)
+  && ($ilce == "" || region->slug.current == $ilce || neighborhood match $ilce)
+  && ($fiyat == 100000000 || price <= $fiyat)
+  && (!defined($esyali) || features.furnished == $esyali)
+] | order(_createdAt desc) {
+  _id, title, slug, status, propertyType, price, neighborhood,
+  region->{name, slug},
+  features { grossArea, netArea, rooms, floor, buildingAge, heating, furnished, creditEligible, deedStatus, dues },
+  mainImage { asset->{ _id, url, metadata { lqip, dimensions } }, alt, hotspot, crop },
+  gallery[] { asset->{ _id, url, metadata { lqip, dimensions } }, alt, hotspot, crop }
+}`;
+
+export const listingDetailQuery = groq`*[_type == "listing" && slug.current == $slug][0] {
+  _id, title, slug, status, propertyType, price, neighborhood, locationMap,
+  region->{name, slug},
+  features { grossArea, netArea, rooms, floor, buildingAge, heating, furnished, creditEligible, deedStatus, dues },
+  mainImage { asset->{ _id, url, metadata { lqip, dimensions } }, alt, hotspot, crop },
+  gallery[] { asset->{ _id, url, metadata { lqip, dimensions } }, alt, hotspot, crop },
+  description, seo
+}`;
+
+export const relatedListingsQuery = groq`*[_type == "listing" && region._ref == $regionId && _id != $currentId] | order(_createdAt desc)[0...3] {
+  _id, title, slug, status, propertyType, price, neighborhood,
+  region->{name, slug},
+  features { grossArea, netArea, rooms, floor, buildingAge, heating, furnished, creditEligible, deedStatus, dues },
+  mainImage { asset->{ _id, url, metadata { lqip, dimensions } }, alt, hotspot, crop },
+  gallery[] { asset->{ _id, url, metadata { lqip, dimensions } }, alt, hotspot, crop }
+}`;
+
 // ─── Yasal Sayfalar ────────────────────────────────────────────────────────────
 
 export const legalPageBySlugQuery = groq`*[_type == "legalPage" && slug.current == $slug][0] {
@@ -142,6 +176,7 @@ export const allSlugsForSitemapQuery = groq`{
   "blogCategories": *[_type == "blogCategory" && defined(slug.current)] { "slug": slug.current, _updatedAt },
   "services": *[_type == "service" && defined(slug.current)] { "slug": slug.current, _updatedAt },
   "projects": *[_type == "project" && defined(slug.current)] { "slug": slug.current, _updatedAt },
+  "listings": *[_type == "listing" && defined(slug.current)] { "slug": slug.current, _updatedAt },
   "legalPages": *[_type == "legalPage" && defined(slug.current)] { "slug": slug.current, _updatedAt }
 }`;
 

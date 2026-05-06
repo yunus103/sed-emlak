@@ -59,6 +59,7 @@ export const listingType = defineType({
       name: "mainImage",
       title: "Kapak Görseli",
       type: "image",
+      description: "İlan kartlarında ve detay sayfasında kapak olarak kullanılır. İdeal boyut: 1200x900 (4:3 oran).",
       options: { hotspot: true },
       fields: [defineField({ name: "alt", title: "Alt Metni", type: "string" })],
       validation: (Rule) => Rule.required(),
@@ -67,6 +68,7 @@ export const listingType = defineType({
       name: "gallery",
       title: "Fotoğraf Galerisi",
       type: "array",
+      description: "İlan detay sayfası ve kartlardaki kaydırmalı (Swiper) galeri için fotoğraflar. İdeal boyut: 1200x900 (4:3 oran). En fazla 5 görsel kartta görünür, tamamı detayda görünür.",
       of: [{ type: "image", options: { hotspot: true }, fields: [defineField({ name: "alt", title: "Alt Metni", type: "string" })] }],
     }),
     defineField({
