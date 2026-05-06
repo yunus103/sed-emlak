@@ -20,13 +20,15 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function AboutPage() {
   const data = await getClient().fetch(aboutPageQuery);
 
-  const bgImage = data?.mainImage?.asset
-    ? urlForImage(data.mainImage).url()
+  if (!data) return null;
+
+  const bgImage = data.mainImage?.asset
+    ? urlForImage(data.mainImage as any)?.url()
     : undefined;
 
-  const advisorImg = data?.advisorImage?.asset
-    ? urlForImage(data.advisorImage).width(800).height(1000).url()
-    : "https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=800&auto=format&fit=crop";
+  const advisorImg = (data.advisorImage?.asset
+    ? urlForImage(data.advisorImage as any)?.width(800).height(1000).url()
+    : undefined) || "https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=800&auto=format&fit=crop";
 
   return (
     <main className="flex min-h-screen flex-col w-full bg-background">

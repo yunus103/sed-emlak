@@ -29,6 +29,8 @@ export default async function HomePage() {
     { next: { tags: ["home"] } }
   );
 
+  if (!data) return null;
+
   return (
     <main className="flex min-h-screen flex-col w-full">
       <Hero data={data} />

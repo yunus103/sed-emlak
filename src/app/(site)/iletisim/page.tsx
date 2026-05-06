@@ -31,10 +31,13 @@ export default async function ContactPage() {
   const data = await getClient().fetch(query);
   const page = data?.page;
   const settings = data?.settings;
-  const contact = settings?.contactInfo;
 
-  const bgImage = page?.mainImage?.asset
-    ? urlForImage(page.mainImage).url()
+  if (!page || !settings) return null;
+
+  const contact = settings.contactInfo;
+
+  const bgImage = page.mainImage?.asset
+    ? urlForImage(page.mainImage as any)?.url()
     : undefined;
 
   const phone = contact?.phone || "+90 532 000 00 00";
@@ -43,8 +46,8 @@ export default async function ContactPage() {
   const address = contact?.address || "İstanbul, Türkiye";
   const mapIframe = contact?.mapIframe;
 
-  const phoneClean = phone.replace(/[^0-9+]/g, "");
-  const waLink = whatsappDisplay.replace(/[^0-9]/g, "");
+  const phoneClean = phone?.replace(/[^0-9+]/g, "") || "";
+  const waLink = whatsappDisplay?.replace(/[^0-9]/g, "") || "";
 
   return (
     <main className="flex min-h-screen flex-col w-full bg-background">
