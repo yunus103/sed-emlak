@@ -35,6 +35,11 @@ export function ListingsFilter({ regions = [] }: { regions?: any[] }) {
 
   const [isOpen, setIsOpen] = useState(false);
 
+  const currentIlceObj = regions?.find((r: any) => r.slug?.current === currentIlce);
+  const ilceDisplayValue = currentIlceObj?.title
+    ? currentIlceObj.title.charAt(0).toLocaleUpperCase('tr-TR') + currentIlceObj.title.slice(1).toLocaleLowerCase('tr-TR')
+    : currentIlce;
+
   const createQueryString = useCallback(
     (name: string, value: string) => {
       const params = new URLSearchParams(searchParams.toString());
@@ -157,7 +162,9 @@ export function ListingsFilter({ regions = [] }: { regions?: any[] }) {
             onValueChange={(val) => handleFilterChange("ilce", val === "all" || !val ? "" : val)}
           >
             <SelectTrigger className="w-full bg-muted/50 border-border/50 rounded-xl px-4 py-2.5 h-auto text-sm focus:ring-primary/20 transition-all cursor-pointer">
-              <SelectValue placeholder="Tüm İstanbul" />
+              <span className={ilceDisplayValue ? "text-foreground" : "text-muted-foreground"}>
+                {ilceDisplayValue || "Tüm İstanbul"}
+              </span>
             </SelectTrigger>
             <SelectContent alignItemWithTrigger={false} className="rounded-xl border-border/50 shadow-xl">
               <SelectItem value="all" className="py-2.5 px-3 cursor-pointer">Tüm İstanbul</SelectItem>

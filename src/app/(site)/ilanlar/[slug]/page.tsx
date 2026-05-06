@@ -59,7 +59,7 @@ export default async function ListingDetailPage({ params }: { params: Promise<{ 
     ? new Intl.NumberFormat('tr-TR', { style: 'currency', currency: 'TRY', maximumFractionDigits: 0 }).format(listing.price)
     : "Fiyat Belirtilmemiş";
 
-  const locationStr = [listing.neighborhood, listing.region?.name].filter(Boolean).join(", ");
+  const locationStr = [listing.neighborhood, listing.region?.title].filter(Boolean).join(", ");
   
   // Ulaş Koyuncu (Static for now, normally from settings/about)
   const advisor = {
@@ -91,8 +91,8 @@ export default async function ListingDetailPage({ params }: { params: Promise<{ 
             <span>/</span>
             {listing.region && (
               <>
-                <Link href={`/ilanlar?ilce=${listing.region.slug?.current || listing.region.name}`} className="hover:text-primary transition-colors">
-                  {listing.region.name}
+                <Link href={`/ilanlar?ilce=${listing.region.slug?.current || listing.region.title}`} className="hover:text-primary transition-colors">
+                  {listing.region.title}
                 </Link>
                 <span>/</span>
               </>
@@ -205,8 +205,8 @@ export default async function ListingDetailPage({ params }: { params: Promise<{ 
             </div>
             {listing.region && (
               <div className="mt-10 text-center">
-                <Link href={`/ilanlar?ilce=${listing.region.slug?.current || listing.region.name}`} className="inline-flex items-center gap-2 text-primary font-medium hover:underline">
-                  {listing.region.name} Bölgesindeki Tüm İlanlar →
+                <Link href={`/ilanlar?ilce=${listing.region.slug?.current || listing.region.title}`} className="inline-flex items-center gap-2 text-primary font-medium hover:underline">
+                  {listing.region.title} Bölgesindeki Tüm İlanlar →
                 </Link>
               </div>
             )}
