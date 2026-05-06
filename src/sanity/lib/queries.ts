@@ -146,13 +146,21 @@ export const listingsQuery = groq`*[_type == "listing"
   gallery[] { asset->{ _id, url, metadata { lqip, dimensions } }, alt, hotspot, crop }
 }`;
 
-export const listingDetailQuery = groq`*[_type == "listing" && slug.current == $slug][0] {
-  _id, title, slug, status, propertyType, price, neighborhood, locationMap,
-  region->{title, slug},
-  features { grossArea, netArea, rooms, floor, buildingAge, heating, furnished, creditEligible, deedStatus, dues },
-  mainImage { asset->{ _id, url, metadata { lqip, dimensions } }, alt, hotspot, crop },
-  gallery[] { asset->{ _id, url, metadata { lqip, dimensions } }, alt, hotspot, crop },
-  description, seo
+export const listingDetailQuery = groq`{
+  "listing": *[_type == "listing" && slug.current == $slug][0] {
+    _id, title, slug, status, propertyType, price, neighborhood, locationMap,
+    region->{title, slug},
+    features { grossArea, netArea, rooms, floor, buildingAge, heating, furnished, creditEligible, deedStatus, dues },
+    mainImage { asset->{ _id, url, metadata { lqip, dimensions } }, alt, hotspot, crop },
+    gallery[] { asset->{ _id, url, metadata { lqip, dimensions } }, alt, hotspot, crop },
+    description, seo
+  },
+  "advisor": *[_type == "aboutPage"][0] {
+    advisorName, advisorTitle, advisorImage
+  },
+  "settings": *[_type == "siteSettings"][0] {
+    contactInfo { phone, whatsappNumber }
+  }
 }`;
 
 export const relatedListingsQuery = groq`*[_type == "listing" && region._ref == $regionId && _id != $currentId] | order(_createdAt desc)[0...3] {

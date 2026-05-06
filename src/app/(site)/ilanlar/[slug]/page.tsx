@@ -17,15 +17,15 @@ export const revalidate = 60;
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> | { slug: string } }): Promise<Metadata> {
   const p = await params;
-  const data = await getClient().fetch(listingDetailQuery, { slug: p.slug });
+  const { listing } = await getClient().fetch(listingDetailQuery, { slug: p.slug });
   const settings = await getClient().fetch(defaultSeoQuery);
   const siteName = settings?.siteName || "SED Emlak";
 
-  if (!data) return { title: `İlan Bulunamadı | ${siteName}` };
+  if (!listing) return { title: `İlan Bulunamadı | ${siteName}` };
 
-  const metaTitle = data.seo?.metaTitle || `${data.title} | ${siteName}`;
-  const metaDesc = data.seo?.metaDescription || data.description?.[0]?.children?.[0]?.text?.slice(0, 150) || "";
-  const ogImage = data.seo?.ogImage || data.mainImage;
+  const metaTitle = listing.seo?.metaTitle || `${listing.title} | ${siteName}`;
+  const metaDesc = listing.seo?.metaDescription || listing.description?.[0]?.children?.[0]?.text?.slice(0, 150) || "";
+  const ogImage = listing.seo?.ogImage || listing.mainImage;
 
   return {
     title: metaTitle,
@@ -40,7 +40,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
 export default async function ListingDetailPage({ params }: { params: Promise<{ slug: string }> | { slug: string } }) {
   const p = await params;
-  const listing = await getClient().fetch(listingDetailQuery, { slug: p.slug });
+  const { listing, advisor: advisorData, settings } = await getClient().fetch(listingDetailQuery, { slug: p.slug });
 
   if (!listing) {
     notFound();
@@ -61,13 +61,21 @@ export default async function ListingDetailPage({ params }: { params: Promise<{ 
 
   const locationStr = [listing.neighborhood, listing.region?.title].filter(Boolean).join(", ");
   
-  // Ulaş Koyuncu (Static for now, normally from settings/about)
+  // Dynamic Advisor Info from Sanity
   const advisor = {
-    name: "Ulaş Koyuncu",
-    title: "Kurucu & Gayrimenkul Danışmanı",
-    phone: "+90 532 201 64 64",
-    image: "https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=400&auto=format&fit=crop",
-    waMessage: `Merhaba Ulaş Bey, web sitenizdeki "${listing.title}" başlıklı ilanınızla ilgileniyorum. Bilgi alabilir miyim?`
+    name: advisorData?.advisorName || "Ulaş Koyuncu",
+    title: advisorData?.advisorTitle || "Gayrimenkul Danışmanı",
+    phone: settings?.contactInfo?.phone || "+90 532 201 64 64",
+    whatsapp: settings?.contactInfo?.whatsappNumber || "+905322016464",
+    image: advisorData?.advisorImage ? urlForImage(advisorData.advisorImage)?.width(400).height(400).url() : "https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=400&auto=format&fit=crop",
+    waMessage: `Merhaba, web sitenizdeki "${listing.title}" başlıklı ilanınızla ilgileniyorum. Bilgi alabilir miyim?`
+  };
+
+  const statusLabels: Record<string, string> = {
+    satilik: "Satılık",
+    kiralik: "Kiralık",
+    satildi: "Satıldı",
+    kiralandi: "Kiralandı",
   };
 
   const bgImage = listing.mainImage?.asset ? urlForImage(listing.mainImage as any)?.url() : undefined;
@@ -117,7 +125,7 @@ export default async function ListingDetailPage({ params }: { params: Promise<{ 
                 <div className="w-px h-12 bg-border hidden md:block"></div>
                 <div className="flex flex-col">
                   <span className="text-sm text-muted-foreground mb-1">Durum</span>
-                  <span className="font-medium capitalize">{listing.status}</span>
+                  <span className="font-medium">{statusLabels[listing.status] || listing.status}</span>
                 </div>
                 <div className="w-px h-12 bg-border hidden md:block"></div>
                 <div className="flex flex-col">

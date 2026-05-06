@@ -3,7 +3,12 @@
 import React, { useMemo } from "react";
 import Link from "next/link";
 import { SanityImage } from "@/components/ui/SanityImage";
-import { RiHotelBedLine, RiShowersLine, RiRulerLine, RiMapPin2Line } from "react-icons/ri";
+import {
+  RiHotelBedLine,
+  RiShowersLine,
+  RiRulerLine,
+  RiMapPin2Line,
+} from "react-icons/ri";
 
 // Swiper imports
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -27,29 +32,40 @@ export function ListingCard({ listing, priority = false }: ListingCardProps) {
     if (listing.gallery && Array.isArray(listing.gallery)) {
       allImages.push(...listing.gallery);
     }
-    // Eğer hiç görsel yoksa fallback url dönmemek için null kontrolü, 
+    // Eğer hiç görsel yoksa fallback url dönmemek için null kontrolü,
     // ama SanityImage zaten asset kontrolü yapıyor.
     return allImages.slice(0, 5);
   }, [listing.mainImage, listing.coverImage, listing.gallery]);
 
-  const fallbackImage = "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=800&auto=format&fit=crop";
+  const fallbackImage =
+    "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=800&auto=format&fit=crop";
 
   const statusMap: Record<string, { label: string; color: string }> = {
     satilik: { label: "SATILIK", color: "bg-primary text-primary-foreground" },
     kiralik: { label: "KİRALIK", color: "bg-amber-500 text-white" },
-    satildi: { label: "SATILDI", color: "bg-destructive text-destructive-foreground" },
+    satildi: {
+      label: "SATILDI",
+      color: "bg-destructive text-destructive-foreground",
+    },
     kiralandi: { label: "KİRALANDI", color: "bg-slate-600 text-white" },
   };
 
-  const statusConfig = statusMap[listing.status] || { label: listing.status?.toUpperCase() || "İLAN", color: "bg-primary text-white" };
-  const isInactive = listing.status === "satildi" || listing.status === "kiralandi";
+  const statusConfig = statusMap[listing.status] || {
+    label: listing.status?.toUpperCase() || "İLAN",
+    color: "bg-primary text-white",
+  };
+  const isInactive =
+    listing.status === "satildi" || listing.status === "kiralandi";
 
   // Slug resolving
-  const slugStr = typeof listing.slug === "object" ? listing.slug?.current : listing.slug;
+  const slugStr =
+    typeof listing.slug === "object" ? listing.slug?.current : listing.slug;
   const href = `/ilanlar/${slugStr || "ilan"}`;
 
   return (
-    <div className={`group flex flex-col rounded-2xl overflow-hidden bg-white shadow-sm border border-border/60 transition-all duration-300 relative ${isInactive ? 'opacity-90 grayscale-[0.2]' : ''}`}>
+    <div
+      className={`group flex flex-col rounded-2xl overflow-hidden bg-white shadow-sm border border-border/60 transition-all duration-500 relative ${isInactive ? "grayscale-[0.8] hover:grayscale-[0.4] opacity-95" : ""}`}
+    >
       {/* Slider Area */}
       <div className="relative w-full aspect-[4/3] overflow-hidden bg-muted">
         {images.length > 0 ? (
@@ -69,26 +85,42 @@ export function ListingCard({ listing, priority = false }: ListingCardProps) {
             {images.map((img, i) => (
               <SwiperSlide key={i}>
                 <Link href={href} className="block w-full h-full">
-                    <SanityImage
-                      image={img}
-                      fill
-                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                      className="object-cover"
-                      priority={priority && i === 0}
-                    />
+                  <SanityImage
+                    image={img}
+                    fill
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                    className="object-cover"
+                    priority={priority && i === 0}
+                  />
                 </Link>
               </SwiperSlide>
             ))}
           </Swiper>
         ) : (
           <Link href={href} className="block w-full h-full">
-            <img src={listing.img || fallbackImage} alt={listing.title} className="object-cover w-full h-full" />
+            <img
+              src={listing.img || fallbackImage}
+              alt={listing.title}
+              className="object-cover w-full h-full"
+            />
           </Link>
+        )}
+
+        {/* Sold/Rented Overlay Sash */}
+        {isInactive && (
+          <div className="absolute inset-0 z-20 pointer-events-none flex items-center justify-center overflow-hidden bg-black/10">
+            <div className="bg-destructive/90 text-white py-1.5 px-20 transform -rotate-45 font-bold text-[10px] tracking-widest shadow-2xl border-y border-white/20 whitespace-nowrap">
+              SED EMLAK TARAFINDAN{" "}
+              {listing.status === "satildi" ? "SATILDI" : "KİRALANDI"}
+            </div>
+          </div>
         )}
 
         {/* Status badge */}
         <div className="absolute top-3 left-3 z-10 pointer-events-none">
-          <span className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-bold tracking-wide shadow ${statusConfig.color}`}>
+          <span
+            className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-bold tracking-wide shadow ${statusConfig.color}`}
+          >
             {statusConfig.label}
           </span>
         </div>
@@ -96,8 +128,16 @@ export function ListingCard({ listing, priority = false }: ListingCardProps) {
 
       {/* Content Area */}
       <Link href={href} className="flex flex-col flex-1 p-5">
-        <p className={`text-2xl font-bold mb-1 ${isInactive ? 'text-muted-foreground line-through' : 'text-primary'}`}>
-          {listing.price ? new Intl.NumberFormat('tr-TR', { style: 'currency', currency: 'TRY', maximumFractionDigits: 0 }).format(listing.price) : (listing.priceText || "Fiyat Belirtilmemiş")}
+        <p
+          className={`text-2xl font-bold mb-1 ${isInactive ? "text-muted-foreground line-through" : "text-primary"}`}
+        >
+          {listing.price
+            ? new Intl.NumberFormat("tr-TR", {
+                style: "currency",
+                currency: "TRY",
+                maximumFractionDigits: 0,
+              }).format(listing.price)
+            : listing.priceText || "Fiyat Belirtilmemiş"}
         </p>
         <h3 className="font-semibold text-base leading-snug mb-3 text-foreground group-hover:text-primary transition-colors line-clamp-2">
           {listing.title}
@@ -107,9 +147,17 @@ export function ListingCard({ listing, priority = false }: ListingCardProps) {
           <RiMapPin2Line size={15} className="shrink-0 text-primary" />
           <span className="truncate">
             {[
-              listing.neighborhood ? listing.neighborhood.charAt(0).toLocaleUpperCase('tr-TR') + listing.neighborhood.slice(1).toLocaleLowerCase('tr-TR') : "",
-              listing.region?.title ? listing.region.title.charAt(0).toLocaleUpperCase('tr-TR') + listing.region.title.slice(1).toLocaleLowerCase('tr-TR') : listing.location
-            ].filter(Boolean).join(", ")}
+              listing.neighborhood
+                ? listing.neighborhood.charAt(0).toLocaleUpperCase("tr-TR") +
+                  listing.neighborhood.slice(1).toLocaleLowerCase("tr-TR")
+                : "",
+              listing.region?.title
+                ? listing.region.title.charAt(0).toLocaleUpperCase("tr-TR") +
+                  listing.region.title.slice(1).toLocaleLowerCase("tr-TR")
+                : listing.location,
+            ]
+              .filter(Boolean)
+              .join(", ")}
           </span>
         </div>
 
@@ -119,8 +167,11 @@ export function ListingCard({ listing, priority = false }: ListingCardProps) {
             {listing.features?.rooms || listing.beds || "-"}
           </span>
           <span className="flex items-center gap-1.5" title="Mülk Türü">
-            <RiShowersLine size={16} className="opacity-0 w-0 h-0 hidden" /> {/* Banyo geçici kalktı, mülk türü gelsin */}
-            <span className="px-2 py-0.5 bg-secondary text-secondary-foreground rounded text-xs">{listing.propertyType || "Bilinmiyor"}</span>
+            <RiShowersLine size={16} className="opacity-0 w-0 h-0 hidden" />{" "}
+            {/* Banyo geçici kalktı, mülk türü gelsin */}
+            <span className="px-2 py-0.5 bg-secondary text-secondary-foreground rounded text-xs">
+              {listing.propertyType || "Bilinmiyor"}
+            </span>
           </span>
           <span className="flex items-center gap-1.5" title="Brüt m²">
             <RiRulerLine size={16} />
