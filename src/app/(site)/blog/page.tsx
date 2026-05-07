@@ -30,9 +30,11 @@ export default async function BlogListPage() {
         size="compact"
       />
 
-      <section className="py-16">
-        <div className="container mx-auto px-4">
-          <BlogFilter posts={posts} categories={categories} />
+      <section className="relative z-10 pb-16 md:pb-24">
+        <div className="container mx-auto px-4 md:px-8">
+          <div className="-mt-8 md:-mt-12 bg-background rounded-t-[2rem] md:rounded-t-[3rem] pt-10 md:pt-14 px-4 md:px-10 shadow-xl border border-border/10">
+            <BlogFilter posts={posts} categories={categories} />
+          </div>
         </div>
       </section>
     </div>
