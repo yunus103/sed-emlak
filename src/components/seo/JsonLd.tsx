@@ -30,6 +30,6 @@ export function articleJsonLd(post: any) {
     "@type": "Article",
     headline: post?.title,
     datePublished: post?.publishedAt,
-    url: `${getSiteUrl()}/blog/${post?.slug?.current}`,
+    url: `${getSiteUrl()}/${post?.slug?.current}`,
   };
 }

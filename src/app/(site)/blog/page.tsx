@@ -23,13 +23,27 @@ export default async function BlogListPage() {
   ]);
 
   return (
-    <div className="container mx-auto px-4 py-16">
-      <FadeIn direction="up">
-        <h1 className="text-4xl font-bold mb-4">{pageData?.pageTitle || "Blog"}</h1>
-        <p className="text-muted-foreground mb-8">{pageData?.pageSubtitle || "Yazılar, güncellemeler ve haberler."}</p>
-      </FadeIn>
+    <div className="min-h-screen">
+      {/* Hero Section */}
+      <section className="bg-muted/30 py-20 border-b">
+        <div className="container mx-auto px-4">
+          <FadeIn direction="up">
+            <h1 className="text-4xl md:text-5xl font-bold mb-4 font-bankgothic uppercase tracking-tight">
+              {pageData?.pageTitle || "Blog"}
+            </h1>
+            <p className="text-lg text-muted-foreground max-w-2xl leading-relaxed">
+              {pageData?.pageSubtitle || "Gayrimenkul dünyasından en güncel haberler, bölge rehberleri ve emlak ipuçları."}
+            </p>
+          </FadeIn>
+        </div>
+      </section>
 
-      <BlogFilter posts={posts} categories={categories} />
+      {/* Main Content */}
+      <section className="py-16">
+        <div className="container mx-auto px-4">
+          <BlogFilter posts={posts} categories={categories} />
+        </div>
+      </section>
     </div>
   );
 }

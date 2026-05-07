@@ -70,6 +70,7 @@ export const blogListQuery = groq`*[_type == "blogPost"] | order(publishedAt des
 
 export const blogPostBySlugQuery = groq`*[_type == "blogPost" && slug.current == $slug][0] {
   _id, title, slug, publishedAt, excerpt, category->{_id, title, slug}, seoTags,
+  regions[]->{title, "slug": slug.current},
   mainImage { asset->{ _id, url, metadata { lqip, dimensions } }, alt, hotspot, crop },
   body[] {
     ...,
