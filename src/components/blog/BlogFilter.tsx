@@ -46,7 +46,7 @@ export function BlogFilter({ posts, categories }: BlogFilterProps) {
               variant={!currentCategory ? "default" : "ghost"}
               size="sm"
               onClick={() => setCategory(null)}
-              className="rounded-full px-5"
+              className="rounded-full px-5 cursor-pointer"
             >
               Tümü
             </Button>
@@ -56,7 +56,7 @@ export function BlogFilter({ posts, categories }: BlogFilterProps) {
                 variant={currentCategory === cat.slug?.current ? "default" : "ghost"}
                 size="sm"
                 onClick={() => setCategory(cat.slug?.current)}
-                className="rounded-full px-5"
+                className="rounded-full px-5 cursor-pointer"
               >
                 {cat.title}
               </Button>
@@ -68,47 +68,58 @@ export function BlogFilter({ posts, categories }: BlogFilterProps) {
       {filteredPosts?.length > 0 ? (
         <AnimateGroup key={currentCategory || "all"} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
           {filteredPosts.map((post: any) => (
-            <Link key={post.slug?.current} href={`/${post.slug?.current}`} className="group block h-full">
-              <article className="relative bg-card rounded-2xl overflow-hidden border border-border/40 transition-all duration-500 hover:shadow-[0_20px_50px_rgba(0,0,0,0.1)] hover:border-border/80 h-full flex flex-col">
-                {post.mainImage && (
-                  <div className="relative aspect-[16/10] overflow-hidden bg-muted">
-                    <SanityImage
-                      image={post.mainImage}
-                      fill
-                      sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                      className="object-cover transition-transform duration-1000 ease-out group-hover:scale-110"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                  </div>
-                )}
-                <div className="p-7 flex-grow flex flex-col">
-                  <div className="flex items-center gap-3 mb-4">
-                    {post.category && (
-                      <span className="text-[10px] font-bold uppercase tracking-[0.1em] px-2.5 py-1 bg-primary/5 text-primary border border-primary/10 rounded-md">
-                        {post.category.title}
-                      </span>
-                    )}
-                    {post.publishedAt && (
-                      <time className="text-[11px] font-medium text-muted-foreground uppercase tracking-wider">
-                        {formatDate(post.publishedAt)}
-                      </time>
-                    )}
-                  </div>
-                  <h2 className="text-xl font-bold mb-3 font-bankgothic leading-tight group-hover:text-primary transition-colors duration-300 line-clamp-2">
-                    {post.title}
-                  </h2>
-                  {post.excerpt && (
-                    <p className="text-sm text-muted-foreground/80 leading-relaxed line-clamp-3 mb-6">{post.excerpt}</p>
-                  )}
-                  <div className="mt-auto pt-4 border-t border-border/40 flex items-center justify-between">
-                     <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-primary flex items-center gap-2 group-hover:gap-3 transition-all duration-300">
-                       Devamını Oku
-                       <span className="text-lg leading-none">→</span>
-                     </span>
-                  </div>
+            <article key={post.slug?.current} className="group relative bg-card rounded-2xl overflow-hidden border border-border/40 transition-all duration-500 hover:shadow-[0_20px_50px_rgba(0,0,0,0.1)] hover:border-border/80 h-full flex flex-col">
+              {/* Image */}
+              {post.mainImage && (
+                <div className="relative aspect-[16/10] overflow-hidden bg-muted">
+                  <SanityImage
+                    image={post.mainImage}
+                    fill
+                    sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                    className="object-cover transition-transform duration-1000 ease-out group-hover:scale-110"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                 </div>
-              </article>
-            </Link>
+              )}
+              
+              <div className="p-7 flex-grow flex flex-col">
+                <div className="flex items-center gap-3 mb-4">
+                  {post.category && (
+                    <Link
+                      href={`/blog?category=${post.category.slug?.current}`}
+                      className="relative z-20 text-[10px] font-bold uppercase tracking-[0.1em] px-2.5 py-1 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors"
+                    >
+                      {post.category.title}
+                    </Link>
+                  )}
+                  {post.publishedAt && (
+                    <time className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider">
+                      {formatDate(post.publishedAt)}
+                    </time>
+                  )}
+                </div>
+
+                {/* Stretched Link for the entire card */}
+                <h2 className="text-lg font-bold mb-3 font-bankgothic leading-tight group-hover:text-primary transition-colors duration-300 line-clamp-2">
+                  <Link href={`/${post.slug?.current}`} className="after:absolute after:inset-0 after:z-10">
+                    {post.title}
+                  </Link>
+                </h2>
+
+                {post.excerpt && (
+                  <p className="text-[13px] text-muted-foreground/80 leading-relaxed line-clamp-3 mb-6">
+                    {post.excerpt}
+                  </p>
+                )}
+
+                <div className="mt-auto pt-4 border-t border-border/40 flex items-center justify-between">
+                   <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-primary flex items-center gap-2 group-hover:gap-3 transition-all duration-300">
+                     Devamını Oku
+                     <span className="text-lg leading-none">→</span>
+                   </span>
+                </div>
+              </div>
+            </article>
           ))}
         </AnimateGroup>
       ) : (

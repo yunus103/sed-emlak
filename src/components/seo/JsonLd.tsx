@@ -24,12 +24,62 @@ export function organizationJsonLd(settings: any) {
   };
 }
 
-export function articleJsonLd(post: any) {
+export function articleJsonLd(post: any, siteSettings?: any) {
+  const siteUrl = getSiteUrl();
+  const logoUrl = siteSettings?.logo?.asset?.url;
+
+  const publisher = {
+    "@type": "RealEstateAgent",
+    name: "SED Emlak",
+    url: siteUrl,
+    ...(logoUrl && {
+      logo: {
+        "@type": "ImageObject",
+        url: logoUrl,
+      },
+    }),
+  };
+
+  const author = {
+    "@type": "Organization",
+    name: "SED Emlak",
+    url: siteUrl,
+  };
+
   return {
     "@context": "https://schema.org",
     "@type": "Article",
     headline: post?.title,
+    description: post?.excerpt || "",
+    inLanguage: "tr-TR",
     datePublished: post?.publishedAt,
-    url: `${getSiteUrl()}/${post?.slug?.current}`,
+    dateModified: post?._updatedAt || post?.publishedAt,
+    url: `${siteUrl}/${post?.slug?.current}`,
+    ...(post?.mainImage?.asset?.url && {
+      image: {
+        "@type": "ImageObject",
+        url: post.mainImage.asset.url,
+        ...(post.mainImage.asset.metadata?.dimensions && {
+          width: post.mainImage.asset.metadata.dimensions.width,
+          height: post.mainImage.asset.metadata.dimensions.height,
+        }),
+      },
+    }),
+    author,
+    publisher,
+  };
+}
+
+export function breadcrumbListJsonLd(breadcrumbs: Array<{ label: string; href?: string }>) {
+  const siteUrl = getSiteUrl();
+  return {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: breadcrumbs.map((crumb, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      name: crumb.label,
+      ...(crumb.href && { item: `${siteUrl}${crumb.href}` }),
+    })),
   };
 }

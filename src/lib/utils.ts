@@ -15,3 +15,11 @@ export function getSiteUrl(): string {
   const url = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
   return url.replace(/\/$/, "");
 }
+export function formatPrice(price: number): string {
+  if (price === 0 || !price) return "Fiyat Sorun";
+  return new Intl.NumberFormat("tr-TR", {
+    style: "currency",
+    currency: "TRY",
+    maximumFractionDigits: 0,
+  }).format(price);
+}

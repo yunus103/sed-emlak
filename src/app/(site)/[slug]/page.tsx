@@ -2,16 +2,24 @@ import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { draftMode } from "next/headers";
 import { getClient, client } from "@/sanity/lib/client";
-import { blogPostBySlugQuery, blogListQuery } from "@/sanity/lib/queries";
+import { 
+  blogPostBySlugQuery, 
+  blogListQuery, 
+  blogRelatedPostsQuery, 
+  sidebarListingsQuery,
+  aboutPageQuery 
+} from "@/sanity/lib/queries";
 import { buildMetadata } from "@/lib/seo";
 import { RichText } from "@/components/ui/RichText";
 import { SanityImage } from "@/components/ui/SanityImage";
 import { FadeIn } from "@/components/ui/FadeIn";
-import { JsonLd, articleJsonLd } from "@/components/seo/JsonLd";
+import { JsonLd, articleJsonLd, breadcrumbListJsonLd } from "@/components/seo/JsonLd";
 import { formatDate } from "@/lib/utils";
 import Link from "next/link";
-import { blogRelatedPostsQuery } from "@/sanity/lib/queries";
-import { Calendar, Tag, MapPin, ChevronRight } from "lucide-react";
+import { Calendar, Tag, MapPin } from "lucide-react";
+import { PageHero } from "@/components/ui/PageHero";
+import { AdvisorCard } from "@/components/blog/AdvisorCard";
+import { SidebarListings } from "@/components/blog/SidebarListings";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -42,11 +50,17 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function BlogPostPage({ params }: Props) {
   const { slug } = await params;
   const isDraft = (await draftMode()).isEnabled;
-  const post = await getClient(isDraft).fetch(
-    blogPostBySlugQuery,
-    { slug },
-    { next: { tags: ["blog"] } }
-  );
+  
+  const [post, sidebarListings, aboutData, siteSettings] = await Promise.all([
+    getClient(isDraft).fetch(blogPostBySlugQuery, { slug }, { next: { tags: ["blog"] } }),
+    client.fetch(sidebarListingsQuery, {}, { next: { tags: ["listing"] } }),
+    client.fetch(aboutPageQuery, {}, { next: { tags: ["layout"] } }),
+    client.fetch(
+      `*[_type == "siteSettings"][0] { siteName, logo { asset->{ _id, url } } }`,
+      {},
+      { next: { tags: ["layout"] } }
+    )
+  ]);
 
   if (!post) notFound();
 
@@ -59,160 +73,162 @@ export default async function BlogPostPage({ params }: Props) {
     );
   }
 
+  const breadcrumbs = [
+    { label: "Anasayfa", href: "/" },
+    { label: "Blog", href: "/blog" },
+    { label: post.title }
+  ];
+
   return (
     <>
-      <JsonLd data={articleJsonLd(post)} />
+      <JsonLd data={articleJsonLd(post, siteSettings)} />
+      <JsonLd data={breadcrumbListJsonLd(breadcrumbs)} />
 
-      <article className="pb-24">
-        {/* Header Section */}
-        <header className="bg-muted/30 pt-16 pb-12 border-b border-border/50">
-          <div className="container mx-auto px-4 max-w-4xl">
-            <FadeIn direction="up">
-              {/* Breadcrumbs */}
-              <nav className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-widest text-muted-foreground mb-10">
-                <Link href="/" className="hover:text-primary transition-colors">Anasayfa</Link>
-                <ChevronRight className="size-3 opacity-50" />
-                <Link href="/blog" className="hover:text-primary transition-colors">Blog</Link>
-                {post.category && (
-                  <>
-                    <ChevronRight className="size-3 opacity-50" />
+      <PageHero 
+        title={post.title}
+        breadcrumbs={breadcrumbs}
+      />
+
+      <div className="bg-background pb-24">
+        <div className="container mx-auto px-4">
+          <div className="flex flex-col lg:flex-row gap-12 lg:gap-16 mt-12 md:mt-16">
+            
+            {/* Sol Kolon: İçerik */}
+            <main className="w-full lg:w-2/3">
+              <FadeIn direction="up">
+                {/* Kapak Görseli */}
+                {post.mainImage && (
+                  <div className="relative aspect-[16/10] rounded-3xl overflow-hidden mb-10 bg-muted">
+                    <SanityImage
+                      image={{ ...post.mainImage, alt: post.mainImage.alt || post.title }}
+                      fill
+                      sizes="(max-width: 1280px) 100vw, 800px"
+                      className="object-cover"
+                      priority
+                    />
+                  </div>
+                )}
+
+                <div className="flex flex-wrap items-center gap-6 mb-8 text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
+                  {post.category && (
                     <Link 
                       href={`/blog?category=${post.category.slug?.current}`}
-                      className="hover:text-primary transition-colors"
+                      className="flex items-center gap-2 text-primary bg-primary/10 px-3 py-1.5 rounded-lg border border-primary/20 hover:bg-primary hover:text-primary-foreground transition-all"
                     >
-                      {post.category.title}
+                      <Tag className="size-3" />
+                      <span>{post.category.title}</span>
                     </Link>
-                  </>
-                )}
-              </nav>
+                  )}
+                  {post.publishedAt && (
+                    <div className="flex items-center gap-2 py-1.5">
+                      <Calendar className="size-3 text-primary" />
+                      <time>{formatDate(post.publishedAt)}</time>
+                    </div>
+                  )}
+                </div>
 
-              <div className="flex flex-wrap items-center gap-6 mb-8 text-sm text-muted-foreground font-medium">
-                {post.category && (
-                  <div className="flex items-center gap-2 text-primary bg-primary/5 px-3 py-1.5 rounded-lg border border-primary/10">
-                    <Tag className="size-4" />
-                    <span>{post.category.title}</span>
+                <div className="prose prose-sm md:prose-base max-w-none dark:prose-invert prose-headings:font-bankgothic prose-headings:uppercase prose-headings:tracking-tight prose-a:text-primary prose-img:rounded-2xl shadow-sm bg-white pt-3 px-6 pb-6 md:pt-4 md:px-10 md:pb-10 rounded-[2rem] border border-border/40">
+                  <RichText value={post.body} />
+                </div>
+
+                {/* Related Regions */}
+                {post.regions?.length > 0 && (
+                  <div className="mt-12 p-8 md:p-10 bg-muted/30 rounded-3xl border border-border/50">
+                    <div className="flex items-center gap-3 mb-6">
+                      <MapPin className="size-5 text-primary" />
+                      <h3 className="text-sm font-bold uppercase tracking-widest font-bankgothic">İlgili Bölgeler</h3>
+                    </div>
+                    <div className="flex flex-wrap gap-2">
+                      {post.regions.map((region: any) => (
+                        <Link
+                          key={region.slug}
+                          href={`/ilanlar?ilce=${region.slug}`}
+                          className="text-[11px] font-bold uppercase tracking-wider px-4 py-2.5 bg-white border border-border/60 rounded-xl hover:border-primary hover:text-primary transition-all shadow-sm"
+                        >
+                          {region.title}
+                        </Link>
+                      ))}
+                    </div>
                   </div>
                 )}
-                {post.publishedAt && (
-                  <div className="flex items-center gap-2">
-                    <Calendar className="size-4" />
-                    <time>{formatDate(post.publishedAt)}</time>
-                  </div>
-                )}
-              </div>
 
-              <h1 className="text-4xl md:text-5xl font-bold mb-0 leading-[1.1] font-bankgothic uppercase tracking-tight">
-                {post.title}
-              </h1>
-            </FadeIn>
-          </div>
-        </header>
-
-        {/* Featured Image */}
-        {post.mainImage && (
-          <div className="container mx-auto px-4 max-w-5xl -mt-8 md:-mt-12">
-            <FadeIn delay={0.15}>
-              <div className="relative aspect-[21/9] rounded-2xl md:rounded-[2rem] overflow-hidden shadow-2xl border-4 border-background bg-muted">
-                <SanityImage
-                  image={post.mainImage}
-                  fill
-                  sizes="(max-width: 1280px) 100vw, 1280px"
-                  className="object-cover"
-                  priority
-                />
-              </div>
-            </FadeIn>
-          </div>
-        )}
-
-        {/* Content Area */}
-        <div className="container mx-auto px-4 mt-16 md:mt-24">
-          <div className="max-w-3xl mx-auto">
-            <FadeIn delay={0.25}>
-              <div className="prose prose-lg dark:prose-invert prose-headings:font-bankgothic prose-headings:uppercase prose-headings:tracking-tight prose-a:text-primary prose-img:rounded-2xl">
-                <RichText value={post.body} />
-              </div>
-            </FadeIn>
-
-            {/* Related Regions */}
-            {post.regions?.length > 0 && (
-              <FadeIn delay={0.3}>
-                <div className="mt-16 p-8 bg-muted/30 rounded-3xl border border-border/50">
-                  <div className="flex items-center gap-3 mb-4">
-                    <MapPin className="size-5 text-primary" />
-                    <h3 className="text-sm font-bold uppercase tracking-widest font-bankgothic">İlgili Bölgeler</h3>
-                  </div>
-                  <div className="flex flex-wrap gap-2">
-                    {post.regions.map((region: any) => (
-                      <Link
-                        key={region.slug}
-                        href={`/ilanlar?ilce=${region.slug}`}
-                        className="text-sm px-4 py-2 bg-background border border-border/60 rounded-xl hover:border-primary hover:text-primary transition-all font-medium"
-                      >
-                        {region.title}
-                      </Link>
+                {/* Tags */}
+                {post.seoTags?.length > 0 && (
+                  <div className="mt-10 flex flex-wrap gap-2">
+                    {post.seoTags.map((tag: string) => (
+                      <span key={tag} className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground bg-muted/50 border border-border/30 px-3 py-1.5 rounded-lg">
+                        #{tag}
+                      </span>
                     ))}
                   </div>
-                </div>
+                )}
               </FadeIn>
-            )}
+            </main>
 
-            {/* Tags */}
-            {post.seoTags?.length > 0 && (
-              <FadeIn delay={0.35}>
-                <div className="mt-12 flex flex-wrap gap-2">
-                  {post.seoTags.map((tag: string) => (
-                    <span key={tag} className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground bg-muted px-3 py-1.5 rounded-lg">
-                      #{tag}
-                    </span>
+            {/* Sağ Kolon: Sidebar */}
+            <aside className="w-full lg:w-1/3">
+              <div className="sticky top-32 space-y-12">
+                <FadeIn direction="up" delay={0.2}>
+                  <AdvisorCard advisor={{
+                    advisorName: aboutData?.advisorName,
+                    advisorTitle: aboutData?.advisorTitle,
+                    advisorBio: aboutData?.advisorBio,
+                    advisorImage: aboutData?.advisorImage
+                  }} />
+                </FadeIn>
+
+                <FadeIn direction="up" delay={0.3}>
+                  <SidebarListings listings={sidebarListings} />
+                </FadeIn>
+              </div>
+            </aside>
+
+          </div>
+
+          {/* İlgili Yazılar */}
+          {relatedPosts?.length > 0 && (
+            <div className="mt-32 pt-20 border-t border-border/60">
+              <FadeIn direction="up">
+                <div className="flex items-center justify-between mb-12">
+                  <h2 className="text-2xl md:text-3xl font-bold font-bankgothic uppercase tracking-tight">İlginizi Çekebilir</h2>
+                  <Link href="/blog" className="text-[11px] font-bold uppercase tracking-[0.2em] text-primary hover:underline underline-offset-8">Tüm Yazılar</Link>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10">
+                  {relatedPosts.map((rPost: any) => (
+                    <Link key={rPost.slug.current} href={`/${rPost.slug.current}`} className="group block">
+                      <article className="h-full flex flex-col">
+                        <div className="relative aspect-[16/10] rounded-2xl overflow-hidden mb-6 bg-muted border border-border/40 shadow-sm transition-all group-hover:shadow-xl">
+                          <SanityImage
+                            image={rPost.mainImage}
+                            fill
+                            sizes="(max-width: 768px) 100vw, 33vw"
+                            className="object-cover transition-transform duration-700 group-hover:scale-110"
+                          />
+                        </div>
+                        <div className="flex-grow">
+                          <div className="flex items-center gap-3 mb-3">
+                            {rPost.category && (
+                              <span className="text-[9px] font-bold text-primary bg-primary/5 px-2 py-0.5 rounded border border-primary/10 uppercase tracking-tighter">
+                                {rPost.category.title}
+                              </span>
+                            )}
+                            <time className="text-[10px] font-bold text-muted-foreground uppercase tracking-[0.2em]">
+                              {formatDate(rPost.publishedAt)}
+                            </time>
+                          </div>
+                          <h3 className="text-base font-bold mb-4 font-bankgothic leading-tight group-hover:text-primary transition-colors line-clamp-2 uppercase">
+                            {rPost.title}
+                          </h3>
+                        </div>
+                      </article>
+                    </Link>
                   ))}
                 </div>
               </FadeIn>
-            )}
-          </div>
+            </div>
+          )}
         </div>
-
-        {/* Related Posts */}
-        {relatedPosts?.length > 0 && (
-          <div className="container mx-auto px-4 mt-32 border-t pt-20">
-            <FadeIn delay={0.4}>
-              <div className="flex items-center justify-between mb-12">
-                <h2 className="text-3xl font-bold font-bankgothic uppercase tracking-tight">İlginizi Çekebilir</h2>
-                <Link href="/blog" className="text-sm font-bold uppercase tracking-widest text-primary hover:underline underline-offset-8">Tüm Yazılar</Link>
-              </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10">
-                {relatedPosts.map((rPost: any) => (
-                  <Link key={rPost.slug.current} href={`/${rPost.slug.current}`} className="group block">
-                    <article className="h-full flex flex-col">
-                      <div className="relative aspect-[16/10] rounded-2xl overflow-hidden mb-6 bg-muted border border-border/40">
-                        <SanityImage
-                          image={rPost.mainImage}
-                          fill
-                          sizes="(max-width: 768px) 100vw, 33vw"
-                          className="object-cover transition-transform duration-700 group-hover:scale-110"
-                        />
-                      </div>
-                      <div className="flex-grow">
-                        {rPost.publishedAt && (
-                          <time className="text-[10px] font-bold text-muted-foreground mb-3 block uppercase tracking-[0.2em]">
-                            {formatDate(rPost.publishedAt)}
-                          </time>
-                        )}
-                        <h3 className="text-lg font-bold mb-4 font-bankgothic leading-tight group-hover:text-primary transition-colors line-clamp-2">
-                          {rPost.title}
-                        </h3>
-                        <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-primary flex items-center gap-2 group-hover:gap-3 transition-all duration-300">
-                           Oku <span className="text-lg">→</span>
-                        </span>
-                      </div>
-                    </article>
-                  </Link>
-                ))}
-              </div>
-            </FadeIn>
-          </div>
-        )}
-      </article>
+      </div>
     </>
   );
 }

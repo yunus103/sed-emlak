@@ -37,7 +37,7 @@ export default async function HomePage() {
       <Stats stats={data?.stats || []} />
       <AboutSummary data={data} />
       <Services services={data?.featuredServices || []} />
-      <LatestBlogs posts={data?.featuredPosts || []} />
+      <LatestBlogs posts={data?.featuredPosts || []} title={data?.blogTitle} subtitle={data?.blogSubtitle} />
       <ContactBar settings={data?.siteSettings} />
     </main>
   );
