@@ -90,7 +90,7 @@ export default async function BlogPostPage({ params }: Props) {
       />
 
       <div className="bg-background pb-24">
-        <div className="container mx-auto px-4">
+        <div className="container mx-auto px-6 md:px-12">
           <div className="flex flex-col lg:flex-row gap-12 lg:gap-16 mt-12 md:mt-16">
             
             {/* Sol Kolon: İçerik */}
@@ -100,7 +100,7 @@ export default async function BlogPostPage({ params }: Props) {
                 {post.mainImage && (
                   <div className="relative aspect-[16/10] rounded-3xl overflow-hidden mb-10 bg-muted">
                     <SanityImage
-                      image={{ ...post.mainImage, alt: post.mainImage.alt || post.title }}
+                      image={{ ...post.mainImage, alt: post.mainImage?.alt || post.title }}
                       fill
                       sizes="(max-width: 1280px) 100vw, 800px"
                       className="object-cover"
@@ -127,7 +127,7 @@ export default async function BlogPostPage({ params }: Props) {
                   )}
                 </div>
 
-                <div className="prose prose-sm md:prose-base max-w-none dark:prose-invert prose-headings:font-bankgothic prose-headings:uppercase prose-headings:tracking-tight prose-a:text-primary prose-img:rounded-2xl shadow-sm bg-white pt-3 px-6 pb-6 md:pt-4 md:px-10 md:pb-10 rounded-[2rem] border border-border/40">
+                <div className="prose prose-sm md:prose-base max-w-none dark:prose-invert prose-headings:font-bankgothic prose-headings:tracking-tight prose-a:text-primary prose-img:rounded-2xl shadow-sm bg-white pt-3 px-6 pb-6 md:pt-4 md:px-10 md:pb-10 rounded-[2rem] border border-border/40">
                   <RichText value={post.body} />
                 </div>
 
