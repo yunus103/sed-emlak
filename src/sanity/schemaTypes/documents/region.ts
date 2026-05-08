@@ -20,7 +20,7 @@ export const regionType = defineType({
       title: "Bölge Tanıtım Metni",
       type: "array",
       of: [{ type: "block" }],
-      description: "SEO odaklı (ulaşım, kentsel dönüşüm, mahalleler) açıklama metni",
+      description: "SEO ve tasarım dengesi için 150-250 kelime arası (2-3 kısa paragraf) idealdir. İlçe adı, ulaşım imkanları ve emlak piyasası gibi anahtar kelimeleri içermesi önerilir.",
     }),
     defineField({
       name: "metrics",
@@ -39,6 +39,14 @@ export const regionType = defineType({
       type: "array",
       of: [{ type: "string" }],
       options: { layout: "tags" },
+    }),
+    defineField({
+      name: "nearbyRegions",
+      title: "Yakın Bölgeler",
+      type: "array",
+      of: [{ type: "reference", to: [{ type: "region" }] }],
+      description: "Bölge detay sayfasında cross-link için komşu/ilgili ilçeler (maks. 6 adet önerilir)",
+      validation: (Rule) => Rule.max(6),
     }),
     defineField({ name: "seo", title: "SEO", type: "seo" }),
   ],

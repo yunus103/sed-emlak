@@ -6,7 +6,7 @@ import { RiArrowRightSLine, RiHome4Line } from "react-icons/ri";
 
 type BreadcrumbItem = {
   label: string;
-  href: string;
+  href?: string;
   active?: boolean;
 };
 
@@ -49,7 +49,7 @@ export function Breadcrumbs({ items, className = "" }: { items?: BreadcrumbItem[
         {breadcrumbs.map((crumb, i) => (
           <li key={i} className="flex items-center gap-2">
             <RiArrowRightSLine size={14} className="text-muted-foreground/40 shrink-0" />
-            {crumb.active ? (
+            {crumb.active || !crumb.href ? (
               <span className="font-medium text-foreground truncate max-w-[200px]">
                 {crumb.label}
               </span>

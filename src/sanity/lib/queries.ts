@@ -94,6 +94,54 @@ export const projectsPageQuery = groq`*[_type == "projectsPage"][0] {
   pageTitle, pageSubtitle, ctaLabel, ctaLink, seo
 }`;
 
+// ─── Bölgeler ──────────────────────────────────────────────────────────────────
+
+// Hub sayfası: sayfa ayarları + featuredRegions (öncelikli), fallback: tüm bölgeler alfabe sırası
+export const regionsPageQuery = groq`{
+  "page": *[_type == "regionsPage"][0] {
+    title, description, seo,
+    mainImage { asset->{ _id, url, metadata { lqip, dimensions } }, alt, hotspot, crop },
+    "featuredRegions": featuredRegions[]->{
+      _id, title, slug, neighborhoods,
+      heroImage { asset->{ _id, url, metadata { lqip, dimensions } }, alt, hotspot, crop },
+      metrics { activeListings }
+    }
+  },
+  "allRegions": *[_type == "region"] | order(title asc) {
+    _id, title, slug, neighborhoods,
+    heroImage { asset->{ _id, url, metadata { lqip, dimensions } }, alt, hotspot, crop },
+    metrics { activeListings }
+  }
+}`;
+
+// Detay sayfası: tek bölge slug ile
+export const regionDetailQuery = groq`*[_type == "region" && slug.current == $slug][0] {
+  _id, title, slug, description, mapEmbed, neighborhoods,
+  heroImage { asset->{ _id, url, metadata { lqip, dimensions } }, alt, hotspot, crop },
+  metrics { activeListings, avgSalePrice, avgRentPrice },
+  nearbyRegions[]->{ _id, title, "slug": slug.current, heroImage { asset->{ _id, url, metadata { lqip, dimensions } }, alt, hotspot, crop } },
+  seo { metaTitle, metaDescription, noIndex,
+    ogImage { asset->{ _id, url, metadata { lqip, dimensions } }, hotspot, crop }
+  }
+}`;
+
+// İlçe sayfasındaki ilanlar (max 6, aktifler önce)
+export const listingsByRegionQuery = groq`*[_type == "listing" && region->slug.current == $slug]
+  | order(select(status in ["satildi","kiralandi"] => 1, 0) asc, _createdAt desc)[0...6] {
+  _id, title, slug, status, propertyType, price, neighborhood,
+  region->{ title, slug },
+  features { grossArea, rooms, floor },
+  mainImage { asset->{ _id, url, metadata { lqip, dimensions } }, alt, hotspot, crop }
+}`;
+
+// İlçeye etiketlenmiş blog yazıları (max 3)
+export const blogsByRegionQuery = groq`*[_type == "blogPost" && references($regionId)] | order(publishedAt desc)[0...3] {
+  _id, title, slug, excerpt, publishedAt,
+  category->{ title, slug },
+  mainImage { asset->{ _id, url, metadata { lqip, dimensions } }, alt, hotspot, crop }
+}`;
+
+
 // ─── Blog ──────────────────────────────────────────────────────────────────────
 
 export const blogListQuery = groq`*[_type == "blogPost"] | order(publishedAt desc) {
@@ -228,7 +276,8 @@ export const allSlugsForSitemapQuery = groq`{
   "services": *[_type == "service" && defined(slug.current)] { "slug": slug.current, _updatedAt },
   "projects": *[_type == "project" && defined(slug.current)] { "slug": slug.current, _updatedAt },
   "listings": *[_type == "listing" && defined(slug.current)] { "slug": slug.current, _updatedAt },
-  "legalPages": *[_type == "legalPage" && defined(slug.current)] { "slug": slug.current, _updatedAt }
+  "legalPages": *[_type == "legalPage" && defined(slug.current)] { "slug": slug.current, _updatedAt },
+  "regions": *[_type == "region" && defined(slug.current)] { "slug": slug.current, _updatedAt }
 }`;
 
 // ─── Varsayılan SEO ────────────────────────────────────────────────────────────

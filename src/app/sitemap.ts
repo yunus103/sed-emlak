@@ -12,6 +12,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${base}/hakkimizda`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.8 },
     { url: `${base}/iletisim`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.7 },
     { url: `${base}/blog`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.9 },
+    { url: `${base}/bolgeler`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.8 },
   ];
 
   const dynamicRoutes: MetadataRoute.Sitemap = [
@@ -45,6 +46,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       lastModified: new Date(p._updatedAt),
       changeFrequency: "yearly" as const,
       priority: 0.3,
+    })) || []),
+    ...(data?.regions?.map((p: any) => ({
+      url: `${base}/bolgeler/${p.slug}`,
+      lastModified: new Date(p._updatedAt),
+      changeFrequency: "monthly" as const,
+      priority: 0.85,
     })) || []),
   ];
 
