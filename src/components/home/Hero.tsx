@@ -50,7 +50,7 @@ export function Hero({ data }: { data: any }) {
 
   return (
     <section
-      className="relative flex items-start justify-center overflow-hidden pt-28 md:pt-36 lg:pt-44"
+      className="relative flex items-center justify-center overflow-hidden py-20"
       style={{ height: "100svh", minHeight: 700 }}
     >
       {/* Background */}
