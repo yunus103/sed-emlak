@@ -10,7 +10,8 @@ export const aboutPageType = defineType({
     { name: "team", title: "3. Danışman Profili" },
     { name: "mission", title: "4. Misyon & Vizyon" },
     { name: "stats", title: "5. İstatistikler" },
-    { name: "seo", title: "6. SEO" },
+    { name: "cta", title: "6. CTA (Eylem Çağrısı)" },
+    { name: "seo", title: "7. SEO" },
   ],
   fields: [
     // --- HERO ---
@@ -70,6 +71,10 @@ export const aboutPageType = defineType({
       ],
       validation: (Rule) => Rule.max(4),
     }),
+    // --- CTA ---
+    defineField({ name: "ctaTitle", title: "CTA Başlık", type: "string", group: "cta", initialValue: "Geleceğinizi Birlikte İnşa Edelim" }),
+    defineField({ name: "ctaSubtitle", title: "CTA Alt Başlık", type: "text", rows: 2, group: "cta", initialValue: "Gayrimenkul yatırımlarınızda ve iç mimari projelerinizde profesyonel destek almak için bize ulaşın." }),
+    defineField({ name: "ctaButtonText", title: "Buton Metni", type: "string", group: "cta", initialValue: "Hemen İletişime Geçin" }),
 
     // --- SEO ---
     defineField({ name: "seo", title: "SEO Ayarları", type: "seo", group: "seo" }),
