@@ -14,7 +14,7 @@ export const homePageType = defineType({
   ],
   fields: [
     // --- HERO ---
-    defineField({ name: "heroTitle", title: "Hero Başlık", type: "string", group: "hero", validation: (Rule) => Rule.required(), description: "Ana sayfaya girildiğinde ziyaretçiyi karşılayan dev başlık." }),
+    defineField({ name: "heroTitle", title: "Hero Başlık", type: "text", rows: 2, group: "hero", validation: (Rule) => Rule.required(), description: "Ana sayfaya girildiğinde ziyaretçiyi karşılayan dev başlık." }),
     defineField({ name: "heroSubtitle", title: "Hero Alt Başlık", type: "text", rows: 3, group: "hero", description: "Ana başlığın altında yer alan, arama motorlarını ve kullanıcıyı bilgilendiren kısa açıklama metni." }),
     defineField({
       name: "heroImage",

@@ -65,7 +65,7 @@ export function Hero({ data }: { data: any }) {
         <p className="text-white/60 uppercase tracking-[0.3em] text-[10px] sm:text-xs font-semibold mb-4 drop-shadow">
           İstanbul&apos;un Güvenilir Emlak Danışmanı
         </p>
-        <h1 className="font-heading text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-white font-bold mb-5 drop-shadow-lg max-w-4xl leading-tight">
+        <h1 className="font-heading text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-white font-bold mb-5 drop-shadow-lg max-w-4xl leading-tight whitespace-pre-line">
           {data?.heroTitle || "Hayalinizdeki Evi Keşfedin"}
         </h1>
         <p className="text-white/75 text-base md:text-lg mb-10 max-w-lg drop-shadow leading-relaxed">
