@@ -61,15 +61,29 @@ export function ContactBar({ settings }: { settings: any }) {
           <div className="relative z-10 mt-10 pt-8 border-t border-white/10 flex flex-col md:flex-row flex-wrap items-center justify-center lg:justify-start gap-8 md:gap-12">
             
             {/* Telefon */}
-            <a href={`tel:${phoneClean}`} className="flex items-center gap-3.5 text-white/90 hover:text-white transition-colors group">
-              <div className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center group-hover:bg-white/20 transition-colors shrink-0">
-                <RiPhoneFill size={20} />
-              </div>
-              <div className="text-left">
-                <div className="text-[11px] text-white/50 uppercase tracking-widest font-semibold mb-0.5 whitespace-nowrap">Telefon</div>
-                <div className="font-semibold text-base whitespace-nowrap">{phone}</div>
-              </div>
-            </a>
+            <div className="flex flex-col md:flex-row gap-8 md:gap-12">
+              <a href={`tel:${phoneClean}`} className="flex items-center gap-3.5 text-white/90 hover:text-white transition-colors group">
+                <div className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center group-hover:bg-white/20 transition-colors shrink-0">
+                  <RiPhoneFill size={20} />
+                </div>
+                <div className="text-left">
+                  <div className="text-[11px] text-white/50 uppercase tracking-widest font-semibold mb-0.5 whitespace-nowrap">Telefon</div>
+                  <div className="font-semibold text-base whitespace-nowrap">{phone}</div>
+                </div>
+              </a>
+
+              {contact?.phone2 && (
+                <a href={`tel:${contact.phone2.replace(/[^0-9+]/g, "")}`} className="flex items-center gap-3.5 text-white/90 hover:text-white transition-colors group">
+                  <div className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center group-hover:bg-white/20 transition-colors shrink-0">
+                    <RiPhoneFill size={20} />
+                  </div>
+                  <div className="text-left">
+                    <div className="text-[11px] text-white/50 uppercase tracking-widest font-semibold mb-0.5 whitespace-nowrap">Telefon 2</div>
+                    <div className="font-semibold text-base whitespace-nowrap">{contact.phone2}</div>
+                  </div>
+                </a>
+              )}
+            </div>
             
             {/* Email */}
             <a href={`mailto:${email}`} className="flex items-center gap-3.5 text-white/90 hover:text-white transition-colors group">

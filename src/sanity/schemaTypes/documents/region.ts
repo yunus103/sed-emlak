@@ -11,6 +11,7 @@ export const regionType = defineType({
       name: "heroImage",
       title: "Hero Görseli",
       type: "image",
+      description: "Önerilen boyut: Ana sayfa kartları için 1200x525px (16:7), detay sayfası hero bölümü için 1920x800px (geniş format) tercih edilmelidir.",
       options: { hotspot: true },
       fields: [defineField({ name: "alt", title: "Alt Metni", type: "string" })],
     }),

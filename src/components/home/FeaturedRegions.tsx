@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
+import { SanityImage } from "@/components/ui/SanityImage";
 
 const FALLBACK_REGIONS = [
   { name: "Beşiktaş",  slug: "besiktas",  img: "https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?q=80&w=800&auto=format&fit=crop" },
@@ -27,7 +28,8 @@ export function FeaturedRegions({ regions }: { regions: any[] }) {
         {/* 3-column grid matching the reference image */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
           {items.map((region, i) => {
-            const href = `/bolgeler/${region.slug?.current || region.slug || region.name?.toLowerCase()}`;
+            const title = region.title || region.name;
+            const href = `/bolgeler/${region.slug?.current || region.slug || title?.toLowerCase()}`;
             const imgSrc = region.heroImage?.asset?.url || region.img || "";
             return (
               <Link
@@ -37,20 +39,29 @@ export function FeaturedRegions({ regions }: { regions: any[] }) {
                 style={{ aspectRatio: "16/7" }}
               >
                 {/* Photo */}
-                <Image
-                  src={imgSrc}
-                  alt={region.name}
-                  fill
-                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                  className="object-cover transition-transform duration-700 group-hover:scale-105"
-                />
+                {region.heroImage?.asset ? (
+                  <SanityImage
+                    image={region.heroImage}
+                    fill
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                    className="object-cover transition-transform duration-700 group-hover:scale-105"
+                  />
+                ) : (
+                  <Image
+                    src={region.img || "https://images.unsplash.com/photo-1560448205-4d9b3e6bb6db?q=80&w=800&auto=format&fit=crop"}
+                    alt={title}
+                    fill
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                    className="object-cover transition-transform duration-700 group-hover:scale-105"
+                  />
+                )}
                 {/* Gradient overlay — reference style: dark band across entire card */}
                 <div className="absolute inset-0 bg-black/45 group-hover:bg-black/55 transition-colors duration-300" />
 
                 {/* Region name centered, exactly like the reference */}
                 <div className="absolute inset-0 flex items-center justify-center">
                   <h3 className="text-white font-semibold text-xl md:text-2xl tracking-wide drop-shadow-md text-center px-3">
-                    {region.name}
+                    {title}
                   </h3>
                 </div>
               </Link>

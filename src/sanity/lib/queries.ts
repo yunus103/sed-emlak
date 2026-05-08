@@ -36,7 +36,7 @@ export const homePageQuery = groq`*[_type == "homePage"][0] {
   },
   featuredRegions[]->{
     _id, title, slug,
-    mainImage { asset->{ _id, url, metadata { lqip, dimensions } }, alt, hotspot, crop }
+    heroImage { asset->{ _id, url, metadata { lqip, dimensions } }, alt, hotspot, crop }
   },
   featuredServices[]->{
     _id, title, slug, shortDescription, icon,
