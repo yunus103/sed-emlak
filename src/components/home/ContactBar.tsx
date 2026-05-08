@@ -39,16 +39,16 @@ export function ContactBar({ settings }: { settings: any }) {
           </div>
           
           <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-10">
-            <div className="flex-1 text-center lg:text-left text-primary-foreground">
+            <div className="flex-1 text-left text-primary-foreground">
               <h2 className="text-3xl md:text-4xl font-heading font-bold mb-4">
                 Bizimle İletişime Geçin
               </h2>
-              <p className="text-primary-foreground/80 text-lg max-w-md mx-auto lg:mx-0">
+              <p className="text-primary-foreground/80 text-lg max-w-md">
                 Gayrimenkul süreçlerinizde profesyonel destek almak için bize ulaşın.
               </p>
             </div>
             
-            <div className="shrink-0 flex justify-center">
+            <div className="shrink-0 flex justify-start">
               <Link 
                 href="/iletisim"
                 className="inline-flex items-center justify-center bg-white text-primary font-bold px-8 py-4 rounded-xl hover:bg-white/90 active:scale-95 transition-all shadow-xl"
@@ -58,7 +58,7 @@ export function ContactBar({ settings }: { settings: any }) {
             </div>
           </div>
           
-          <div className="relative z-10 mt-10 pt-8 border-t border-white/10 flex flex-col md:flex-row flex-wrap items-center justify-center lg:justify-start gap-8 md:gap-12">
+          <div className="relative z-10 mt-10 pt-8 border-t border-white/10 flex flex-col md:flex-row flex-wrap items-start justify-start gap-8 md:gap-12">
             
             {/* Telefon */}
             <div className="flex flex-col md:flex-row gap-8 md:gap-12">
@@ -99,7 +99,7 @@ export function ContactBar({ settings }: { settings: any }) {
 
           {/* Sosyal Medya Linkleri */}
           {socialLinks.length > 0 && (
-            <div className="relative z-10 mt-8 flex flex-wrap items-center justify-center lg:justify-start gap-4">
+            <div className="relative z-10 mt-8 flex flex-wrap items-center justify-start gap-4">
               <span className="text-[11px] text-white/40 uppercase tracking-widest font-semibold mr-2 hidden sm:block">Sosyal Medya:</span>
               <div className="flex flex-wrap gap-3">
                 {socialLinks.map((social: any, i: number) => {

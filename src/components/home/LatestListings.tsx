@@ -43,7 +43,7 @@ export function LatestListings({ listings }: { listings: any[] }) {
   return (
     <section className="py-20 bg-background">
       <div className="container mx-auto px-4">
-        <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-4">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 gap-4">
           <div>
             <p className="text-primary text-sm font-semibold uppercase tracking-widest mb-2">Portföyümüzden</p>
             <h2 className="text-3xl md:text-4xl font-heading font-bold">Güncel İlanlar</h2>

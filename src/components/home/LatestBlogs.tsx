@@ -9,7 +9,7 @@ export function LatestBlogs({ posts, title, subtitle }: { posts: any[]; title?: 
   return (
     <section className="py-20 bg-muted/20">
       <div className="container mx-auto px-4">
-        <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-4">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 gap-4">
           <div>
             {subtitle && (
               <p className="text-primary text-sm font-semibold uppercase tracking-widest mb-2">{subtitle}</p>

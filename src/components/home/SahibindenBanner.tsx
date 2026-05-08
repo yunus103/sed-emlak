@@ -35,7 +35,7 @@ export function SahibindenBanner({ url }: SahibindenBannerProps) {
             <div className="space-y-2">
               <div className="flex flex-wrap items-center justify-center md:justify-start gap-3">
                 <h2 className="text-2xl font-heading font-bold text-foreground">
-                  Resmi Sahibinden Mağazamız
+                  Güncel Portföyümüze Sahibinden Mağazamızdan Ulaşın
                 </h2>
                 <span className="bg-primary/10 text-primary text-[10px] font-bold uppercase tracking-widest px-2 py-1 rounded-md border border-primary/20">
                   Premium Emlak Ofisi

@@ -69,18 +69,18 @@ export function Stats({ stats }: { stats: any[] }) {
       }} />
 
       <div className="container relative mx-auto px-4">
-        <div className="text-center mb-14">
+        <div className="text-left md:text-center mb-14">
           <p className="text-white/50 text-xs font-semibold uppercase tracking-[0.25em] mb-3">Güven ve Tecrübe</p>
           <h2 className="text-3xl md:text-4xl font-heading font-bold text-white">Sayılarla SED Emlak</h2>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-5xl mx-auto">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-5xl md:mx-auto">
           {items.map((stat, i) => (
-            <div key={i} className="text-center">
+            <div key={i} className="text-left md:text-center">
               <p className="text-5xl md:text-6xl font-heading font-light text-white mb-2 tabular-nums">
                 <AnimatedNumber target={stat.num} suffix={stat.suffix} />
               </p>
-              <div className="w-8 h-0.5 bg-primary mx-auto mb-3 rounded-full" />
+              <div className="w-8 h-0.5 bg-primary md:mx-auto mb-3 rounded-full" />
               <p className="text-sm font-semibold uppercase tracking-widest text-white/60">{stat.label}</p>
             </div>
           ))}

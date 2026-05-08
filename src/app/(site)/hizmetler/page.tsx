@@ -10,7 +10,11 @@ import { SanityImage } from "@/components/ui/SanityImage";
 import { FadeIn } from "@/components/ui/FadeIn";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const data = await getClient().fetch(servicesPageQuery, {}, { next: { tags: ["services"] } });
+  const data = await getClient().fetch(
+    servicesPageQuery,
+    {},
+    { next: { tags: ["services"] } },
+  );
   return buildMetadata({
     canonicalPath: "/hizmetler",
     pageSeo: data?.seo,
@@ -28,7 +32,10 @@ export default async function ServicesPage() {
       {/* ── Hero ───────────────────────────────────── */}
       <PageHero
         title={pageData?.pageTitle || "Hizmetlerimiz"}
-        subtitle={pageData?.pageSubtitle || "Gayrimenkul süreçlerinizde uçtan uca profesyonel destek."}
+        subtitle={
+          pageData?.pageSubtitle ||
+          "Gayrimenkul süreçlerinizde SED Emlak tarafından uçtan uca profesyonel destek!"
+        }
         backgroundImage={pageData?.mainImage}
         breadcrumbs={[
           { label: "Ana Sayfa", href: "/" },
@@ -49,7 +56,8 @@ export default async function ServicesPage() {
                 {pageData?.sectionHeading || "Uçtan Uca Gayrimenkul Hizmetleri"}
               </h2>
               <p className="text-muted-foreground text-base leading-relaxed">
-                {pageData?.sectionDescription || "Alım, satım, kiralama veya yatırım — hangi ihtiyaçla gelirseniz gelin, uzman kadromuz yanınızda."}
+                {pageData?.sectionDescription ||
+                  "Alım, satım, kiralama veya yatırım — hangi ihtiyaçla gelirseniz gelin, uzman kadromuz yanınızda."}
               </p>
             </div>
           </FadeIn>
@@ -61,7 +69,11 @@ export default async function ServicesPage() {
               const slug = service.slug?.current || service.slug;
 
               return (
-                <FadeIn key={slug || i} delay={Math.min(i * 0.06, 0.4)} direction="up">
+                <FadeIn
+                  key={slug || i}
+                  delay={Math.min(i * 0.06, 0.4)}
+                  direction="up"
+                >
                   <Link
                     href={`/hizmetler/${slug}`}
                     className="group flex flex-col rounded-2xl border border-border bg-card overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all duration-300 h-full"
@@ -129,7 +141,8 @@ export default async function ServicesPage() {
                 Hangi Hizmeti Arıyorsunuz?
               </h2>
               <p className="text-primary-foreground/80 text-base md:text-lg mb-10 max-w-2xl mx-auto leading-relaxed">
-                Gayrimenkul süreçlerinizde size özel çözümler için bugün iletişime geçin. Ücretsiz ön görüşme için hazırız.
+                Gayrimenkul süreçlerinizde size özel çözümler için bugün
+                iletişime geçin.
               </p>
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
                 <Link
