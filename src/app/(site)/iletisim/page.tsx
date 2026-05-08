@@ -9,10 +9,37 @@ import {
   RiPhoneFill,
   RiMailFill,
   RiWhatsappFill,
-  RiTimeFill,
 } from "react-icons/ri";
+import { 
+  FaInstagram, FaFacebook, FaLinkedin, FaYoutube, 
+  FaTiktok, FaPinterest, FaWhatsapp 
+} from "react-icons/fa";
+import { FaXTwitter } from "react-icons/fa6";
 import { ContactForm } from "@/components/forms/ContactForm";
 import { groq } from "next-sanity";
+
+const socialIconMap: Record<string, React.ElementType> = {
+  instagram: FaInstagram,
+  facebook: FaFacebook,
+  twitter: FaXTwitter,
+  linkedin: FaLinkedin,
+  youtube: FaYoutube,
+  tiktok: FaTiktok,
+  pinterest: FaPinterest,
+  whatsapp: FaWhatsapp,
+};
+
+// Sahibinden SVG İkonu
+const SahibindenIcon = ({ className }: { className?: string }) => (
+  <svg 
+    viewBox="0 0 32 32" 
+    xmlns="http://www.w3.org/2000/svg"
+    className={className}
+    fill="currentColor"
+  >
+    <path d="M0 0v32h32v-32zM15.354 6.297c0.75-0.010 1.51-0.005 2.255 0.083 3.214 0.073 6.469 2.906 6.505 6.010h-4.427c0.016-0.922-0.802-2.073-1.703-2.307-1.474-0.359-3.281-0.474-4.573 0.391-0.984 0.594-1.422 2.229-0.125 2.74 3.047 1.448 6.875 1.13 9.63 3.167 2.266 1.609 2.13 4.885 0.365 6.781-2.292 2.453-6.182 2.844-9.464 2.375-3.266-0.156-6.344-2.995-6.427-6.083h4.417c-0.078 1.109 0.849 2.078 1.943 2.427 1.698 0.37 3.635 0.479 5.24-0.25 1.281-0.432 1.37-2.057 0.38-2.807-2.125-1.193-4.75-1.229-7.063-2.021-2.682-0.521-4.854-3.036-4.344-5.599 0.563-3.12 4.167-4.969 7.391-4.906z"/>
+  </svg>
+);
 
 export async function generateMetadata(): Promise<Metadata> {
   const data = await getClient().fetch(contactPageQuery);
@@ -30,7 +57,8 @@ export default async function ContactPage() {
       seo
     },
     "settings": *[_type == "siteSettings"][0] {
-      contactInfo { phone, email, address, whatsappNumber, mapIframe }
+      contactInfo { phone, email, address, whatsappNumber, sahibindenUrl, mapIframe },
+      socialLinks[] { platform, url }
     }
   }`;
 
@@ -39,6 +67,7 @@ export default async function ContactPage() {
   const settings = data?.settings;
 
   const contact = settings?.contactInfo;
+  const socialLinks = settings?.socialLinks || [];
 
   const bgImage = page?.mainImage?.asset
     ? urlForImage(page.mainImage as any)?.url()
@@ -67,17 +96,17 @@ export default async function ContactPage() {
             {/* Sol Kolon: Bilgiler */}
             <div className="w-full lg:w-1/2">
               <h2 className="text-3xl md:text-4xl font-heading font-bold mb-6">
-                Ofisimizi Ziyaret Edin
+                Ofis Bilgilerimiz
               </h2>
               <p className="text-muted-foreground text-lg mb-12">
                 Kahvenizi içerken gayrimenkul hedeflerinizi konuşalım. Haftanın
                 6 günü hizmetinizdeyiz.
               </p>
 
-              <div className="space-y-8">
+              <div className="space-y-10">
                 {/* Adres */}
                 <div className="flex items-start gap-5">
-                  <div className="w-14 h-14 rounded-2xl bg-primary/10 text-primary flex items-center justify-center shrink-0">
+                  <div className="w-14 h-14 rounded-2xl bg-muted/50 text-muted-foreground flex items-center justify-center shrink-0">
                     <RiMapPin2Fill size={24} />
                   </div>
                   <div>
@@ -89,61 +118,106 @@ export default async function ContactPage() {
                 </div>
 
                 {/* Telefon */}
-                <div className="flex items-start gap-5">
-                  <div className="w-14 h-14 rounded-2xl bg-primary/10 text-primary flex items-center justify-center shrink-0">
+                <a 
+                  href={`tel:${phoneClean}`} 
+                  className="flex items-start gap-5 group cursor-pointer"
+                >
+                  <div className="w-14 h-14 rounded-2xl bg-primary/10 text-primary flex items-center justify-center shrink-0 group-hover:bg-primary group-hover:text-primary-foreground transition-all duration-300">
                     <RiPhoneFill size={24} />
                   </div>
                   <div>
-                    <h3 className="font-bold text-lg mb-1">Telefon</h3>
-                    <a
-                      href={`tel:${phoneClean}`}
-                      className="text-muted-foreground hover:text-primary transition-colors text-lg"
-                    >
+                    <h3 className="font-bold text-lg mb-1 group-hover:text-primary transition-colors">Telefon</h3>
+                    <p className="text-muted-foreground text-lg group-hover:text-primary/80 transition-colors">
                       {phone}
-                    </a>
+                    </p>
                   </div>
-                </div>
+                </a>
 
                 {/* WhatsApp */}
-                <div className="flex items-start gap-5">
-                  <div className="w-14 h-14 rounded-2xl bg-[#25D366]/10 text-[#25D366] flex items-center justify-center shrink-0">
+                <a 
+                  href={`https://wa.me/${waLink}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-start gap-5 group cursor-pointer"
+                >
+                  <div className="w-14 h-14 rounded-2xl bg-[#25D366]/10 text-[#25D366] flex items-center justify-center shrink-0 group-hover:bg-[#25D366] group-hover:text-white transition-all duration-300">
                     <RiWhatsappFill size={28} />
                   </div>
                   <div>
-                    <h3 className="font-bold text-lg mb-1">WhatsApp</h3>
-                    <a
-                      href={`https://wa.me/${waLink}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-muted-foreground hover:text-[#25D366] transition-colors text-lg"
-                    >
+                    <h3 className="font-bold text-lg mb-1 group-hover:text-[#25D366] transition-colors">WhatsApp</h3>
+                    <p className="text-muted-foreground text-lg group-hover:text-[#25D366]/80 transition-colors">
                       {whatsappDisplay}
-                    </a>
+                    </p>
                   </div>
-                </div>
+                </a>
+
+                {/* Sahibinden */}
+                {contact?.sahibindenUrl && (
+                  <a 
+                    href={contact.sahibindenUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-start gap-5 group cursor-pointer"
+                  >
+                    <div className="w-14 h-14 rounded-2xl bg-[#f3da00]/10 text-[#f3da00] flex items-center justify-center shrink-0 group-hover:bg-[#f3da00] group-hover:text-black transition-all duration-300">
+                      <SahibindenIcon className="w-7 h-7" />
+                    </div>
+                    <div>
+                      <h3 className="font-bold text-lg mb-1 group-hover:text-[#f3da00] transition-colors">Sahibinden</h3>
+                      <p className="text-muted-foreground text-lg group-hover:text-primary/80 transition-colors">
+                        Mağazamızı İnceleyin
+                      </p>
+                    </div>
+                  </a>
+                )}
 
                 {/* Email */}
-                <div className="flex items-start gap-5">
-                  <div className="w-14 h-14 rounded-2xl bg-primary/10 text-primary flex items-center justify-center shrink-0">
+                <a 
+                  href={`mailto:${email}`}
+                  className="flex items-start gap-5 group cursor-pointer"
+                >
+                  <div className="w-14 h-14 rounded-2xl bg-primary/10 text-primary flex items-center justify-center shrink-0 group-hover:bg-primary group-hover:text-primary-foreground transition-all duration-300">
                     <RiMailFill size={24} />
                   </div>
                   <div>
-                    <h3 className="font-bold text-lg mb-1">E-posta</h3>
-                    <a
-                      href={`mailto:${email}`}
-                      className="text-muted-foreground hover:text-primary transition-colors text-lg"
-                    >
+                    <h3 className="font-bold text-lg mb-1 group-hover:text-primary transition-colors">E-posta</h3>
+                    <p className="text-muted-foreground text-lg group-hover:text-primary/80 transition-colors">
                       {email}
-                    </a>
+                    </p>
                   </div>
-                </div>
+                </a>
+
+                {/* Sosyal Medya */}
+                {socialLinks.length > 0 && (
+                  <div className="pt-8 border-t border-border flex flex-wrap gap-4 items-center">
+                    <span className="text-sm font-bold uppercase tracking-widest text-muted-foreground mr-2">Sosyal Medya:</span>
+                    <div className="flex flex-wrap gap-3">
+                      {socialLinks.map((social: any, i: number) => {
+                        const Icon = socialIconMap[social.platform];
+                        if (!Icon) return null;
+                        return (
+                          <a
+                            key={i}
+                            href={social.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="w-12 h-12 rounded-2xl bg-muted/50 flex items-center justify-center text-muted-foreground hover:text-primary hover:bg-primary/10 transition-all active:scale-90 cursor-pointer"
+                            aria-label={social.platform}
+                          >
+                            <Icon size={20} />
+                          </a>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
 
             {/* Sağ Kolon: Form */}
-            <div className="w-full lg:w-1/2 flex lg:justify-end">
-              <div className="w-full max-w-lg bg-white rounded-3xl p-8 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-muted">
-                <h2 className="text-3xl font-heading font-bold mb-8">
+            <div className="w-full lg:w-1/2 flex lg:justify-end items-start">
+              <div className="w-full max-w-md bg-white rounded-3xl p-8 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-muted">
+                <h2 className="text-3xl font-heading font-bold mb-8 text-center lg:text-left">
                   {page?.formTitle || "Bize Ulaşın"}
                 </h2>
 

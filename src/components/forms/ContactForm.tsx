@@ -50,60 +50,60 @@ export function ContactForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
+    <form onSubmit={handleSubmit} className="space-y-4">
       {isSuccess && (
-        <div className="bg-green-50 text-green-700 p-4 rounded-xl border border-green-200">
+        <div className="bg-green-50 text-green-700 p-4 rounded-xl border border-green-200 text-sm">
           Mesajınız başarıyla gönderildi. En kısa sürede size dönüş yapacağız.
         </div>
       )}
 
-      <div className="grid md:grid-cols-2 gap-6">
-        <div className="space-y-2">
-          <label className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">Ad Soyad</label>
+      <div className="grid md:grid-cols-2 gap-4">
+        <div className="space-y-1.5">
+          <label className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground/70 ml-1">Ad Soyad</label>
           <input
             type="text"
-            className={`w-full bg-muted/30 border rounded-xl px-4 py-4 focus:ring-2 focus:ring-primary outline-none transition-all ${
+            className={`w-full bg-muted/30 border rounded-xl px-4 py-3 focus:ring-2 focus:ring-primary outline-none transition-all ${
               errors.name ? "border-red-500 focus:ring-red-500" : "border-transparent"
             }`}
             placeholder="Adınız Soyadınız"
             value={formData.name}
             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
           />
-          {errors.name && <p className="text-red-500 text-xs mt-1">{errors.name}</p>}
+          {errors.name && <p className="text-red-500 text-[10px] mt-1 ml-1">{errors.name}</p>}
         </div>
-        <div className="space-y-2">
-          <label className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">Telefon</label>
+        <div className="space-y-1.5">
+          <label className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground/70 ml-1">Telefon</label>
           <input
             type="tel"
-            className={`w-full bg-muted/30 border rounded-xl px-4 py-4 focus:ring-2 focus:ring-primary outline-none transition-all ${
+            className={`w-full bg-muted/30 border rounded-xl px-4 py-3 focus:ring-2 focus:ring-primary outline-none transition-all ${
               errors.phone ? "border-red-500 focus:ring-red-500" : "border-transparent"
             }`}
             placeholder="0555 000 00 00"
             value={formData.phone}
             onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
           />
-          {errors.phone && <p className="text-red-500 text-xs mt-1">{errors.phone}</p>}
+          {errors.phone && <p className="text-red-500 text-[10px] mt-1 ml-1">{errors.phone}</p>}
         </div>
       </div>
       
-      <div className="space-y-2">
-        <label className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">E-Posta</label>
+      <div className="space-y-1.5">
+        <label className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground/70 ml-1">E-Posta</label>
         <input
           type="email"
-          className={`w-full bg-muted/30 border rounded-xl px-4 py-4 focus:ring-2 focus:ring-primary outline-none transition-all ${
+          className={`w-full bg-muted/30 border rounded-xl px-4 py-3 focus:ring-2 focus:ring-primary outline-none transition-all ${
             errors.email ? "border-red-500 focus:ring-red-500" : "border-transparent"
           }`}
           placeholder="ornek@email.com"
           value={formData.email}
           onChange={(e) => setFormData({ ...formData, email: e.target.value })}
         />
-        {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email}</p>}
+        {errors.email && <p className="text-red-500 text-[10px] mt-1 ml-1">{errors.email}</p>}
       </div>
 
-      <div className="space-y-2">
-        <label className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">Konu</label>
+      <div className="space-y-1.5">
+        <label className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground/70 ml-1">Konu</label>
         <select
-          className="w-full bg-muted/30 border-none rounded-xl px-4 py-4 focus:ring-2 focus:ring-primary outline-none transition-all text-foreground"
+          className="w-full bg-muted/30 border-none rounded-xl px-4 py-3 focus:ring-2 focus:ring-primary outline-none transition-all text-foreground text-sm cursor-pointer"
           value={formData.subject}
           onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
         >
@@ -115,24 +115,24 @@ export function ContactForm() {
         </select>
       </div>
 
-      <div className="space-y-2">
-        <label className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">Mesajınız</label>
+      <div className="space-y-1.5">
+        <label className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground/70 ml-1">Mesajınız</label>
         <textarea
-          rows={5}
-          className={`w-full bg-muted/30 border rounded-xl px-4 py-4 focus:ring-2 focus:ring-primary outline-none transition-all resize-none ${
+          rows={4}
+          className={`w-full bg-muted/30 border rounded-xl px-4 py-3 focus:ring-2 focus:ring-primary outline-none transition-all resize-none ${
             errors.message ? "border-red-500 focus:ring-red-500" : "border-transparent"
           }`}
           placeholder="Nasıl yardımcı olabiliriz?"
           value={formData.message}
           onChange={(e) => setFormData({ ...formData, message: e.target.value })}
         />
-        {errors.message && <p className="text-red-500 text-xs mt-1">{errors.message}</p>}
+        {errors.message && <p className="text-red-500 text-[10px] mt-1 ml-1">{errors.message}</p>}
       </div>
 
       <button
         type="submit"
         disabled={isSubmitting}
-        className="w-full bg-primary text-primary-foreground font-bold text-lg rounded-xl py-5 hover:opacity-90 active:scale-[0.98] transition-all disabled:opacity-70 flex justify-center items-center"
+        className="w-full bg-primary text-primary-foreground font-bold text-base rounded-xl py-4 hover:opacity-90 active:scale-[0.98] transition-all disabled:opacity-70 flex justify-center items-center cursor-pointer shadow-lg shadow-primary/20"
       >
         {isSubmitting ? (
           <span className="w-6 h-6 border-2 border-white/30 border-t-white rounded-full animate-spin" />
