@@ -8,7 +8,7 @@ export const layoutQuery = groq`{
     logo { asset->{ _id, url, metadata { lqip, dimensions } }, hotspot, crop },
     logoHeight,
     favicon { asset->{ _id, url } },
-    contactInfo { phone, email, address, whatsappNumber, mapIframe },
+    contactInfo { phone, email, address, whatsappNumber, sahibindenUrl, mapIframe },
     socialLinks[] { platform, url },
     gaId, gtmId, googleSearchConsoleId
   },
@@ -52,7 +52,11 @@ export const homePageQuery = groq`*[_type == "homePage"][0] {
   aboutImage { asset->{ _id, url, metadata { lqip, dimensions } }, alt, hotspot, crop },
   blogTitle, blogSubtitle,
   ctaTitle, ctaText,
-  seo
+  seo,
+  "siteSettings": *[_type == "siteSettings"][0] {
+    contactInfo { phone, email, whatsappNumber, sahibindenUrl },
+    socialLinks[] { platform, url }
+  }
 }`;
 
 
@@ -190,7 +194,7 @@ export const listingDetailQuery = groq`{
     advisorName, advisorTitle, advisorImage
   },
   "settings": *[_type == "siteSettings"][0] {
-    contactInfo { phone, whatsappNumber }
+    contactInfo { phone, whatsappNumber, sahibindenUrl }
   }
 }`;
 

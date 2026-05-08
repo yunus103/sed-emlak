@@ -48,6 +48,12 @@ export const siteSettingsType = defineType({
           description: "Başında + ile ülke kodu dahil. Örn: +905001234567",
         }),
         defineField({
+          name: "sahibindenUrl",
+          title: "Sahibinden Mağaza URL",
+          type: "url",
+          description: "Sahibinden.com mağaza sayfanızın tam linki. Örn: https://sedemlak.sahibinden.com",
+        }),
+        defineField({
           name: "mapIframe",
           title: "Harita iFrame Kodu",
           type: "text",
