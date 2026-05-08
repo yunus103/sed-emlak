@@ -39,7 +39,7 @@ export const homePageQuery = groq`*[_type == "homePage"][0] {
     mainImage { asset->{ _id, url, metadata { lqip, dimensions } }, alt, hotspot, crop }
   },
   featuredServices[]->{
-    _id, title, slug, shortDescription,
+    _id, title, slug, shortDescription, icon,
     mainImage { asset->{ _id, url, metadata { lqip, dimensions } }, alt, hotspot, crop }
   },
   featuredPosts[]->{
@@ -85,7 +85,9 @@ export const blogPageQuery = groq`*[_type == "blogPage"][0] {
 }`;
 
 export const servicesPageQuery = groq`*[_type == "servicesPage"][0] {
-  pageTitle, pageSubtitle, ctaLabel, ctaLink, seo
+  pageTitle, pageSubtitle, ctaLabel, ctaLink, seo,
+  sectionTitle, sectionHeading, sectionDescription,
+  mainImage { asset->{ _id, url, metadata { lqip, dimensions } }, alt, hotspot, crop }
 }`;
 
 export const projectsPageQuery = groq`*[_type == "projectsPage"][0] {
@@ -133,12 +135,12 @@ export const blogRelatedPostsQuery = groq`*[_type == "blogPost" && category._ref
 // ─── Hizmetler ─────────────────────────────────────────────────────────────────
 
 export const serviceListQuery = groq`*[_type == "service"] | order(_createdAt asc) {
-  title, slug,
+  title, slug, shortDescription, icon,
   mainImage { asset->{ _id, url, metadata { lqip, dimensions } }, alt, hotspot, crop }
 }`;
 
 export const serviceBySlugQuery = groq`*[_type == "service" && slug.current == $slug][0] {
-  title, slug,
+  title, slug, shortDescription, icon,
   mainImage { asset->{ _id, url, metadata { lqip, dimensions } }, alt, hotspot, crop },
   body[] {
     ...,

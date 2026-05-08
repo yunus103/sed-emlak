@@ -2,16 +2,18 @@ import Link from "next/link";
 import {
   RiHomeHeartLine, RiKey2Line, RiBarChartBoxLine,
   RiShieldStarLine, RiScales3Line, RiBuilding4Line,
-  RiArrowRightLine
+  RiArrowRightLine,
 } from "react-icons/ri";
+import { getIcon } from "@/lib/iconMap";
 
+// Sanity bağlantısı yoksa gösterilecek fallback verisi
 const FALLBACK = [
-  { title: "Satış Danışmanlığı",      description: "Mülkünüzü gerçek piyasa değerinden, güvenilir süreç yönetimiyle en hızlı şekilde satıyoruz.", icon: RiHomeHeartLine, slug: "satis-danismanligi", accent: "#1a5fb4" },
-  { title: "Kiralama Danışmanlığı",   description: "Bütçenize ve yaşam tarzınıza en uygun kiralık daire ve işyerlerini hızla buluyoruz.", icon: RiKey2Line, slug: "kiralama-danismanligi", accent: "#2d6a4f" },
-  { title: "Yatırım Danışmanlığı",    description: "Kira getirisi ve değer artışı analizleriyle doğru lokasyonda, doğru yatırımı yapmanıza rehberlik ediyoruz.", icon: RiBarChartBoxLine, slug: "yatirim-danismanligi", accent: "#7b2d8b" },
-  { title: "Ekspertiz & Değerleme",   description: "Bağımsız uzman değerleme raporuyla mülkünüzün gerçek piyasa değerini tespit ediyoruz.", icon: RiShieldStarLine, slug: "ekspertiz-degerleme", accent: "#b5451b" },
-  { title: "Mülk Yönetimi",          description: "Kiracı bulma, kira takibi ve bakım koordinasyonunu sizin yerinize üstleniyoruz.", icon: RiBuilding4Line, slug: "mulk-yonetimi", accent: "#1a7fa1" },
-  { title: "Hukuki & Tapu Desteği",  description: "Tapu devri, ipotek ve sözleşme süreçlerinde hukuki güvence sağlıyoruz.", icon: RiScales3Line, slug: "hukuki-destek", accent: "#8a6800" },
+  { title: "Satış Danışmanlığı", description: "Mülkünüzü gerçek piyasa değerinden, güvenilir süreç yönetimiyle en hızlı şekilde satıyoruz.", icon: "RiHomeHeartLine", slug: "satis-danismanligi" },
+  { title: "Kiralama Danışmanlığı", description: "Bütçenize ve yaşam tarzınıza en uygun kiralık daire ve işyerlerini hızla buluyoruz.", icon: "RiKey2Line", slug: "kiralama-danismanligi" },
+  { title: "Yatırım Danışmanlığı", description: "Kira getirisi ve değer artışı analizleriyle doğru lokasyonda, doğru yatırımı yapmanıza rehberlik ediyoruz.", icon: "RiBarChartBoxLine", slug: "yatirim-danismanligi" },
+  { title: "Ekspertiz & Değerleme", description: "Bağımsız uzman değerleme raporuyla mülkünüzün gerçek piyasa değerini tespit ediyoruz.", icon: "RiShieldStarLine", slug: "ekspertiz-degerleme" },
+  { title: "Mülk Yönetimi", description: "Kiracı bulma, kira takibi ve bakım koordinasyonunu sizin yerinize üstleniyoruz.", icon: "RiBuilding4Line", slug: "mulk-yonetimi" },
+  { title: "Hukuki & Tapu Desteği", description: "Tapu devri, ipotek ve sözleşme süreçlerinde hukuki güvence sağlıyoruz.", icon: "RiScales3Line", slug: "hukuki-destek" },
 ];
 
 export function Services({ services }: { services: any[] }) {
@@ -32,14 +34,16 @@ export function Services({ services }: { services: any[] }) {
         {/* Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {items.map((service, i) => {
-            const Icon = service.icon || RiBuilding4Line;
+            const Icon = getIcon(service.icon);
+            const slug = service.slug?.current || service.slug;
+
             return (
               <Link
                 key={i}
-                href={`/hizmetler/${service.slug?.current || service.slug}`}
+                href={`/hizmetler/${slug}`}
                 className="group relative flex flex-col p-7 rounded-2xl border bg-background hover:bg-primary hover:border-primary transition-all duration-300 hover:shadow-xl hover:-translate-y-1 overflow-hidden"
               >
-                {/* Corner accent square (decorative) */}
+                {/* Dekoratif köşe */}
                 <div className="absolute top-0 right-0 w-20 h-20 rounded-bl-3xl bg-muted/50 group-hover:bg-white/10 transition-colors duration-300" />
 
                 <div className="relative w-12 h-12 rounded-xl bg-primary/10 group-hover:bg-white/15 flex items-center justify-center mb-5 transition-colors duration-300 text-primary group-hover:text-white">
@@ -50,7 +54,7 @@ export function Services({ services }: { services: any[] }) {
                   {service.title}
                 </h3>
                 <p className="text-sm text-muted-foreground group-hover:text-white/80 leading-relaxed flex-1 transition-colors duration-300">
-                  {service.description || service.shortDescription}
+                  {service.shortDescription || service.description}
                 </p>
 
                 <div className="mt-5 flex items-center gap-1.5 text-sm font-semibold text-primary group-hover:text-white transition-colors duration-300">
