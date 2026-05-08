@@ -57,7 +57,7 @@ export default async function ContactPage() {
       seo
     },
     "settings": *[_type == "siteSettings"][0] {
-      contactInfo { phone, email, address, whatsappNumber, sahibindenUrl, mapIframe },
+      contactInfo { phone, phone2, email, address, branchAddress, whatsappNumber, sahibindenUrl, mapIframe },
       socialLinks[] { platform, url }
     }
   }`;
@@ -74,12 +74,15 @@ export default async function ContactPage() {
     : undefined;
 
   const phone = contact?.phone || "+90 532 000 00 00";
+  const phone2 = contact?.phone2;
   const email = contact?.email || "info@sedemlak.com";
   const whatsappDisplay = contact?.whatsappNumber || phone;
   const address = contact?.address || "İstanbul, Türkiye";
+  const branchAddress = contact?.branchAddress;
   const mapIframe = contact?.mapIframe;
 
   const phoneClean = phone?.replace(/[^0-9+]/g, "") || "";
+  const phone2Clean = phone2?.replace(/[^0-9+]/g, "") || "";
   const waLink = whatsappDisplay?.replace(/[^0-9]/g, "") || "";
 
   return (
@@ -104,34 +107,73 @@ export default async function ContactPage() {
               </p>
 
               <div className="space-y-10">
-                {/* Adres */}
-                <div className="flex items-start gap-5">
-                  <div className="w-14 h-14 rounded-2xl bg-muted/50 text-muted-foreground flex items-center justify-center shrink-0">
-                    <RiMapPin2Fill size={24} />
+                {/* Adresler */}
+                <div className="space-y-8">
+                  {/* Merkez Adres */}
+                  <div className="flex items-start gap-5">
+                    <div className="w-14 h-14 rounded-2xl bg-muted/50 text-muted-foreground flex items-center justify-center shrink-0">
+                      <RiMapPin2Fill size={24} />
+                    </div>
+                    <div>
+                      <h3 className="font-bold text-lg mb-1">Merkez Ofis</h3>
+                      <p className="text-muted-foreground leading-relaxed whitespace-pre-wrap">
+                        {address}
+                      </p>
+                    </div>
                   </div>
-                  <div>
-                    <h3 className="font-bold text-lg mb-1">Adres</h3>
-                    <p className="text-muted-foreground leading-relaxed whitespace-pre-wrap">
-                      {address}
-                    </p>
-                  </div>
+
+                  {/* Şube Adres */}
+                  {branchAddress && (
+                    <div className="flex items-start gap-5">
+                      <div className="w-14 h-14 rounded-2xl bg-muted/50 text-muted-foreground flex items-center justify-center shrink-0">
+                        <RiMapPin2Fill size={24} />
+                      </div>
+                      <div>
+                        <h3 className="font-bold text-lg mb-1">Şube Ofis</h3>
+                        <p className="text-muted-foreground leading-relaxed whitespace-pre-wrap">
+                          {branchAddress}
+                        </p>
+                      </div>
+                    </div>
+                  )}
                 </div>
 
-                {/* Telefon */}
-                <a 
-                  href={`tel:${phoneClean}`} 
-                  className="flex items-start gap-5 group cursor-pointer"
-                >
-                  <div className="w-14 h-14 rounded-2xl bg-primary/10 text-primary flex items-center justify-center shrink-0 group-hover:bg-primary group-hover:text-primary-foreground transition-all duration-300">
-                    <RiPhoneFill size={24} />
-                  </div>
-                  <div>
-                    <h3 className="font-bold text-lg mb-1 group-hover:text-primary transition-colors">Telefon</h3>
-                    <p className="text-muted-foreground text-lg group-hover:text-primary/80 transition-colors">
-                      {phone}
-                    </p>
-                  </div>
-                </a>
+                {/* Telefonlar */}
+                <div className="space-y-6">
+                  {/* Telefon 1 */}
+                  <a 
+                    href={`tel:${phoneClean}`} 
+                    className="flex items-start gap-5 group cursor-pointer"
+                  >
+                    <div className="w-14 h-14 rounded-2xl bg-primary/10 text-primary flex items-center justify-center shrink-0 group-hover:bg-primary group-hover:text-primary-foreground transition-all duration-300">
+                      <RiPhoneFill size={24} />
+                    </div>
+                    <div>
+                      <h3 className="font-bold text-lg mb-1 group-hover:text-primary transition-colors">Telefon</h3>
+                      <p className="text-muted-foreground text-lg group-hover:text-primary/80 transition-colors">
+                        {phone}
+                      </p>
+                    </div>
+                  </a>
+
+                  {/* Telefon 2 */}
+                  {phone2 && (
+                    <a 
+                      href={`tel:${phone2Clean}`} 
+                      className="flex items-start gap-5 group cursor-pointer"
+                    >
+                      <div className="w-14 h-14 rounded-2xl bg-primary/10 text-primary flex items-center justify-center shrink-0 group-hover:bg-primary group-hover:text-primary-foreground transition-all duration-300">
+                        <RiPhoneFill size={24} />
+                      </div>
+                      <div>
+                        <h3 className="font-bold text-lg mb-1 group-hover:text-primary transition-colors">Telefon 2</h3>
+                        <p className="text-muted-foreground text-lg group-hover:text-primary/80 transition-colors">
+                          {phone2}
+                        </p>
+                      </div>
+                    </a>
+                  )}
+                </div>
 
                 {/* WhatsApp */}
                 <a 

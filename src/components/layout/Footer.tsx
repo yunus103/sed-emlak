@@ -112,7 +112,12 @@ export function Footer({ settings, navigation }: { settings: any; navigation: an
               {contact?.phone && (
                 <li className="flex items-start gap-2.5">
                   <RiPhoneLine size={15} className="shrink-0 mt-0.5 text-primary" />
-                  <a href={`tel:${contact.phone}`} className="hover:text-white transition-colors">{contact.phone}</a>
+                  <div className="flex flex-col gap-1">
+                    <a href={`tel:${contact.phone}`} className="hover:text-white transition-colors">{contact.phone}</a>
+                    {contact.phone2 && (
+                      <a href={`tel:${contact.phone2}`} className="hover:text-white transition-colors">{contact.phone2}</a>
+                    )}
+                  </div>
                 </li>
               )}
               {contact?.email && (
@@ -124,7 +129,19 @@ export function Footer({ settings, navigation }: { settings: any; navigation: an
               {contact?.address && (
                 <li className="flex items-start gap-2.5">
                   <RiMapPinLine size={15} className="shrink-0 mt-0.5 text-primary" />
-                  <span>{contact.address}</span>
+                  <div className="flex flex-col gap-1">
+                    <span className="text-white/40 text-[10px] uppercase font-bold tracking-tight">Merkez Ofis</span>
+                    <span>{contact.address}</span>
+                  </div>
+                </li>
+              )}
+              {contact?.branchAddress && (
+                <li className="flex items-start gap-2.5">
+                  <RiMapPinLine size={15} className="shrink-0 mt-0.5 text-primary" />
+                  <div className="flex flex-col gap-1">
+                    <span className="text-white/40 text-[10px] uppercase font-bold tracking-tight">Şube Ofis</span>
+                    <span>{contact.branchAddress}</span>
+                  </div>
                 </li>
               )}
               {contact?.workingHours && (
