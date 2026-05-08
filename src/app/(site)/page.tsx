@@ -11,6 +11,7 @@ import { Stats } from "@/components/home/Stats";
 import { AboutSummary } from "@/components/home/AboutSummary";
 import { Services } from "@/components/home/Services";
 import { LatestBlogs } from "@/components/home/LatestBlogs";
+import { SahibindenBanner } from "@/components/home/SahibindenBanner";
 import { ContactBar } from "@/components/home/ContactBar";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -38,6 +39,7 @@ export default async function HomePage() {
       <AboutSummary data={data} />
       <Services services={data?.featuredServices || []} />
       <LatestBlogs posts={data?.featuredPosts || []} title={data?.blogTitle} subtitle={data?.blogSubtitle} />
+      <SahibindenBanner url={data?.siteSettings?.contactInfo?.sahibindenUrl} />
       <ContactBar settings={data?.siteSettings} />
     </main>
   );
