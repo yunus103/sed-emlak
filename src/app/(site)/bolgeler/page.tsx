@@ -72,7 +72,6 @@ export default async function RegionsPage() {
           <div className="container mx-auto px-4 md:px-8">
             {/* Floating card: yukarı taşma efekti — blog sayfasındaki gibi */}
             <div className="-mt-4 md:-mt-6 bg-background rounded-t-[2rem] md:rounded-t-[3rem] pt-10 md:pt-14 px-4 md:px-10 shadow-xl border border-border/10 pb-14">
-
               {/* Section header */}
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-8">
                 <div>
@@ -80,7 +79,7 @@ export default async function RegionsPage() {
                     İstanbul
                   </p>
                   <h2 className="text-2xl md:text-3xl font-heading font-bold">
-                    Uzmanlık Bölgelerimiz
+                    SED Emlak Danışmanlık Lokasyonları
                   </h2>
                 </div>
                 <p className="text-sm text-muted-foreground max-w-sm">
@@ -90,7 +89,10 @@ export default async function RegionsPage() {
 
               {regions.length === 0 ? (
                 <div className="py-20 text-center text-muted-foreground">
-                  <RiMapPin2Line size={40} className="mx-auto mb-4 opacity-30" />
+                  <RiMapPin2Line
+                    size={40}
+                    className="mx-auto mb-4 opacity-30"
+                  />
                   <p>Henüz bölge eklenmemiş.</p>
                 </div>
               ) : (
