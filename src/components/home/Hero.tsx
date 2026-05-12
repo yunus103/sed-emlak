@@ -61,17 +61,31 @@ export function Hero({ data, regions = [] }: { data: any; regions?: any[] }) {
         className="absolute inset-0 z-0 bg-cover bg-center"
         style={{ backgroundImage: `url(${bgImage})` }}
       />
-      <div className="absolute inset-0 z-0 bg-gradient-to-b from-black/55 via-black/30 to-black/65" />
+      <div className="absolute inset-0 z-0 bg-gradient-to-b from-black/40 via-black/10 to-black/50" />
 
       {/* Content */}
       <div className="container relative z-10 mx-auto px-4 flex flex-col items-center text-center">
-        <p className="text-white/60 uppercase tracking-[0.3em] text-[10px] sm:text-xs font-semibold mb-4 drop-shadow">
+        {/* Soft Contrast Pocket - Provides surgical contrast without darkening the whole image */}
+        <div className="absolute inset-x-0 top-0 bottom-40 bg-black/20 blur-[120px] -z-10 rounded-full scale-110 sm:scale-100" />
+
+        <p 
+          className="text-white/90 uppercase tracking-[0.3em] text-[10px] sm:text-xs font-semibold mb-4"
+          style={{ textShadow: '0 2px 10px rgba(0,0,0,0.8)' }}
+        >
           İstanbul&apos;un Güvenilir Emlak Danışmanı
         </p>
-        <h1 className="font-heading text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-white font-bold mb-5 drop-shadow-lg max-w-4xl leading-tight whitespace-pre-line">
+        <h1 
+          className="font-heading text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-white font-bold mb-5 max-w-4xl leading-tight whitespace-pre-line"
+          style={{ 
+            textShadow: '0 4px 20px rgba(0,0,0,0.6), 0 0 40px rgba(0,0,0,0.3)' 
+          }}
+        >
           {data?.heroTitle || "Hayalinizdeki Evi Keşfedin"}
         </h1>
-        <p className="text-white/75 text-base md:text-lg mb-10 max-w-lg drop-shadow leading-relaxed">
+        <p 
+          className="text-white/95 text-base md:text-lg mb-10 max-w-lg leading-relaxed font-medium"
+          style={{ textShadow: '0 2px 15px rgba(0,0,0,0.9)' }}
+        >
           {data?.heroSubtitle ||
             "Kiralık ve satılık seçeneklerle ihtiyacınıza en uygun mülkü uzman danışmanlarımızla bulun."}
         </p>
