@@ -130,12 +130,16 @@ export default async function RegionsPage() {
                           </div>
                         )}
 
-                        {/* Overlay */}
-                        <div className="absolute inset-0 bg-black/45 group-hover:bg-black/55 transition-colors duration-300" />
-
+                        {/* Zero-overlay design — 100% vivid image */}
+                        
                         {/* İlçe adı */}
                         <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 px-4">
-                          <h3 className="text-white font-semibold text-xl md:text-2xl tracking-wide drop-shadow-md text-center">
+                          <h3 
+                            className="relative z-10 text-white font-extrabold text-2xl md:text-3xl tracking-wide text-center"
+                            style={{ 
+                              textShadow: '0 2px 4px rgba(0,0,0,0.9), 0 4px 12px rgba(0,0,0,0.7), 0 0 25px rgba(0,0,0,0.5)' 
+                            }}
+                          >
                             {title}
                           </h3>
                           {activeCount != null && activeCount > 0 && (

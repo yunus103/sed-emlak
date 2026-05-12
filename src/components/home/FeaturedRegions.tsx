@@ -56,12 +56,16 @@ export function FeaturedRegions({ regions, title, subtitle }: { regions: any[]; 
                     className="object-cover transition-transform duration-700 group-hover:scale-105"
                   />
                 )}
-                {/* Gradient overlay — reference style: dark band across entire card */}
-                <div className="absolute inset-0 bg-black/45 group-hover:bg-black/55 transition-colors duration-300" />
-
-                {/* Region name centered, exactly like the reference */}
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <h3 className="text-white font-semibold text-xl md:text-2xl tracking-wide drop-shadow-md text-center px-3">
+                {/* Zero-overlay design — No background filters, keeping the image 100% vivid */}
+                
+                {/* Region name centered */}
+                <div className="absolute inset-0 flex items-center justify-center p-4">
+                  <h3 
+                    className="relative z-10 text-white font-extrabold text-2xl md:text-3xl tracking-wide text-center px-6"
+                    style={{ 
+                      textShadow: '0 2px 4px rgba(0,0,0,0.9), 0 4px 12px rgba(0,0,0,0.7), 0 0 25px rgba(0,0,0,0.5)' 
+                    }}
+                  >
                     {title}
                   </h3>
                 </div>
