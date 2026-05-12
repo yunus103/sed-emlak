@@ -106,7 +106,7 @@ export function Hero({ data, regions = [] }: { data: any; regions?: any[] }) {
                 <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground flex items-center gap-1 mb-0.5">
                   <RiHome4Line size={12} /> Mülk Türü
                 </span>
-                <Select value={tur} onValueChange={(val) => setTur(val)}>
+                <Select value={tur} onValueChange={(val) => setTur(val || "")}>
                   <SelectTrigger className="w-full border-0 p-0 h-auto font-medium text-sm shadow-none focus:ring-0 bg-transparent gap-1 cursor-pointer">
                     <SelectValue placeholder="Tüm Türler" />
                   </SelectTrigger>
@@ -126,7 +126,7 @@ export function Hero({ data, regions = [] }: { data: any; regions?: any[] }) {
                 <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground flex items-center gap-1 mb-0.5">
                   <RiMapPin2Line size={12} /> İlçe / Bölge
                 </span>
-                <Select value={ilce} onValueChange={(val) => setIlce(val)}>
+                <Select value={ilce} onValueChange={(val) => setIlce(val || "")}>
                   <SelectTrigger className="w-full border-0 p-0 h-auto font-medium text-sm shadow-none focus:ring-0 bg-transparent gap-1 cursor-pointer">
                     <span className={ilce && ilce !== "all" ? "text-foreground" : "text-muted-foreground"}>
                       {ilce && ilce !== "all" 

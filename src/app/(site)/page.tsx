@@ -57,8 +57,9 @@ export default async function IndexPage() {
       />
       <SahibindenBanner />
       <ContactBar 
-        data={data}
-        siteSettings={data?.siteSettings}
+        settings={data?.siteSettings}
+        ctaTitle={data?.ctaTitle}
+        ctaText={data?.ctaText}
       />
     </main>
   );
