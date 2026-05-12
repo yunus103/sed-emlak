@@ -41,7 +41,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { ilce } = await params;
   const region = await client
-    .fetch(regionDetailQuery, { slug: ilce }, { next: { tags: ["region"] } })
+    .fetch(regionDetailQuery, { slug: ilce }, { next: { tags: ["region", `region:${ilce}`] } })
     .catch(() => null);
 
   if (!region) return buildMetadata({ title: "Bölge", canonicalPath: `/bolgeler/${ilce}` });
@@ -68,7 +68,7 @@ export default async function RegionDetailPage({
 
   const [region, listings, advisor, layout] = await Promise.all([
     client
-      .fetch(regionDetailQuery, { slug: ilce }, { next: { tags: ["region"] } })
+      .fetch(regionDetailQuery, { slug: ilce }, { next: { tags: ["region", `region:${ilce}`] } })
       .catch(() => null),
     client
       .fetch(listingsByRegionQuery, { slug: ilce }, { next: { tags: ["listing"] } })

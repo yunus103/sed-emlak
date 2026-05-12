@@ -47,9 +47,9 @@ export async function POST(req: Request) {
       blogPost: ["blog"],
       service: ["services"],
       listing: ["listings"],
-      region: ["regions"],
+      region: ["region"],
       listingsPage: ["listings"],
-      regionsPage: ["regions"],
+      regionsPage: ["regionsPage"],
       legalPage: ["legal"],
       faq: ["faq"],
     };
