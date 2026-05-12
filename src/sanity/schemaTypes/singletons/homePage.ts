@@ -59,7 +59,7 @@ export const homePageType = defineType({
 
     // --- FEATURED REGIONS ---
     defineField({ name: "featuredRegionsTitle", title: "Popüler Bölgeler - Başlık", type: "string", group: "featured", description: "Örn: Popüler Bölgeler veya Çalışma Alanlarımız" }),
-    defineField({ name: "featuredRegionsSubtitle", title: "Popüler Bölgeler - Alt Başlık", type: "string", group: "featured", description: "Örn: İstanbul'da" }),
+    defineField({ name: "featuredRegionsDescription", title: "Popüler Bölgeler - Açıklama Metni", type: "text", rows: 2, group: "featured", description: "Başlığın altında yer alacak kısa açıklama." }),
     defineField({
       name: "featuredRegions",
       title: "Seçili Bölgeler",

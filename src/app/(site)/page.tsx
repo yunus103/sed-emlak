@@ -22,41 +22,44 @@ export async function generateMetadata(): Promise<Metadata> {
   });
 }
 
-export default async function HomePage() {
-  const isDraft = (await draftMode()).isEnabled;
-  const data = await getClient(isDraft).fetch(
-    homePageQuery,
-    {},
-    { next: { tags: ["home"] } }
-  );
+export default async function IndexPage() {
+  const isDraft = false; // logic for draft mode if needed
+
+  const { data, allRegions } = await getClient(isDraft).fetch(homePageQuery, {}, {
+    next: { tags: ["homePage", "listing", "region", "service", "blogPost"] },
+  });
 
   return (
-    <main className="flex min-h-screen flex-col w-full">
-      <Hero data={data} />
-      <LatestListings
-        listings={data?.featuredListings || []}
+    <main className="flex min-h-screen flex-col w-full bg-background overflow-hidden">
+      <Hero data={data} regions={allRegions || []} />
+      <LatestListings 
+        listings={data?.featuredListings || []} 
         title={data?.featuredListingsTitle}
         subtitle={data?.featuredListingsSubtitle}
       />
-      <FeaturedRegions
-        regions={data?.featuredRegions || []}
+      <FeaturedRegions 
+        regions={data?.featuredRegions || []} 
         title={data?.featuredRegionsTitle}
-        subtitle={data?.featuredRegionsSubtitle}
+        subtitle={data?.featuredRegionsDescription}
       />
-      <Stats
-        stats={data?.stats || []}
+      <Stats 
+        stats={data?.stats || []} 
         title={data?.statsTitle}
         subtitle={data?.statsSubtitle}
       />
-      <AboutSummary data={data} />
-      <Services
-        services={data?.featuredServices || []}
+      <Services 
+        services={data?.featuredServices || []} 
         title={data?.featuredServicesTitle}
         subtitle={data?.featuredServicesSubtitle}
       />
-      <LatestBlogs posts={data?.featuredPosts || []} title={data?.blogTitle} subtitle={data?.blogSubtitle} />
-      <SahibindenBanner url={data?.siteSettings?.contactInfo?.sahibindenUrl} />
-      <ContactBar settings={data?.siteSettings} ctaTitle={data?.ctaTitle} ctaText={data?.ctaText} />
+      <AboutSummary 
+        data={data} 
+      />
+      <SahibindenBanner />
+      <ContactBar 
+        data={data}
+        siteSettings={data?.siteSettings}
+      />
     </main>
   );
 }

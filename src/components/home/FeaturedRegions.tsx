@@ -18,14 +18,11 @@ export function FeaturedRegions({ regions, title, subtitle }: { regions: any[]; 
     <section className="py-20 bg-muted/20">
       <div className="container mx-auto px-4">
         <div className="text-left md:text-center mb-12">
-          <p className="text-primary text-sm font-semibold uppercase tracking-widest mb-2">
-            {subtitle || "İstanbul'da"}
-          </p>
-          <h2 className="text-3xl md:text-4xl font-heading font-bold mb-3">
+          <h2 className="text-3xl md:text-4xl font-heading font-bold mb-4">
             {title || "Uzmanlık Bölgelerimiz"}
           </h2>
           <p className="text-muted-foreground max-w-xl md:mx-auto text-base">
-            İstanbul'un en değerli ilçelerinde kapsamlı portföy ve uzman danışman kadrosu.
+            {subtitle || "İstanbul'un en değerli ilçelerinde kapsamlı portföy ve uzman danışman kadrosu."}
           </p>
         </div>
 

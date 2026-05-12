@@ -20,48 +20,51 @@ export const layoutQuery = groq`{
 
 // ─── Sayfalar ──────────────────────────────────────────────────────────────────
 
-export const homePageQuery = groq`*[_type == "homePage"][0] {
-  heroTitle, heroSubtitle, heroCtaLabel,
-  heroCtaLink {
-    linkType,
-    manual,
-    internal->{ _type, "slug": slug.current }
+export const homePageQuery = groq`{
+  "data": *[_type == "homePage"][0] {
+    heroTitle, heroSubtitle, heroCtaLabel,
+    heroCtaLink {
+      linkType,
+      manual,
+      internal->{ _type, "slug": slug.current }
+    },
+    heroImage { asset->{ _id, url, metadata { lqip, dimensions } }, alt, hotspot, crop },
+    quickFilters[] { label, tip, tur, ilce },
+    featuredListingsTitle, featuredListingsSubtitle,
+    featuredListings[]->{
+      _id, title, slug, status, propertyType, price, neighborhood,
+      region->{title, slug},
+      features { grossArea, netArea, rooms },
+      mainImage { asset->{ _id, url, metadata { lqip, dimensions } }, alt, hotspot, crop }
+    },
+    featuredRegionsTitle, featuredRegionsDescription,
+    featuredRegions[]->{
+      _id, title, slug,
+      heroImage { asset->{ _id, url, metadata { lqip, dimensions } }, alt, hotspot, crop }
+    },
+    featuredServicesTitle, featuredServicesSubtitle,
+    featuredServices[]->{
+      _id, title, slug, shortDescription, icon,
+      mainImage { asset->{ _id, url, metadata { lqip, dimensions } }, alt, hotspot, crop }
+    },
+    featuredPosts[]->{
+      _id, title, slug, excerpt, publishedAt,
+      category->{ title, slug },
+      mainImage { asset->{ _id, url, metadata { lqip, dimensions } }, alt, hotspot, crop }
+    },
+    stats[] { value, label },
+    statsTitle, statsSubtitle,
+    aboutTitle, aboutSubtitle, aboutText, aboutPoints,
+    aboutImage { asset->{ _id, url, metadata { lqip, dimensions } }, alt, hotspot, crop },
+    blogTitle, blogSubtitle,
+    ctaTitle, ctaText,
+    seo,
+    "siteSettings": *[_type == "siteSettings"][0] {
+      contactInfo { phone, phone2, email, address, branchAddress, whatsappNumber, sahibindenUrl },
+      socialLinks[] { platform, url }
+    }
   },
-  heroImage { asset->{ _id, url, metadata { lqip, dimensions } }, alt, hotspot, crop },
-  quickFilters[] { label, tip, tur, ilce },
-  featuredListingsTitle, featuredListingsSubtitle,
-  featuredListings[]->{
-    _id, title, slug, status, propertyType, price, neighborhood,
-    region->{title, slug},
-    features { grossArea, netArea, rooms },
-    mainImage { asset->{ _id, url, metadata { lqip, dimensions } }, alt, hotspot, crop }
-  },
-  featuredRegionsTitle, featuredRegionsSubtitle,
-  featuredRegions[]->{
-    _id, title, slug,
-    heroImage { asset->{ _id, url, metadata { lqip, dimensions } }, alt, hotspot, crop }
-  },
-  featuredServicesTitle, featuredServicesSubtitle,
-  featuredServices[]->{
-    _id, title, slug, shortDescription, icon,
-    mainImage { asset->{ _id, url, metadata { lqip, dimensions } }, alt, hotspot, crop }
-  },
-  featuredPosts[]->{
-    _id, title, slug, excerpt, publishedAt,
-    category->{ title, slug },
-    mainImage { asset->{ _id, url, metadata { lqip, dimensions } }, alt, hotspot, crop }
-  },
-  stats[] { value, label },
-  statsTitle, statsSubtitle,
-  aboutTitle, aboutSubtitle, aboutText, aboutPoints,
-  aboutImage { asset->{ _id, url, metadata { lqip, dimensions } }, alt, hotspot, crop },
-  blogTitle, blogSubtitle,
-  ctaTitle, ctaText,
-  seo,
-  "siteSettings": *[_type == "siteSettings"][0] {
-    contactInfo { phone, phone2, email, address, branchAddress, whatsappNumber, sahibindenUrl },
-    socialLinks[] { platform, url }
-  }
+  "allRegions": *[_type == "region"] | order(title asc) { _id, title, "slug": slug.current }
 }`;
 
 

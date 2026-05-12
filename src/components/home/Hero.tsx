@@ -11,16 +11,15 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-const PROPERTY_TYPES = ["Daire", "Villa", "Arsa", "İş Yeri", "Bina", "Depo"];
-const DISTRICTS = ["Tüm İstanbul", "Bakırköy", "Beşiktaş", "Beylikdüzü", "Eyüpsultan", "Kadıköy", "Sarıyer", "Şişli", "Üsküdar"];
+const PROPERTY_TYPES = ["Daire", "Villa", "Müstakil Ev", "Ofis", "Dükkan / Mağaza", "Arsa", "Bina"];
 
 const FALLBACK_QUICK_FILTERS = [
-  { label: "Daire — Kadıköy", tip: "satilik", tur: "daire", ilce: "Kadıköy" },
-  { label: "Villa — Sarıyer", tip: "satilik", tur: "villa", ilce: "Sarıyer" },
-  { label: "Arsa — Silivri", tip: "satilik", tur: "arsa", ilce: "Silivri" },
+  { label: "Daire — Kadıköy", tip: "satilik", tur: "Daire", ilce: "kadikoy" },
+  { label: "Villa — Sarıyer", tip: "satilik", tur: "Villa", ilce: "sariyer" },
+  { label: "Arsa — Silivri", tip: "satilik", tur: "Arsa", ilce: "silivri" },
 ];
 
-export function Hero({ data }: { data: any }) {
+export function Hero({ data, regions = [] }: { data: any; regions?: any[] }) {
   const router = useRouter();
   const [tip, setTip] = useState<"satilik" | "kiralik">("satilik");
   const [tur, setTur] = useState("");
@@ -35,8 +34,8 @@ export function Hero({ data }: { data: any }) {
   const handleSearch = () => {
     const params = new URLSearchParams();
     params.set("tip", tip);
-    if (tur && tur !== "Tüm Türler") params.set("tur", tur);
-    if (ilce && ilce !== "Tüm İstanbul") params.set("ilce", ilce);
+    if (tur && tur !== "all") params.set("tur", tur);
+    if (ilce && ilce !== "all") params.set("ilce", ilce);
     router.push(`/ilanlar?${params.toString()}`);
   };
 
@@ -107,12 +106,12 @@ export function Hero({ data }: { data: any }) {
                 <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground flex items-center gap-1 mb-0.5">
                   <RiHome4Line size={12} /> Mülk Türü
                 </span>
-                <Select value={tur} onValueChange={(val) => setTur(val || "")}>
+                <Select value={tur} onValueChange={(val) => setTur(val)}>
                   <SelectTrigger className="w-full border-0 p-0 h-auto font-medium text-sm shadow-none focus:ring-0 bg-transparent gap-1 cursor-pointer">
                     <SelectValue placeholder="Tüm Türler" />
                   </SelectTrigger>
-                  <SelectContent alignItemWithTrigger={false} className="rounded-xl border-border/50 shadow-xl p-1 max-h-[400px]">
-                    <SelectItem value="Tüm Türler" className="py-2.5 px-3">Tüm Türler</SelectItem>
+                  <SelectContent alignItemWithTrigger={false} className="rounded-xl border-border/50 shadow-xl">
+                    <SelectItem value="all" className="py-2.5 px-3">Tüm Türler</SelectItem>
                     {PROPERTY_TYPES.map((p) => (
                       <SelectItem key={p} value={p} className="py-2.5 px-3">{p}</SelectItem>
                     ))}
@@ -127,13 +126,20 @@ export function Hero({ data }: { data: any }) {
                 <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground flex items-center gap-1 mb-0.5">
                   <RiMapPin2Line size={12} /> İlçe / Bölge
                 </span>
-                <Select value={ilce} onValueChange={(val) => setIlce(val || "")}>
+                <Select value={ilce} onValueChange={(val) => setIlce(val)}>
                   <SelectTrigger className="w-full border-0 p-0 h-auto font-medium text-sm shadow-none focus:ring-0 bg-transparent gap-1 cursor-pointer">
-                    <SelectValue placeholder="Tüm İstanbul" />
+                    <span className={ilce && ilce !== "all" ? "text-foreground" : "text-muted-foreground"}>
+                      {ilce && ilce !== "all" 
+                        ? regions.find(r => r.slug === ilce)?.title || ilce 
+                        : "Tüm İstanbul"}
+                    </span>
                   </SelectTrigger>
-                  <SelectContent alignItemWithTrigger={false} className="rounded-xl border-border/50 shadow-xl p-1 max-h-[400px]">
-                    {DISTRICTS.map((d) => (
-                      <SelectItem key={d} value={d} className="py-2.5 px-3">{d}</SelectItem>
+                  <SelectContent alignItemWithTrigger={false} className="rounded-xl border-border/50 shadow-xl">
+                    <SelectItem value="all" className="py-2.5 px-3">Tüm İstanbul</SelectItem>
+                    {regions.map((r: any) => (
+                      <SelectItem key={r._id} value={r.slug} className="py-2.5 px-3">
+                        {r.title}
+                      </SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
