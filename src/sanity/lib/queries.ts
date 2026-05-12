@@ -28,16 +28,20 @@ export const homePageQuery = groq`*[_type == "homePage"][0] {
     internal->{ _type, "slug": slug.current }
   },
   heroImage { asset->{ _id, url, metadata { lqip, dimensions } }, alt, hotspot, crop },
+  quickFilters[] { label, tip, tur, ilce },
+  featuredListingsTitle, featuredListingsSubtitle,
   featuredListings[]->{
     _id, title, slug, status, propertyType, price, neighborhood,
     region->{title, slug},
     features { grossArea, netArea, rooms },
     mainImage { asset->{ _id, url, metadata { lqip, dimensions } }, alt, hotspot, crop }
   },
+  featuredRegionsTitle, featuredRegionsSubtitle,
   featuredRegions[]->{
     _id, title, slug,
     heroImage { asset->{ _id, url, metadata { lqip, dimensions } }, alt, hotspot, crop }
   },
+  featuredServicesTitle, featuredServicesSubtitle,
   featuredServices[]->{
     _id, title, slug, shortDescription, icon,
     mainImage { asset->{ _id, url, metadata { lqip, dimensions } }, alt, hotspot, crop }
@@ -48,6 +52,7 @@ export const homePageQuery = groq`*[_type == "homePage"][0] {
     mainImage { asset->{ _id, url, metadata { lqip, dimensions } }, alt, hotspot, crop }
   },
   stats[] { value, label },
+  statsTitle, statsSubtitle,
   aboutTitle, aboutSubtitle, aboutText, aboutPoints,
   aboutImage { asset->{ _id, url, metadata { lqip, dimensions } }, alt, hotspot, crop },
   blogTitle, blogSubtitle,

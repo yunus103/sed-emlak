@@ -16,7 +16,7 @@ const FALLBACK = [
   { title: "Hukuki & Tapu Desteği", description: "Tapu devri, ipotek ve sözleşme süreçlerinde hukuki güvence sağlıyoruz.", icon: "RiScales3Line", slug: "hukuki-destek" },
 ];
 
-export function Services({ services }: { services: any[] }) {
+export function Services({ services, title, subtitle }: { services: any[]; title?: string; subtitle?: string }) {
   const items = services?.length > 0 ? services : FALLBACK;
 
   return (
@@ -24,8 +24,12 @@ export function Services({ services }: { services: any[] }) {
       <div className="container mx-auto px-4">
         {/* Header */}
         <div className="max-w-2xl mb-16">
-          <p className="text-primary text-sm font-semibold uppercase tracking-widest mb-2">Ne Yapıyoruz?</p>
-          <h2 className="text-3xl md:text-4xl font-heading font-bold mb-4">Uçtan Uca Gayrimenkul Hizmetleri</h2>
+          <p className="text-primary text-sm font-semibold uppercase tracking-widest mb-2">
+            {subtitle || "Ne Yapıyoruz?"}
+          </p>
+          <h2 className="text-3xl md:text-4xl font-heading font-bold mb-4">
+            {title || "Uçtan Uca Gayrimenkul Hizmetleri"}
+          </h2>
           <p className="text-muted-foreground text-base leading-relaxed">
             Alım, satım, kiralama veya yatırım — hangi ihtiyaçla gelirseniz gelin, uzman kadromuz yanınızda.
           </p>

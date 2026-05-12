@@ -33,14 +33,30 @@ export default async function HomePage() {
   return (
     <main className="flex min-h-screen flex-col w-full">
       <Hero data={data} />
-      <LatestListings listings={data?.featuredListings || []} />
-      <FeaturedRegions regions={data?.featuredRegions || []} />
-      <Stats stats={data?.stats || []} />
+      <LatestListings
+        listings={data?.featuredListings || []}
+        title={data?.featuredListingsTitle}
+        subtitle={data?.featuredListingsSubtitle}
+      />
+      <FeaturedRegions
+        regions={data?.featuredRegions || []}
+        title={data?.featuredRegionsTitle}
+        subtitle={data?.featuredRegionsSubtitle}
+      />
+      <Stats
+        stats={data?.stats || []}
+        title={data?.statsTitle}
+        subtitle={data?.statsSubtitle}
+      />
       <AboutSummary data={data} />
-      <Services services={data?.featuredServices || []} />
+      <Services
+        services={data?.featuredServices || []}
+        title={data?.featuredServicesTitle}
+        subtitle={data?.featuredServicesSubtitle}
+      />
       <LatestBlogs posts={data?.featuredPosts || []} title={data?.blogTitle} subtitle={data?.blogSubtitle} />
       <SahibindenBanner url={data?.siteSettings?.contactInfo?.sahibindenUrl} />
-      <ContactBar settings={data?.siteSettings} />
+      <ContactBar settings={data?.siteSettings} ctaTitle={data?.ctaTitle} ctaText={data?.ctaText} />
     </main>
   );
 }

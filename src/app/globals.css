@@ -48,6 +48,7 @@
 }
 
 :root {
+  --header-height: 5.5rem; /* 88px — Header bileşeniyle eşleşmeli */
   --background: oklch(0.99 0 0);
   --foreground: oklch(0.15 0 0);
   --card: oklch(1 0 0);

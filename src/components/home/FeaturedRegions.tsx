@@ -11,15 +11,19 @@ const FALLBACK_REGIONS = [
   { name: "Üsküdar",   slug: "uskudar",   img: "https://images.unsplash.com/photo-1606836591695-4d58a73eba1e?q=80&w=800&auto=format&fit=crop" },
 ];
 
-export function FeaturedRegions({ regions }: { regions: any[] }) {
+export function FeaturedRegions({ regions, title, subtitle }: { regions: any[]; title?: string; subtitle?: string }) {
   const items = regions?.length > 0 ? regions : FALLBACK_REGIONS;
 
   return (
     <section className="py-20 bg-muted/20">
       <div className="container mx-auto px-4">
         <div className="text-left md:text-center mb-12">
-          <p className="text-primary text-sm font-semibold uppercase tracking-widest mb-2">İstanbul'da</p>
-          <h2 className="text-3xl md:text-4xl font-heading font-bold mb-3">Uzmanlık Bölgelerimiz</h2>
+          <p className="text-primary text-sm font-semibold uppercase tracking-widest mb-2">
+            {subtitle || "İstanbul'da"}
+          </p>
+          <h2 className="text-3xl md:text-4xl font-heading font-bold mb-3">
+            {title || "Uzmanlık Bölgelerimiz"}
+          </h2>
           <p className="text-muted-foreground max-w-xl md:mx-auto text-base">
             İstanbul'un en değerli ilçelerinde kapsamlı portföy ve uzman danışman kadrosu.
           </p>

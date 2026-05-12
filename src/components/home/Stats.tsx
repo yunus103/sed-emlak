@@ -52,7 +52,7 @@ function AnimatedNumber({ target, suffix, duration = 1800 }: { target: number; s
   );
 }
 
-export function Stats({ stats }: { stats: any[] }) {
+export function Stats({ stats, title, subtitle }: { stats: any[]; title?: string; subtitle?: string }) {
   const items = stats?.length > 0
     ? stats.map((s: any) => {
         const { num, suffix } = parseStatValue(s.value || "0");
@@ -70,8 +70,12 @@ export function Stats({ stats }: { stats: any[] }) {
 
       <div className="container relative mx-auto px-4">
         <div className="text-left md:text-center mb-14">
-          <p className="text-white/50 text-xs font-semibold uppercase tracking-[0.25em] mb-3">Güven ve Tecrübe</p>
-          <h2 className="text-3xl md:text-4xl font-heading font-bold text-white">Sayılarla SED Emlak</h2>
+          <p className="text-white/50 text-xs font-semibold uppercase tracking-[0.25em] mb-3">
+            {subtitle || "Güven ve Tecrübe"}
+          </p>
+          <h2 className="text-3xl md:text-4xl font-heading font-bold text-white">
+            {title || "Sayılarla SED Emlak"}
+          </h2>
         </div>
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-5xl md:mx-auto">

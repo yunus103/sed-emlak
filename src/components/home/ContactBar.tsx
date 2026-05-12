@@ -17,7 +17,7 @@ const socialIconMap: Record<string, React.ElementType> = {
   whatsapp: FaWhatsapp,
 };
 
-export function ContactBar({ settings }: { settings: any }) {
+export function ContactBar({ settings, ctaTitle, ctaText }: { settings: any; ctaTitle?: string; ctaText?: string }) {
   const contact = settings?.contactInfo;
   const socialLinks = settings?.socialLinks || [];
   
@@ -41,10 +41,10 @@ export function ContactBar({ settings }: { settings: any }) {
           <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-10">
             <div className="flex-1 text-left text-primary-foreground">
               <h2 className="text-3xl md:text-4xl font-heading font-bold mb-4">
-                Bizimle İletişime Geçin
+                {ctaTitle || "Bizimle İletişime Geçin"}
               </h2>
               <p className="text-primary-foreground/80 text-lg max-w-md">
-                Gayrimenkul süreçlerinizde profesyonel destek almak için bize ulaşın.
+                {ctaText || "Gayrimenkul süreçlerinizde profesyonel destek almak için bize ulaşın."}
               </p>
             </div>
             

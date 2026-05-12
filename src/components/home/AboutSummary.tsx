@@ -5,7 +5,7 @@ import Image from "next/image";
 import { buttonVariants } from "@/components/ui/button";
 import { RiCheckboxCircleFill } from "react-icons/ri";
 
-const TRUST_POINTS = [
+const FALLBACK_POINTS = [
   "20 yılı aşkın sektör deneyimi",
   "5.000'den fazla mutlu müşteri",
   "Hukuki güvence ve tapu danışmanlığı",
@@ -51,11 +51,15 @@ export function AboutSummary({ data }: { data?: any }) {
           {/* --- Text side --- */}
           <div className="w-full lg:w-[55%] space-y-6">
             <p className="text-primary text-sm font-semibold uppercase tracking-widest">
-              Hakkımızda
+              {data?.aboutSubtitle || "Hakkımızda"}
             </p>
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold leading-tight">
-              İstanbul'da Güvenilir
-              <br className="hidden sm:block" /> Gayrimenkul Ortağınız
+              {data?.aboutTitle || (
+                <>
+                  İstanbul'da Güvenilir
+                  <br className="hidden sm:block" /> Gayrimenkul Ortağınız
+                </>
+              )}
             </h2>
             <p className="text-muted-foreground text-lg leading-relaxed">
               {data?.aboutText ||
@@ -63,7 +67,7 @@ export function AboutSummary({ data }: { data?: any }) {
             </p>
 
             <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
-              {TRUST_POINTS.map((point, i) => (
+              {(data?.aboutPoints?.length > 0 ? data.aboutPoints : FALLBACK_POINTS).map((point: string, i: number) => (
                 <li
                   key={i}
                   className="flex items-start gap-2.5 text-sm font-medium text-foreground/80"

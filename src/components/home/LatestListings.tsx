@@ -37,7 +37,7 @@ const FALLBACK_LISTINGS = [
   },
 ];
 
-export function LatestListings({ listings }: { listings: any[] }) {
+export function LatestListings({ listings, title, subtitle }: { listings: any[]; title?: string; subtitle?: string }) {
   const items = listings?.length > 0 ? listings : FALLBACK_LISTINGS;
 
   return (
@@ -45,8 +45,10 @@ export function LatestListings({ listings }: { listings: any[] }) {
       <div className="container mx-auto px-4">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 gap-4">
           <div>
-            <p className="text-primary text-sm font-semibold uppercase tracking-widest mb-2">Portföyümüzden</p>
-            <h2 className="text-3xl md:text-4xl font-heading font-bold">Güncel İlanlar</h2>
+            <p className="text-primary text-sm font-semibold uppercase tracking-widest mb-2">
+              {subtitle || "Portföyümüzden"}
+            </p>
+            <h2 className="text-3xl md:text-4xl font-heading font-bold">{title || "Güncel İlanlar"}</h2>
           </div>
           <Link href="/ilanlar" className={buttonVariants({ variant: "outline", className: "rounded-full px-6 gap-2 group" })}>
             Tüm İlanlar
