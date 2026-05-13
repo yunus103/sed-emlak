@@ -53,8 +53,8 @@ export const homePageType = defineType({
       type: "array",
       group: "featured",
       of: [{ type: "reference", to: [{ type: "listing" }] }],
-      description: "Ana sayfada vitrine çıkacak olan ilanları seçin. Sırasını sürükleyerek değiştirebilirsiniz (En fazla 6 önerilir).",
-      validation: (Rule) => Rule.max(6),
+      description: "Ana sayfada vitrine çıkacak olan ilanları seçin. Sırasını sürükleyerek değiştirebilirsiniz (En fazla 8 önerilir).",
+      validation: (Rule) => Rule.max(8),
     }),
 
     // --- FEATURED REGIONS ---
