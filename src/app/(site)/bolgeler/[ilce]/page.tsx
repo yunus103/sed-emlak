@@ -28,7 +28,7 @@ import {
 export async function generateStaticParams() {
   const { groq } = await import("next-sanity");
   const slugs = await client.fetch<{ slug: string }[]>(
-    groq`*[_type == "region" && defined(slug.current)] { "slug": slug.current }`
+    groq`*[_type == "region" && defined(slug.current)] { "slug": slug.current }`,
   );
   return slugs.map((s) => ({ ilce: s.slug }));
 }
@@ -41,15 +41,22 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { ilce } = await params;
   const region = await client
-    .fetch(regionDetailQuery, { slug: ilce }, { next: { tags: ["region", `region:${ilce}`] } })
+    .fetch(
+      regionDetailQuery,
+      { slug: ilce },
+      { next: { tags: ["region", `region:${ilce}`] } },
+    )
     .catch(() => null);
 
-  if (!region) return buildMetadata({ title: "Bölge", canonicalPath: `/bolgeler/${ilce}` });
+  if (!region)
+    return buildMetadata({
+      title: "Bölge",
+      canonicalPath: `/bolgeler/${ilce}`,
+    });
 
   return buildMetadata({
     title:
-      region.seo?.metaTitle ||
-      `${region.title}'de Kiralık & Satılık İlanlar`,
+      region.seo?.metaTitle || `${region.title}'de Kiralık & Satılık İlanlar`,
     description:
       region.seo?.metaDescription ||
       `${region.title} bölgesindeki tüm kiralık ve satılık gayrimenkul ilanları. SED Emlak uzman danışmanlığıyla ${region.title}'de ev, daire, ofis ve dükkan ilanları.`,
@@ -68,10 +75,18 @@ export default async function RegionDetailPage({
 
   const [region, listings, advisor, layout] = await Promise.all([
     client
-      .fetch(regionDetailQuery, { slug: ilce }, { next: { tags: ["region", `region:${ilce}`] } })
+      .fetch(
+        regionDetailQuery,
+        { slug: ilce },
+        { next: { tags: ["region", `region:${ilce}`] } },
+      )
       .catch(() => null),
     client
-      .fetch(listingsByRegionQuery, { slug: ilce }, { next: { tags: ["listing"] } })
+      .fetch(
+        listingsByRegionQuery,
+        { slug: ilce },
+        { next: { tags: ["listing"] } },
+      )
       .catch(() => []),
     client
       .fetch(aboutPageQuery, {}, { next: { tags: ["aboutPage"] } })
@@ -85,7 +100,11 @@ export default async function RegionDetailPage({
 
   // Blog yazıları regionId ile
   const blogs = await client
-    .fetch(blogsByRegionQuery, { regionId: region._id }, { next: { tags: ["blog"] } })
+    .fetch(
+      blogsByRegionQuery,
+      { regionId: region._id },
+      { next: { tags: ["blog"] } },
+    )
     .catch(() => []);
 
   const contact = layout?.settings?.contactInfo;
@@ -93,12 +112,13 @@ export default async function RegionDetailPage({
   const phoneClean = phone.replace(/[^0-9+]/g, "");
   const wa = contact?.whatsappNumber || phoneClean;
   const waMsg = encodeURIComponent(
-    `Merhaba, ${region.title} bölgesi hakkında bilgi almak istiyorum.`
+    `Merhaba, ${region.title} bölgesi hakkında bilgi almak istiyorum.`,
   );
 
   // Danışman initials
   const advisorName = advisor?.advisorName || "Ulaş Koyuncu";
-  const advisorTitle = advisor?.advisorTitle || `${region.title} uzmanı · SED Emlak`;
+  const advisorTitle =
+    advisor?.advisorTitle || `${region.title} uzmanı · SED Emlak`;
   const initials = advisorName
     .split(" ")
     .map((n: string) => n[0])
@@ -137,10 +157,8 @@ export default async function RegionDetailPage({
         </div>
 
         <div className="container mx-auto px-4 md:px-8 py-6 md:py-10 max-w-6xl">
-
           {/* ── Hero — Asimetrik 2 Kolon (1.6fr / 1fr) ────────────────────── */}
           <div className="grid grid-cols-1 lg:grid-cols-[1.6fr_1fr] gap-8 md:gap-12 mb-8 pb-8 border-b border-border/40 items-center lg:min-h-[40vh] lg:max-h-[85vh]">
-
             {/* Sol - Metin Alanı */}
             <div className="flex flex-col justify-center lg:h-full lg:max-h-full lg:overflow-y-auto pr-2 custom-scrollbar mb-8 lg:mb-0">
               <div>
@@ -150,10 +168,6 @@ export default async function RegionDetailPage({
                   {region.title}, İstanbul
                 </div>
 
-                <h1 className="font-heading text-xl md:text-2xl lg:text-3xl font-bold text-foreground leading-snug mb-3">
-                  {region.title} Bölge Rehberi
-                </h1>
-
                 {/* Açıklama */}
                 {region.description ? (
                   <div className="text-muted-foreground leading-relaxed prose max-w-none prose-p:mb-2.5 prose-p:text-[13px] lg:prose-p:text-[14px] prose-p:text-muted-foreground prose-strong:text-foreground prose-strong:font-medium">
@@ -161,7 +175,8 @@ export default async function RegionDetailPage({
                   </div>
                 ) : (
                   <p className="text-[13px] lg:text-[14px] text-muted-foreground leading-relaxed">
-                    {region.title} bölgesindeki tüm detaylı bilgiler ve emlak portföyümüze göz atın.
+                    {region.title} bölgesindeki tüm detaylı bilgiler ve emlak
+                    portföyümüze göz atın.
                   </p>
                 )}
               </div>
@@ -219,7 +234,10 @@ export default async function RegionDetailPage({
                   />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center">
-                    <RiBuilding4Line size={36} className="text-muted-foreground/20" />
+                    <RiBuilding4Line
+                      size={36}
+                      className="text-muted-foreground/20"
+                    />
                   </div>
                 )}
               </div>
@@ -237,7 +255,9 @@ export default async function RegionDetailPage({
                         key={n}
                         className="group flex items-center gap-1.5 bg-card border border-border/60 rounded-lg px-3 py-1.5 shadow-sm hover:shadow-md hover:border-primary/30 transition-all duration-300"
                       >
-                        <span className="text-[13px] filter grayscale group-hover:grayscale-0 transition-all">📍</span>
+                        <span className="text-[13px] filter grayscale group-hover:grayscale-0 transition-all">
+                          📍
+                        </span>
                         <span className="text-[12px] font-medium text-foreground/80 group-hover:text-primary transition-colors">
                           {n}
                         </span>
@@ -247,7 +267,6 @@ export default async function RegionDetailPage({
                 </div>
               )}
             </div>
-
           </div>
 
           {/* ── Güncel İlanlar ────────────────────────────────────────────── */}
@@ -399,7 +418,10 @@ export default async function RegionDetailPage({
                           />
                         ) : (
                           <div className="w-full h-full bg-muted/60 flex items-center justify-center">
-                            <RiMapPin2Line size={14} className="text-muted-foreground/40" />
+                            <RiMapPin2Line
+                              size={14}
+                              className="text-muted-foreground/40"
+                            />
                           </div>
                         )}
                       </div>
@@ -452,7 +474,6 @@ export default async function RegionDetailPage({
               </a>
             </div>
           </div>
-
         </div>
       </div>
     </>
