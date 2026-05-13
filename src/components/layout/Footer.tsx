@@ -205,9 +205,20 @@ export function Footer({
                     <span className="block text-[10px] text-white/35 uppercase font-bold tracking-wide mb-0.5">
                       Merkez Ofis
                     </span>
-                    <span className="text-sm text-white/70">
-                      {contact.address}
-                    </span>
+                    {contact.addressLink ? (
+                      <a
+                        href={contact.addressLink}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-sm text-white/70 hover:text-white transition-colors"
+                      >
+                        {contact.address}
+                      </a>
+                    ) : (
+                      <span className="text-sm text-white/70">
+                        {contact.address}
+                      </span>
+                    )}
                   </div>
                 </li>
               )}
@@ -221,9 +232,20 @@ export function Footer({
                     <span className="block text-[10px] text-white/35 uppercase font-bold tracking-wide mb-0.5">
                       Şube Ofis
                     </span>
-                    <span className="text-sm text-white/70">
-                      {contact.branchAddress}
-                    </span>
+                    {contact.branchAddressLink ? (
+                      <a
+                        href={contact.branchAddressLink}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-sm text-white/70 hover:text-white transition-colors"
+                      >
+                        {contact.branchAddress}
+                      </a>
+                    ) : (
+                      <span className="text-sm text-white/70">
+                        {contact.branchAddress}
+                      </span>
+                    )}
                   </div>
                 </li>
               )}

@@ -57,7 +57,7 @@ export default async function ContactPage() {
       seo
     },
     "settings": *[_type == "siteSettings"][0] {
-      contactInfo { phone, phone2, email, address, branchAddress, whatsappNumber, sahibindenUrl, mapIframe },
+      contactInfo { phone, phone2, email, address, addressLink, branchAddress, branchAddressLink, whatsappNumber, sahibindenUrl, mapIframe },
       socialLinks[] { platform, url }
     }
   }`;
@@ -78,7 +78,9 @@ export default async function ContactPage() {
   const email = contact?.email || "info@sedemlak.com";
   const whatsappDisplay = contact?.whatsappNumber || phone;
   const address = contact?.address || "İstanbul, Türkiye";
+  const addressLink = contact?.addressLink;
   const branchAddress = contact?.branchAddress;
+  const branchAddressLink = contact?.branchAddressLink;
   const mapIframe = contact?.mapIframe;
 
   const phoneClean = phone?.replace(/[^0-9+]/g, "") || "";
@@ -110,31 +112,41 @@ export default async function ContactPage() {
                 {/* Adresler */}
                 <div className="space-y-8">
                   {/* Merkez Adres */}
-                  <div className="flex items-start gap-5">
-                    <div className="w-14 h-14 rounded-2xl bg-muted/50 text-muted-foreground flex items-center justify-center shrink-0">
+                  <a 
+                    href={addressLink} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className={`flex items-start gap-5 group ${addressLink ? 'cursor-pointer' : 'pointer-events-none'}`}
+                  >
+                    <div className={`w-14 h-14 rounded-2xl bg-muted/50 text-muted-foreground flex items-center justify-center shrink-0 transition-all duration-300 ${addressLink ? 'group-hover:bg-primary/10 group-hover:text-primary' : ''}`}>
                       <RiMapPin2Fill size={24} />
                     </div>
                     <div>
-                      <h3 className="font-bold text-lg mb-1">Merkez Ofis</h3>
-                      <p className="text-muted-foreground leading-relaxed whitespace-pre-wrap">
+                      <h3 className={`font-bold text-lg mb-1 transition-colors ${addressLink ? 'group-hover:text-primary' : ''}`}>Merkez Ofis</h3>
+                      <p className={`text-muted-foreground leading-relaxed whitespace-pre-wrap transition-colors ${addressLink ? 'group-hover:text-muted-foreground/80' : ''}`}>
                         {address}
                       </p>
                     </div>
-                  </div>
+                  </a>
 
                   {/* Şube Adres */}
                   {branchAddress && (
-                    <div className="flex items-start gap-5">
-                      <div className="w-14 h-14 rounded-2xl bg-muted/50 text-muted-foreground flex items-center justify-center shrink-0">
+                    <a 
+                      href={branchAddressLink} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className={`flex items-start gap-5 group ${branchAddressLink ? 'cursor-pointer' : 'pointer-events-none'}`}
+                    >
+                      <div className={`w-14 h-14 rounded-2xl bg-muted/50 text-muted-foreground flex items-center justify-center shrink-0 transition-all duration-300 ${branchAddressLink ? 'group-hover:bg-primary/10 group-hover:text-primary' : ''}`}>
                         <RiMapPin2Fill size={24} />
                       </div>
                       <div>
-                        <h3 className="font-bold text-lg mb-1">Şube Ofis</h3>
-                        <p className="text-muted-foreground leading-relaxed whitespace-pre-wrap">
+                        <h3 className={`font-bold text-lg mb-1 transition-colors ${branchAddressLink ? 'group-hover:text-primary' : ''}`}>Şube Ofis</h3>
+                        <p className={`text-muted-foreground leading-relaxed whitespace-pre-wrap transition-colors ${branchAddressLink ? 'group-hover:text-muted-foreground/80' : ''}`}>
                           {branchAddress}
                         </p>
                       </div>
-                    </div>
+                    </a>
                   )}
                 </div>
 

@@ -8,7 +8,7 @@ export const layoutQuery = groq`{
     logo { asset->{ _id, url, metadata { lqip, dimensions } }, hotspot, crop },
     logoHeight,
     favicon { asset->{ _id, url } },
-    contactInfo { phone, phone2, email, address, branchAddress, whatsappNumber, sahibindenUrl, mapIframe },
+    contactInfo { phone, phone2, email, address, addressLink, branchAddress, branchAddressLink, whatsappNumber, sahibindenUrl, mapIframe },
     socialLinks[] { platform, url },
     gaId, gtmId, googleSearchConsoleId
   },

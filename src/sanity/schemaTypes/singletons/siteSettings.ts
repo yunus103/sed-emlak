@@ -42,7 +42,9 @@ export const siteSettingsType = defineType({
         defineField({ name: "phone2", title: "Telefon 2", type: "string" }),
         defineField({ name: "email", title: "E-posta", type: "string" }),
         defineField({ name: "address", title: "Adres (Merkez)", type: "text", rows: 3 }),
+        defineField({ name: "addressLink", title: "Adres Linki (Google Maps)", type: "url", description: "Merkez ofis adresi için Google Maps paylaşım linki." }),
         defineField({ name: "branchAddress", title: "Adres (Şube)", type: "text", rows: 3 }),
+        defineField({ name: "branchAddressLink", title: "Adres Linki (Google Maps)", type: "url", description: "Şube adresi için Google Maps paylaşım linki." }),
         defineField({
           name: "whatsappNumber",
           title: "WhatsApp Numarası",
