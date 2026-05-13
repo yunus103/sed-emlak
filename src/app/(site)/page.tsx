@@ -15,7 +15,11 @@ import { SahibindenBanner } from "@/components/home/SahibindenBanner";
 import { ContactBar } from "@/components/home/ContactBar";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const data = await getClient().fetch(homePageQuery, {}, { next: { tags: ["home"] } });
+  const data = await getClient().fetch(
+    homePageQuery,
+    {},
+    { next: { tags: ["home"] } },
+  );
   return buildMetadata({
     canonicalPath: "/",
     pageSeo: data?.seo,
@@ -25,38 +29,40 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function IndexPage() {
   const isDraft = false; // logic for draft mode if needed
 
-  const { data, allRegions } = await getClient(isDraft).fetch(homePageQuery, {}, {
-    next: { tags: ["homePage", "listing", "region", "service", "blogPost"] },
-  });
+  const { data, allRegions } = await getClient(isDraft).fetch(
+    homePageQuery,
+    {},
+    {
+      next: { tags: ["homePage", "listing", "region", "service", "blogPost"] },
+    },
+  );
 
   return (
     <main className="flex min-h-screen flex-col w-full bg-background overflow-hidden">
       <Hero data={data} regions={allRegions || []} />
-      <LatestListings 
-        listings={data?.featuredListings || []} 
+      <LatestListings
+        listings={data?.featuredListings || []}
         title={data?.featuredListingsTitle}
         subtitle={data?.featuredListingsSubtitle}
       />
-      <FeaturedRegions 
-        regions={data?.featuredRegions || []} 
+      <FeaturedRegions
+        regions={data?.featuredRegions || []}
         title={data?.featuredRegionsTitle}
         subtitle={data?.featuredRegionsDescription}
       />
-      <Stats 
-        stats={data?.stats || []} 
+      <Stats
+        stats={data?.stats || []}
         title={data?.statsTitle}
         subtitle={data?.statsSubtitle}
       />
-      <Services 
-        services={data?.featuredServices || []} 
+      <Services
+        services={data?.featuredServices || []}
         title={data?.featuredServicesTitle}
         subtitle={data?.featuredServicesSubtitle}
       />
-      <AboutSummary 
-        data={data} 
-      />
-      <SahibindenBanner />
-      <ContactBar 
+      <AboutSummary data={data} />
+      <SahibindenBanner url={data?.siteSettings?.contactInfo?.sahibindenUrl} />
+      <ContactBar
         settings={data?.siteSettings}
         ctaTitle={data?.ctaTitle}
         ctaText={data?.ctaText}

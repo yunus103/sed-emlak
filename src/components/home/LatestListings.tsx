@@ -35,6 +35,15 @@ const FALLBACK_LISTINGS = [
     img: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=800&auto=format&fit=crop",
     slug: "ornek-ilan-3"
   },
+  {
+    title: "Modern Minimalist Stüdyo",
+    price: "₺5.250.000",
+    status: "satilik",
+    location: "Beşiktaş",
+    beds: 1, baths: 1, sqm: 65,
+    img: "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?q=80&w=800&auto=format&fit=crop",
+    slug: "ornek-ilan-4"
+  },
 ];
 
 export function LatestListings({ listings, title, subtitle }: { listings: any[]; title?: string; subtitle?: string }) {
@@ -56,9 +65,9 @@ export function LatestListings({ listings, title, subtitle }: { listings: any[];
           </Link>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {items.map((listing, i) => (
-            <ListingCard key={i} listing={listing} priority={i < 3} />
+            <ListingCard key={i} listing={listing} priority={i < 4} />
           ))}
         </div>
       </div>
