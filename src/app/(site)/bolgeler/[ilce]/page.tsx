@@ -10,6 +10,8 @@ import {
   layoutQuery,
 } from "@/sanity/lib/queries";
 import { buildMetadata } from "@/lib/seo";
+import { getSiteUrl } from "@/lib/utils";
+import { JsonLd, breadcrumbListJsonLd } from "@/components/seo/JsonLd";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { SanityImage } from "@/components/ui/SanityImage";
 import { RegionListingCard } from "@/components/listings/RegionListingCard";
@@ -127,20 +129,29 @@ export default async function RegionDetailPage({
     .toUpperCase();
 
   // JSON-LD
-  const jsonLd = {
+  const siteUrl = getSiteUrl();
+  const regionJsonLd = {
     "@context": "https://schema.org",
-    "@type": "City",
-    name: region.title,
-    containedInPlace: { "@type": "Country", name: "Turkey" },
-    url: `https://sedemlak.com/bolgeler/${ilce}`,
+    "@type": ["RealEstateAgent", "LocalBusiness"],
+    name: `SED Emlak — ${region.title}`,
+    description: `${region.title} bölgesinde gayrimenkul hizmetleri. Kiralık ve satılık ilanlar, yerel piyasa uzmanlığı.`,
+    url: `${siteUrl}/bolgeler/${ilce}`,
+    areaServed: {
+      "@type": "City",
+      name: region.title,
+      containedIn: { "@type": "City", name: "İstanbul", containedIn: { "@type": "Country", name: "Türkiye" } },
+    },
   };
+  const breadcrumbsData = [
+    { label: "Ana Sayfa", href: "/" },
+    { label: "Bölgeler", href: "/bolgeler" },
+    { label: region.title },
+  ];
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
+      <JsonLd data={regionJsonLd} />
+      <JsonLd data={breadcrumbListJsonLd(breadcrumbsData)} />
 
       <div className="min-h-screen bg-background">
         {/* ── Breadcrumb ───────────────────────────────────────────────── */}

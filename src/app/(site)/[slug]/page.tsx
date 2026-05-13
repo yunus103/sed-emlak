@@ -32,12 +32,16 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const post = await getClient().fetch(blogPostBySlugQuery, { slug }, { next: { tags: ["blog"] } });
   if (!post) return {};
-  
+
   const baseSeo = await buildMetadata({
     title: post.title,
     description: post.excerpt,
     canonicalPath: `/${slug}`,
     pageSeo: post.seo,
+    ogType: "article",
+    publishedTime: post.publishedAt,
+    modifiedTime: post._updatedAt || post.publishedAt,
+    authors: ["Ahmet Aytaç"],
   });
 
   if (post.seoTags?.length) {

@@ -4,6 +4,7 @@ import { RiArrowRightLine, RiPhoneLine } from "react-icons/ri";
 import { getClient } from "@/sanity/lib/client";
 import { servicesPageQuery, serviceListQuery } from "@/sanity/lib/queries";
 import { buildMetadata } from "@/lib/seo";
+import { JsonLd, breadcrumbListJsonLd } from "@/components/seo/JsonLd";
 import { getIcon } from "@/lib/iconMap";
 import { PageHero } from "@/components/ui/PageHero";
 import { SanityImage } from "@/components/ui/SanityImage";
@@ -29,6 +30,10 @@ export default async function ServicesPage() {
 
   return (
     <main className="flex min-h-screen flex-col bg-background">
+      <JsonLd data={breadcrumbListJsonLd([
+        { label: "Ana Sayfa", href: "/" },
+        { label: "Hizmetler" },
+      ])} />
       {/* ── Hero ───────────────────────────────────── */}
       <PageHero
         title={pageData?.pageTitle || "Hizmetlerimiz"}

@@ -110,6 +110,11 @@ export const projectsPageQuery = groq`*[_type == "projectsPage"][0] {
   pageTitle, pageSubtitle, ctaLabel, ctaLink, seo
 }`;
 
+export const listingsPageQuery = groq`*[_type == "listingsPage"][0] {
+  pageTitle, pageSubtitle, seo,
+  mainImage { asset->{ _id, url, metadata { lqip, dimensions } }, alt, hotspot, crop }
+}`;
+
 // ─── Bölgeler ──────────────────────────────────────────────────────────────────
 
 // Hub sayfası: sayfa ayarları + featuredRegions (öncelikli), fallback: tüm bölgeler alfabe sırası

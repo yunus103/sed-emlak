@@ -2,6 +2,7 @@ import { Metadata } from "next";
 import { getClient } from "@/sanity/lib/client";
 import { aboutPageQuery } from "@/sanity/lib/queries";
 import { buildMetadata } from "@/lib/seo";
+import { JsonLd, aboutPageJsonLd, breadcrumbListJsonLd } from "@/components/seo/JsonLd";
 import { urlForImage } from "@/sanity/lib/image";
 import Image from "next/image";
 import { PageHero } from "@/components/ui/PageHero";
@@ -30,10 +31,19 @@ export default async function AboutPage() {
 
   return (
     <main className="flex min-h-screen flex-col w-full bg-background">
-      <PageHero 
-        title={data?.pageTitle || "Hakkımızda"} 
-        subtitle={data?.pageSubtitle || "Kurumsal yaklaşımımız ve değerlerimiz."} 
+      <JsonLd data={aboutPageJsonLd(data)} />
+      <JsonLd data={breadcrumbListJsonLd([
+        { label: "Ana Sayfa", href: "/" },
+        { label: "Hakkımızda" },
+      ])} />
+      <PageHero
+        title={data?.pageTitle || "Hakkımızda"}
+        subtitle={data?.pageSubtitle || "Kurumsal yaklaşımımız ve değerlerimiz."}
         backgroundImage={bgImage}
+        breadcrumbs={[
+          { label: "Ana Sayfa", href: "/" },
+          { label: "Hakkımızda" },
+        ]}
       />
 
       {/* 1. Bölüm: Danışman Profili & Karşılama (Integrated Design) */}

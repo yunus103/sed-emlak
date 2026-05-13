@@ -1,41 +1,43 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { getClient } from "@/sanity/lib/client";
-import { listingDetailQuery, relatedListingsQuery, defaultSeoQuery } from "@/sanity/lib/queries";
+import { getClient, client } from "@/sanity/lib/client";
+import { listingDetailQuery, relatedListingsQuery, defaultSeoQuery, listingsQuery } from "@/sanity/lib/queries";
+import { buildMetadata } from "@/lib/seo";
+import { JsonLd, realEstateListingJsonLd, breadcrumbListJsonLd } from "@/components/seo/JsonLd";
 import { PageHero } from "@/components/ui/PageHero";
 import { ListingGallery } from "@/components/listings/ListingGallery";
 import { ListingCard } from "@/components/ui/ListingCard";
 import { RichText } from "@/components/ui/RichText";
 import { urlForImage } from "@/sanity/lib/image";
-import { 
-  RiHotelBedLine, RiShowersLine, RiRulerLine, RiMapPin2Line, 
-  RiCheckDoubleLine, RiBuilding4Line, RiFireLine, RiMoneyCnyCircleLine 
+import {
+  RiHotelBedLine, RiShowersLine, RiRulerLine, RiMapPin2Line,
+  RiCheckDoubleLine, RiBuilding4Line, RiFireLine, RiMoneyCnyCircleLine
 } from "react-icons/ri";
 
 export const revalidate = 60;
 
+export async function generateStaticParams() {
+  const data = await client.fetch(
+    allSlugsForSitemapQuery,
+    {},
+    { next: { tags: ["listing"] } }
+  );
+  return (data?.listings || []).map((p: any) => ({ slug: p.slug }));
+}
+
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> | { slug: string } }): Promise<Metadata> {
   const p = await params;
-  const { listing } = await getClient().fetch(listingDetailQuery, { slug: p.slug });
-  const settings = await getClient().fetch(defaultSeoQuery);
-  const siteName = settings?.siteName || "SED Emlak";
+  const { listing, settings } = await getClient().fetch(listingDetailQuery, { slug: p.slug });
+  if (!listing) return { title: "İlan Bulunamadı | SED Emlak" };
 
-  if (!listing) return { title: `İlan Bulunamadı | ${siteName}` };
-
-  const metaTitle = listing.seo?.metaTitle || `${listing.title} | ${siteName}`;
-  const metaDesc = listing.seo?.metaDescription || listing.description?.[0]?.children?.[0]?.text?.slice(0, 150) || "";
-  const ogImage = listing.seo?.ogImage || listing.mainImage;
-
-  return {
-    title: metaTitle,
-    description: metaDesc,
-    openGraph: {
-      title: metaTitle,
-      description: metaDesc,
-      images: ogImage?.asset ? [urlForImage(ogImage as any)?.width(1200).height(630).url() || ""] : [],
-    },
-  };
+  return buildMetadata({
+    title: listing.seo?.metaTitle || listing.title,
+    description: listing.seo?.metaDescription || listing.description?.[0]?.children?.[0]?.text?.slice(0, 155) || "",
+    canonicalPath: `/ilanlar/${p.slug}`,
+    ogImage: listing.seo?.ogImage || listing.mainImage,
+    pageSeo: listing.seo,
+  });
 }
 
 export default async function ListingDetailPage({ params }: { params: Promise<{ slug: string }> | { slug: string } }) {
@@ -78,10 +80,19 @@ export default async function ListingDetailPage({ params }: { params: Promise<{ 
     kiralandi: "Kiralandı",
   };
 
+  const breadcrumbs = [
+    { label: "Ana Sayfa", href: "/" },
+    { label: "İlanlar", href: "/ilanlar" },
+    ...(listing.region ? [{ label: listing.region.title, href: `/bolgeler/${listing.region.slug?.current || listing.region.slug}` }] : []),
+    { label: listing.title },
+  ];
+
   const bgImage = listing.mainImage?.asset ? urlForImage(listing.mainImage as any)?.url() : undefined;
 
   return (
     <main className="flex min-h-screen flex-col w-full bg-background">
+      <JsonLd data={realEstateListingJsonLd(listing, settings)} />
+      <JsonLd data={breadcrumbListJsonLd(breadcrumbs)} />
       <PageHero
         title={listing.title}
         subtitle={`${locationStr} - ${priceFormatted}`}

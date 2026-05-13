@@ -3,6 +3,8 @@ import Link from "next/link";
 import { client } from "@/sanity/lib/client";
 import { regionsPageQuery } from "@/sanity/lib/queries";
 import { buildMetadata } from "@/lib/seo";
+import { getSiteUrl } from "@/lib/utils";
+import { JsonLd, breadcrumbListJsonLd } from "@/components/seo/JsonLd";
 import { PageHero } from "@/components/ui/PageHero";
 import { SanityImage } from "@/components/ui/SanityImage";
 import Image from "next/image";
@@ -32,7 +34,8 @@ export default async function RegionsPage() {
       : data?.allRegions || [];
 
   // JSON-LD
-  const jsonLd = {
+  const siteUrl = getSiteUrl();
+  const itemListJsonLd = {
     "@context": "https://schema.org",
     "@type": "ItemList",
     name: page?.title || "Çalıştığımız Bölgeler",
@@ -40,16 +43,18 @@ export default async function RegionsPage() {
       "@type": "ListItem",
       position: i + 1,
       name: r.title,
-      url: `https://sedemlak.com/bolgeler/${r.slug?.current || r.slug}`,
+      url: `${siteUrl}/bolgeler/${r.slug?.current || r.slug}`,
     })),
   };
+  const breadcrumbs = [
+    { label: "Ana Sayfa", href: "/" },
+    { label: "Bölgeler" },
+  ];
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
+      <JsonLd data={itemListJsonLd} />
+      <JsonLd data={breadcrumbListJsonLd(breadcrumbs)} />
 
       <div className="min-h-screen">
         {/* Hero */}

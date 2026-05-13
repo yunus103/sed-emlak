@@ -19,33 +19,31 @@ type BuildMetadataParams = {
   canonicalPath?: string;
   noIndex?: boolean;
   pageSeo?: PageSeo;
+  // Blog yazıları için
+  ogType?: "website" | "article";
+  publishedTime?: string;
+  modifiedTime?: string;
+  authors?: string[];
 };
 
 export async function buildMetadata(params: BuildMetadataParams = {}): Promise<Metadata> {
   const defaults = await client.fetch(defaultSeoQuery, {}, { next: { tags: ["layout"] } });
 
-  const siteName = defaults?.siteName || "Site Adı";
+  const siteName = defaults?.siteName || "SED Emlak";
   const siteTagline = defaults?.siteTagline || "";
-  const defaultMetaTitle = defaults?.title || ""; // siteSettings -> defaultSeo -> metaTitle
+  const defaultMetaTitle = defaults?.title || "";
   const isHomePage = params.canonicalPath === "/";
 
   let title = "";
 
   if (isHomePage) {
-    // Ana Sayfa: En kaliteli yöntem
-    // 1. Sayfa SEO alanına girilmiş ÖZEL BAŞLIK (Tam metni basar)
-    // 2. Site Ayarları -> Varsayılan SEO Başlığı (Tam metni basar)
-    // 3. Site Adı | Slogan
-    // 4. Site Adı
     const customTitle = params.pageSeo?.metaTitle || defaultMetaTitle;
-    
     if (customTitle) {
       title = customTitle;
     } else {
       title = siteTagline ? `${siteName} | ${siteTagline}` : siteName;
     }
   } else {
-    // Diğer Sayfalar: Standard [Başlık] | [Site Adı]
     const pageTitle = params.pageSeo?.metaTitle || params.title || "";
     title = pageTitle ? `${pageTitle} | ${siteName}` : siteName;
   }
@@ -63,6 +61,8 @@ export async function buildMetadata(params: BuildMetadataParams = {}): Promise<M
     ? urlForImage(ogImageSource)?.width(1200).height(630).url()
     : undefined;
 
+  const ogType = params.ogType || "website";
+
   return {
     title,
     description,
@@ -78,7 +78,13 @@ export async function buildMetadata(params: BuildMetadataParams = {}): Promise<M
       description: description || "",
       ...(ogImageUrl && { images: [{ url: ogImageUrl, width: 1200, height: 630 }] }),
       locale: "tr_TR",
-      type: "website",
+      type: ogType,
+      siteName,
+      ...(ogType === "article" && {
+        ...(params.publishedTime && { publishedTime: params.publishedTime }),
+        ...(params.modifiedTime && { modifiedTime: params.modifiedTime }),
+        ...(params.authors && { authors: params.authors }),
+      }),
     },
     twitter: {
       card: "summary_large_image",

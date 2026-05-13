@@ -2,6 +2,7 @@ import { Metadata } from "next";
 import { getClient } from "@/sanity/lib/client";
 import { contactPageQuery } from "@/sanity/lib/queries";
 import { buildMetadata } from "@/lib/seo";
+import { JsonLd, contactPageJsonLd, breadcrumbListJsonLd } from "@/components/seo/JsonLd";
 import { urlForImage } from "@/sanity/lib/image";
 import { PageHero } from "@/components/ui/PageHero";
 import {
@@ -10,9 +11,9 @@ import {
   RiMailFill,
   RiWhatsappFill,
 } from "react-icons/ri";
-import { 
-  FaInstagram, FaFacebook, FaLinkedin, FaYoutube, 
-  FaTiktok, FaPinterest, FaWhatsapp 
+import {
+  FaInstagram, FaFacebook, FaLinkedin, FaYoutube,
+  FaTiktok, FaPinterest, FaWhatsapp
 } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
 import { ContactForm } from "@/components/forms/ContactForm";
@@ -89,6 +90,11 @@ export default async function ContactPage() {
 
   return (
     <main className="flex min-h-screen flex-col w-full bg-background">
+      <JsonLd data={contactPageJsonLd(settings)} />
+      <JsonLd data={breadcrumbListJsonLd([
+        { label: "Ana Sayfa", href: "/" },
+        { label: "İletişim" },
+      ])} />
       <PageHero
         title={page?.pageTitle || "İletişim"}
         subtitle={page?.pageSubtitle || "Size yardımcı olmak için buradayız."}

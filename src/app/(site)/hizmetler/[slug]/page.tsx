@@ -4,8 +4,9 @@ import { draftMode } from "next/headers";
 import Link from "next/link";
 import { RiArrowRightLine, RiPhoneLine, RiWhatsappLine, RiArrowLeftLine } from "react-icons/ri";
 import { getClient, client } from "@/sanity/lib/client";
-import { serviceBySlugQuery, serviceListQuery, servicesPageQuery } from "@/sanity/lib/queries";
+import { serviceBySlugQuery, serviceListQuery, servicesPageQuery, defaultSeoQuery } from "@/sanity/lib/queries";
 import { buildMetadata } from "@/lib/seo";
+import { JsonLd, serviceJsonLd, breadcrumbListJsonLd } from "@/components/seo/JsonLd";
 import { getIcon } from "@/lib/iconMap";
 import { RichText } from "@/components/ui/RichText";
 import { SanityImage } from "@/components/ui/SanityImage";
@@ -34,20 +35,26 @@ export default async function ServicePage({ params }: Props) {
   const { slug } = await params;
   const isDraft = (await draftMode()).isEnabled;
 
-  const [service, pageData] = await Promise.all([
+  const [service, pageData, siteSettings] = await Promise.all([
     getClient(isDraft).fetch(serviceBySlugQuery, { slug }, { next: { tags: ["services"] } }),
     getClient().fetch(servicesPageQuery, {}, { next: { tags: ["services"] } }),
+    client.fetch(defaultSeoQuery, {}, { next: { tags: ["layout"] } }),
   ]);
 
   if (!service) notFound();
 
   const Icon = getIcon(service.icon);
-
-  // Hero için hizmetler sayfasının arka plan görselini kullan
   const heroBg = pageData?.mainImage;
+  const breadcrumbs = [
+    { label: "Ana Sayfa", href: "/" },
+    { label: "Hizmetler", href: "/hizmetler" },
+    { label: service.title },
+  ];
 
   return (
     <main className="flex min-h-screen flex-col bg-background">
+      <JsonLd data={serviceJsonLd(service, siteSettings)} />
+      <JsonLd data={breadcrumbListJsonLd(breadcrumbs)} />
       {/* ── Hero ───────────────────────────────────── */}
       <PageHero
         title={service.title}

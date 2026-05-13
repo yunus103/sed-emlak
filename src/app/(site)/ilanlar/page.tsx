@@ -1,33 +1,24 @@
 import { Metadata } from "next";
 import { getClient } from "@/sanity/lib/client";
-import { defaultSeoQuery, listingsQuery } from "@/sanity/lib/queries";
+import { defaultSeoQuery, listingsQuery, listingsPageQuery } from "@/sanity/lib/queries";
+import { buildMetadata } from "@/lib/seo";
 import { PageHero } from "@/components/ui/PageHero";
 import { ListingsFilter } from "@/components/listings/ListingsFilter";
 import { ListingCard } from "@/components/ui/ListingCard";
 
-// Using the same layout and styling as other pages.
-// Since we have search parameters, this route might be dynamic depending on how Next.js treats it.
-export const revalidate = 60; // optionally revalidate
+export const revalidate = 60;
 
-export async function generateMetadata({ searchParams }: { searchParams: Promise<{ [key: string]: string | string[] | undefined }> | { [key: string]: string | string[] | undefined } }): Promise<Metadata> {
-  const settings = await getClient().fetch(defaultSeoQuery);
-  const siteName = settings?.siteName || "SED Emlak";
-
-  // Using Awaited type workaround or safely resolving the Promise
-  let tip = "";
-  if (searchParams instanceof Promise) {
-    const params = await searchParams;
-    tip = (params.tip as string) || "";
-  } else {
-    tip = (searchParams.tip as string) || "";
-  }
-
-  const titlePrefix = tip === "kiralik" ? "Kiralık İlanlar" : tip === "satilik" ? "Satılık İlanlar" : "Tüm İlanlar";
-
-  return {
-    title: `${titlePrefix} | ${siteName}`,
-    description: `${siteName} güncel ${titlePrefix.toLowerCase()} listesi. Bölgenizdeki en iyi gayrimenkul fırsatlarını keşfedin.`,
-  };
+export async function generateMetadata(): Promise<Metadata> {
+  const pageData = await getClient().fetch(
+    listingsPageQuery,
+    {},
+    { next: { tags: ["listingsPage"] } }
+  );
+  return buildMetadata({
+    title: pageData?.pageTitle || "İlanlar",
+    canonicalPath: "/ilanlar",
+    pageSeo: pageData?.seo,
+  });
 }
 
 export default async function ListingsPage({
@@ -58,16 +49,25 @@ export default async function ListingsPage({
   });
 
   const titlePrefix = filters.tip === "kiralik" ? "Kiralık İlanlar" : filters.tip === "satilik" ? "Satılık İlanlar" : "Tüm İlanlar";
-  const bgImage = "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=1920&auto=format&fit=crop";
+  const pageData = await getClient(isDraft).fetch(
+    listingsPageQuery,
+    {},
+    { next: { tags: ["listingsPage"] } }
+  );
+  const bgImage = pageData?.mainImage || "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=1920&auto=format&fit=crop";
 
   const regions = await getClient(isDraft).fetch(`*[_type == "region"] | order(title asc) { _id, title, slug }`);
 
   return (
     <main className="flex min-h-screen flex-col w-full bg-background">
       <PageHero
-        title={titlePrefix}
-        subtitle="Hayalinizdeki gayrimenkulü bulmak için filtreleri kullanın."
+        title={pageData?.pageTitle || titlePrefix}
+        subtitle={pageData?.pageSubtitle || "Hayalinizdeki gayrimenkulü bulmak için filtreleri kullanın."}
         backgroundImage={bgImage}
+        breadcrumbs={[
+          { label: "Ana Sayfa", href: "/" },
+          { label: "İlanlar" },
+        ]}
       />
 
       <section className="py-12 md:py-20">
