@@ -2,7 +2,7 @@ import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { getClient, client } from "@/sanity/lib/client";
-import { listingDetailQuery, relatedListingsQuery, defaultSeoQuery, listingsQuery } from "@/sanity/lib/queries";
+import { listingDetailQuery, relatedListingsQuery, defaultSeoQuery, listingsQuery, allSlugsForSitemapQuery } from "@/sanity/lib/queries";
 import { buildMetadata } from "@/lib/seo";
 import { JsonLd, realEstateListingJsonLd, breadcrumbListJsonLd } from "@/components/seo/JsonLd";
 import { PageHero } from "@/components/ui/PageHero";

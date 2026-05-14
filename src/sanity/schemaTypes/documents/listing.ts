@@ -1,4 +1,5 @@
 import { defineField, defineType } from "sanity";
+import { turkishSlugify } from "../../lib/slugify";
 
 export const listingType = defineType({
   name: "listing",
@@ -6,7 +7,16 @@ export const listingType = defineType({
   type: "document",
   fields: [
     defineField({ name: "title", title: "İlan Başlığı", type: "string", validation: (Rule) => Rule.required() }),
-    defineField({ name: "slug", title: "Slug", type: "slug", options: { source: "title" }, validation: (Rule) => Rule.required() }),
+    defineField({ 
+      name: "slug", 
+      title: "Slug", 
+      type: "slug", 
+      options: { 
+        source: "title",
+        slugify: turkishSlugify
+      }, 
+      validation: (Rule) => Rule.required() 
+    }),
     defineField({
       name: "status",
       title: "İlan Durumu",

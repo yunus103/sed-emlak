@@ -32,13 +32,13 @@ export const homePageQuery = groq`{
     quickFilters[] { label, tip, tur, ilce },
     featuredListingsTitle, featuredListingsSubtitle,
     "featuredListings": select(
-      count(featuredListings) > 0 => featuredListings[]->{
+      count(featuredListings) > 0 => featuredListings[@->status in ["satilik", "kiralik"]]->{
         _id, title, slug, status, propertyType, price, neighborhood,
         region->{title, slug},
         features { grossArea, netArea, rooms },
         mainImage { asset->{ _id, url, metadata { lqip, dimensions } }, alt, hotspot, crop }
       },
-      *[_type == "listing" && status in ["satilik", "kiralik"]] | order(_createdAt desc)[0...8] {
+      *[_type == "listing" && status in ["satilik", "kiralik"] && defined(slug.current)] | order(_createdAt desc)[0...8] {
         _id, title, slug, status, propertyType, price, neighborhood,
         region->{title, slug},
         features { grossArea, netArea, rooms },

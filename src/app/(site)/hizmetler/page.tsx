@@ -138,35 +138,43 @@ export default async function ServicesPage() {
       </section>
 
       {/* ── CTA Bölümü ──────────────────────────────── */}
-      <section className="py-20 bg-primary text-primary-foreground">
+      <section className="py-20 bg-muted/30 border-t border-border">
         <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto text-center">
+          <div className="max-w-4xl mx-auto">
             <FadeIn direction="up">
-              <p className="text-primary-foreground/60 text-xs font-bold uppercase tracking-widest mb-4">
-                Hemen Başlayalım
-              </p>
-              <h2 className="text-3xl md:text-4xl font-heading font-bold mb-4">
-                Hangi Hizmeti Arıyorsunuz?
-              </h2>
-              <p className="text-primary-foreground/80 text-base md:text-lg mb-10 max-w-2xl mx-auto leading-relaxed">
-                Gayrimenkul süreçlerinizde size özel çözümler için bugün
-                iletişime geçin.
-              </p>
-              <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-                <Link
-                  href="/iletisim"
-                  className="inline-flex items-center gap-2 bg-white text-primary font-bold px-8 py-4 rounded-xl hover:bg-white/90 transition-all hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0"
-                >
-                  <RiPhoneLine size={18} />
-                  İletişime Geçin
-                </Link>
-                <Link
-                  href="/ilanlar"
-                  className="inline-flex items-center gap-2 bg-primary-foreground/10 border border-primary-foreground/30 text-primary-foreground font-bold px-8 py-4 rounded-xl hover:bg-primary-foreground/20 transition-all"
-                >
-                  İlanları İnceleyin
-                  <RiArrowRightLine size={18} />
-                </Link>
+              <div className="bg-primary rounded-[2rem] p-10 md:p-14 text-primary-foreground relative overflow-hidden shadow-2xl">
+                {/* Dekoratif arka plan */}
+                <div className="absolute top-0 right-0 w-72 h-72 bg-white/5 rounded-full -mr-36 -mt-36 blur-3xl pointer-events-none" />
+                <div className="absolute bottom-0 left-0 w-72 h-72 bg-black/5 rounded-full -ml-36 -mb-36 blur-3xl pointer-events-none" />
+
+                <div className="relative z-10 text-center">
+                  <p className="text-primary-foreground/60 text-xs font-bold uppercase tracking-widest mb-4">
+                    Hemen Başlayalım
+                  </p>
+                  <h2 className="text-3xl md:text-4xl font-heading font-bold mb-4">
+                    Hangi Hizmeti Arıyorsunuz?
+                  </h2>
+                  <p className="text-primary-foreground/80 text-base md:text-lg mb-10 max-w-2xl mx-auto leading-relaxed">
+                    Gayrimenkul süreçlerinizde size özel çözümler için bugün
+                    iletişime geçin. Uzman kadromuzla yanınızdayız.
+                  </p>
+                  <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+                    <Link
+                      href="/iletisim"
+                      className="inline-flex items-center gap-2.5 bg-white text-primary font-bold px-8 py-4 rounded-xl hover:bg-white/90 transition-all hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0 min-w-[180px] justify-center"
+                    >
+                      <RiPhoneLine size={18} />
+                      İletişime Geçin
+                    </Link>
+                    <Link
+                      href="/ilanlar"
+                      className="inline-flex items-center gap-2.5 bg-primary-foreground/10 border border-primary-foreground/30 text-primary-foreground font-bold px-8 py-4 rounded-xl hover:bg-primary-foreground/20 transition-all min-w-[180px] justify-center"
+                    >
+                      İlanları İnceleyin
+                      <RiArrowRightLine size={18} />
+                    </Link>
+                  </div>
+                </div>
               </div>
             </FadeIn>
           </div>

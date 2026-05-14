@@ -79,7 +79,7 @@ export function ListingGallery({ images }: ListingGalleryProps) {
 
       {/* Thumbnails Swiper */}
       {images.length > 1 && (
-        <div className="w-full h-24 md:h-32">
+        <div className="w-full h-16 md:h-24">
           <Swiper
             onSwiper={setThumbsSwiper}
             loop={images.length > 4}
@@ -99,7 +99,7 @@ export function ListingGallery({ images }: ListingGalleryProps) {
                 <SanityImage
                   image={img}
                   fill
-                  sizes="20vw"
+                  sizes="(max-width: 640px) 25vw, (max-width: 1024px) 20vw, 15vw"
                   className="object-cover rounded-lg"
                 />
               </SwiperSlide>
