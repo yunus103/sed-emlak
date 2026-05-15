@@ -17,6 +17,8 @@ export async function generateMetadata(): Promise<Metadata> {
     { next: { tags: ["services"] } },
   );
   return buildMetadata({
+    title: data?.pageTitle || "Hizmetlerimiz",
+    description: data?.pageSubtitle || data?.sectionDescription,
     canonicalPath: "/hizmetler",
     pageSeo: data?.seo,
   });

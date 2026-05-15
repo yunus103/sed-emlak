@@ -16,6 +16,7 @@ export async function generateMetadata(): Promise<Metadata> {
     .catch(() => null);
   return buildMetadata({
     title: data?.page?.title || "Bölgeler",
+    description: data?.page?.description,
     canonicalPath: "/bolgeler",
     pageSeo: data?.page?.seo,
   });

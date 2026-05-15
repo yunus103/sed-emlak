@@ -13,6 +13,8 @@ import Link from "next/link";
 export async function generateMetadata(): Promise<Metadata> {
   const data = await getClient().fetch(aboutPageQuery);
   return buildMetadata({
+    title: data?.pageTitle || "Hakkımızda",
+    description: data?.pageSubtitle || data?.advisorBio,
     canonicalPath: "/hakkimizda",
     pageSeo: data?.seo,
   });

@@ -10,6 +10,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const pageData = await client.fetch(blogPageQuery, {}, { next: { tags: ["blogPage"] } });
   return buildMetadata({
     title: pageData?.pageTitle || "Blog",
+    description: pageData?.pageSubtitle,
     canonicalPath: "/blog",
     pageSeo: pageData?.seo,
   });

@@ -45,6 +45,8 @@ const SahibindenIcon = ({ className }: { className?: string }) => (
 export async function generateMetadata(): Promise<Metadata> {
   const data = await getClient().fetch(contactPageQuery);
   return buildMetadata({
+    title: data?.pageTitle || "İletişim",
+    description: data?.pageSubtitle,
     canonicalPath: "/iletisim",
     pageSeo: data?.seo,
   });
