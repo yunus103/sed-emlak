@@ -45,7 +45,7 @@ export default async function ListingsPage({
   };
 
   const listings = await getClient(isDraft).fetch(listingsQuery, filters, {
-    next: { tags: ["listing"] },
+    next: { tags: ["listings"] },
   });
 
   const titlePrefix = filters.tip === "kiralik" ? "Kiralık İlanlar" : filters.tip === "satilik" ? "Satılık İlanlar" : "Tüm İlanlar";

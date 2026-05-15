@@ -33,7 +33,7 @@ export default async function IndexPage() {
     homePageQuery,
     {},
     {
-      next: { tags: ["homePage", "listing", "region", "service", "blogPost"] },
+      next: { tags: ["home", "listings", "region", "services", "blog"] },
     },
   );
 

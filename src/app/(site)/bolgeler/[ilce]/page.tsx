@@ -139,7 +139,11 @@ export default async function RegionDetailPage({
     areaServed: {
       "@type": "City",
       name: region.title,
-      containedIn: { "@type": "City", name: "İstanbul", containedIn: { "@type": "Country", name: "Türkiye" } },
+      containedIn: {
+        "@type": "City",
+        name: "İstanbul",
+        containedIn: { "@type": "Country", name: "Türkiye" },
+      },
     },
   };
   const breadcrumbsData = [
@@ -425,7 +429,7 @@ export default async function RegionDetailPage({
                             image={nb.heroImage}
                             fill
                             sizes="40px"
-                            className="object-cover grayscale group-hover:grayscale-0 transition-all duration-300"
+                            className="object-cover"
                           />
                         ) : (
                           <div className="w-full h-full bg-muted/60 flex items-center justify-center">

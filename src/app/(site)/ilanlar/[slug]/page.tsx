@@ -21,14 +21,18 @@ export async function generateStaticParams() {
   const data = await client.fetch(
     allSlugsForSitemapQuery,
     {},
-    { next: { tags: ["listing"] } }
+    { next: { tags: ["listings"] } }
   );
   return (data?.listings || []).map((p: any) => ({ slug: p.slug }));
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> | { slug: string } }): Promise<Metadata> {
   const p = await params;
-  const { listing, settings } = await getClient().fetch(listingDetailQuery, { slug: p.slug });
+  const { listing, settings } = await getClient().fetch(
+    listingDetailQuery, 
+    { slug: p.slug },
+    { next: { tags: ["listings", `listing:${p.slug}`] } }
+  );
   if (!listing) return { title: "İlan Bulunamadı | SED Emlak" };
 
   return buildMetadata({
@@ -42,7 +46,11 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
 export default async function ListingDetailPage({ params }: { params: Promise<{ slug: string }> | { slug: string } }) {
   const p = await params;
-  const { listing, advisor: advisorData, settings } = await getClient().fetch(listingDetailQuery, { slug: p.slug });
+  const { listing, advisor: advisorData, settings } = await getClient().fetch(
+    listingDetailQuery, 
+    { slug: p.slug },
+    { next: { tags: ["listings", `listing:${p.slug}`] } }
+  );
 
   if (!listing) {
     notFound();
@@ -50,7 +58,11 @@ export default async function ListingDetailPage({ params }: { params: Promise<{ 
 
   // Related listings
   const relatedListings = listing.region?._id
-    ? await getClient().fetch(relatedListingsQuery, { regionId: listing.region._id, currentId: listing._id })
+    ? await getClient().fetch(
+        relatedListingsQuery, 
+        { regionId: listing.region._id, currentId: listing._id },
+        { next: { tags: ["listings"] } }
+      )
     : [];
 
   const images = [];
