@@ -81,7 +81,7 @@ export default async function ListingDetailPage({ params }: { params: Promise<{ 
     title: advisorData?.advisorTitle || "Gayrimenkul Danışmanı",
     phone: settings?.contactInfo?.phone || "+90 532 201 64 64",
     whatsapp: settings?.contactInfo?.whatsappNumber || "+905322016464",
-    image: advisorData?.advisorImage ? urlForImage(advisorData.advisorImage)?.width(400).height(400).url() : "https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=400&auto=format&fit=crop",
+    image: advisorData?.advisorImage ? urlForImage(advisorData.advisorImage)?.width(400).height(400).url() : "",
     waMessage: `Merhaba, web sitenizdeki "${listing.title}" başlıklı ilanınızla ilgileniyorum. Bilgi alabilir miyim?`
   };
 

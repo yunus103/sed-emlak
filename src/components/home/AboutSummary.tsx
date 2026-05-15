@@ -23,8 +23,7 @@ export function AboutSummary({ data }: { data?: any }) {
             <div className="relative aspect-[4/5] max-w-sm mx-auto lg:mx-0 rounded-2xl overflow-hidden shadow-2xl">
               <Image
                 src={
-                  data?.aboutImage?.asset?.url ||
-                  "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?q=80&w=800&auto=format&fit=crop"
+                  data?.aboutImage?.asset?.url || ""
                 }
                 alt="Danışman"
                 fill

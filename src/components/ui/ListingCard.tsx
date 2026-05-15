@@ -37,8 +37,7 @@ export function ListingCard({ listing, priority = false }: ListingCardProps) {
     return allImages.slice(0, 5);
   }, [listing.mainImage, listing.coverImage, listing.gallery]);
 
-  const fallbackImage =
-    "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=800&auto=format&fit=crop";
+  const fallbackImage = "";
 
   const statusMap: Record<string, { label: string; color: string }> = {
     satilik: { label: "SATILIK", color: "bg-primary text-primary-foreground" },
@@ -99,7 +98,7 @@ export function ListingCard({ listing, priority = false }: ListingCardProps) {
         ) : (
           <Link href={href} className="block w-full h-full">
             <img
-              src={listing.img || fallbackImage}
+              src={listing.img || ""}
               alt={listing.title}
               className="object-cover w-full h-full"
             />

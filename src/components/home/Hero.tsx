@@ -25,9 +25,7 @@ export function Hero({ data, regions = [] }: { data: any; regions?: any[] }) {
   const [tur, setTur] = useState("");
   const [ilce, setIlce] = useState("");
 
-  const bgImage =
-    data?.heroImage?.asset?.url ||
-    "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=2075&auto=format&fit=crop";
+  const bgImage = data?.heroImage?.asset?.url || "";
 
   const quickFilters = data?.quickFilters?.length > 0 ? data.quickFilters : FALLBACK_QUICK_FILTERS;
 

@@ -3,12 +3,12 @@ import Image from "next/image";
 import { SanityImage } from "@/components/ui/SanityImage";
 
 const FALLBACK_REGIONS = [
-  { name: "Beşiktaş",  slug: "besiktas",  img: "https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?q=80&w=800&auto=format&fit=crop" },
-  { name: "Şişli",     slug: "sisli",     img: "https://images.unsplash.com/photo-1622536517523-6a2a11cc8b5c?q=80&w=800&auto=format&fit=crop" },
-  { name: "Kadıköy",   slug: "kadikoy",   img: "https://images.unsplash.com/photo-1549923746-c502d488b3ea?q=80&w=800&auto=format&fit=crop" },
-  { name: "Sarıyer",   slug: "sariyer",   img: "https://images.unsplash.com/photo-1545063914-a1a6ec821c88?q=80&w=800&auto=format&fit=crop" },
-  { name: "Bakırköy",  slug: "bakirkoy",  img: "https://images.unsplash.com/photo-1560448205-4d9b3e6bb6db?q=80&w=800&auto=format&fit=crop" },
-  { name: "Üsküdar",   slug: "uskudar",   img: "https://images.unsplash.com/photo-1606836591695-4d58a73eba1e?q=80&w=800&auto=format&fit=crop" },
+  { name: "Beşiktaş",  slug: "besiktas" },
+  { name: "Şişli",     slug: "sisli" },
+  { name: "Kadıköy",   slug: "kadikoy" },
+  { name: "Sarıyer",   slug: "sariyer" },
+  { name: "Bakırköy",  slug: "bakirkoy" },
+  { name: "Üsküdar",   slug: "uskudar" },
 ];
 
 export function FeaturedRegions({ regions, title, subtitle }: { regions: any[]; title?: string; subtitle?: string }) {
@@ -49,7 +49,7 @@ export function FeaturedRegions({ regions, title, subtitle }: { regions: any[]; 
                   />
                 ) : (
                   <Image
-                    src={region.img || "https://images.unsplash.com/photo-1560448205-4d9b3e6bb6db?q=80&w=800&auto=format&fit=crop"}
+                    src={region.img || ""}
                     alt={title}
                     fill
                     sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"

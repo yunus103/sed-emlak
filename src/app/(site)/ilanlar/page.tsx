@@ -55,7 +55,7 @@ export default async function ListingsPage({
     {},
     { next: { tags: ["listingsPage"] } }
   );
-  const bgImage = pageData?.mainImage || "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=1920&auto=format&fit=crop";
+  const bgImage = pageData?.mainImage || undefined;
 
   const regions = await getClient(isDraft).fetch(`*[_type == "region"] | order(title asc) { _id, title, slug }`);
 

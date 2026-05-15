@@ -17,15 +17,13 @@ interface PageHeroProps {
   size?: "default" | "compact";
 }
 
-const DEFAULT_BG = "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=2000&auto=format&fit=crop";
-
 export function PageHero({ title, subtitle, backgroundImage, breadcrumbs, size = "default" }: PageHeroProps) {
   // backgroundImage Sanity image objesi veya string URL olabilir
   const bg = backgroundImage
     ? (typeof backgroundImage === "string"
         ? backgroundImage
-        : urlForImage(backgroundImage)?.width(1920).auto("format").url() || DEFAULT_BG)
-    : DEFAULT_BG;
+        : urlForImage(backgroundImage)?.width(1920).auto("format").url() || "")
+    : "";
 
   const isCompact = size === "compact";
 

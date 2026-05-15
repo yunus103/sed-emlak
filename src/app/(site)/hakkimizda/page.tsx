@@ -29,7 +29,7 @@ export default async function AboutPage() {
 
   const advisorImg = (data?.advisorImage?.asset
     ? urlForImage(data.advisorImage as any)?.width(800).height(1000).url()
-    : undefined) || "https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=800&auto=format&fit=crop";
+    : undefined) || "";
 
   return (
     <main className="flex min-h-screen flex-col w-full bg-background">
